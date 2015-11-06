@@ -82,7 +82,7 @@ fi
 git clone https://github.com/rossonet/ConsoleAr4k.git
 
 # lancia la compilazione
-cd consoleAr4k
+cd ConsoleAr4k
 #./compila.sh
 # lancia l'applicativo - se possibile, verrà lanciato il default browser alla fine dell'operazione -
 #./ar4k.sh
