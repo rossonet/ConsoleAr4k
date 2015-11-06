@@ -82,9 +82,9 @@ class Stato {
 			if (connessioneSSH) {
 				consul = new ConsulClient('127.0.0.1',8569)
 			} else {
-				consul = new ConsulClient(macchinaConsul,portaConsul)
+				if (macchinaConsul && macchinaConsul) consul = new ConsulClient(macchinaConsul,portaConsul)
 			}
-			String risposta = consul.getCatalogDatacenters()
+			String risposta = consul?.getCatalogDatacenters()
 			log.debug("Connessione Consul. Datacenter disponibili: "+risposta)
 			if (risposta) ritorno = true
 		} catch (Exception ee) {

@@ -20,7 +20,8 @@ angular
   .config(['$stateProvider','$urlRouterProvider','$ocLazyLoadProvider',function ($stateProvider,$urlRouterProvider,$ocLazyLoadProvider) {
     
     $ocLazyLoadProvider.config({
-      debug:true,
+	  <g:if env="development">debug:true,</g:if>
+	  <g:if env="production">debug:false,</g:if>
       events:true,
     });
 

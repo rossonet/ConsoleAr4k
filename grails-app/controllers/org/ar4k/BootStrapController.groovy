@@ -26,7 +26,6 @@ class BootStrapController {
 		redirect(action: "boot")
 	}
 
-	/** Gestisce il workflow di bootstrap */
 	def bootFlow = {
 		entrata {
 			action {
@@ -40,11 +39,259 @@ class BootStrapController {
 					}
 				}
 			}
-			on ("success"){[verifica:bootStrapService.verificaConnettivitaInterfaccia()]}.to "showBenvenuto"
+			on ("success"){
+				[verificaInternet:bootStrapService.verificaConnettivitaInterfaccia(),
+					vedrificaSSH:bootStrapService.verificaSSH(),
+					verificaProxy:bootStrapService.verificaProxy(),
+					verificaOnion:bootStrapService.verificaProxy()
+				]
+			}.to "showBenvenuto"
+			on (Exception){[eccezione:true]}.to "showBenvenuto"
+			on ("completata").to("completata")
+			on ("reset"){[inReset:true]}.to("showBenvenuto")
+		}
+
+		showBenvenuto {
+			on ("configuraConsul").to "parametriConsul"
+			on ("configuraCodCommerciale").to "configuraCodCommerciale"
+			on ("configuraNuovoConsul").to "nuovoConsul"
+			on ("fallita"){ [messaggioOlark:"Salve. Serve aiuto per configurare la piattaforma?"] }.to("fallita")
+		}
+
+		configuraCodCommerciale {
+			on ("indietro").to "entrata"
+			on ("completata").to("provaCodiceCommerciale")
+			on ("fallita"){ [messaggioOlark:"Salve. Serve aiuto per configurare la piattaforma?"] }.to("fallita")
+		}
+
+		provaCodiceCommerciale {
+			action {
+				if (bootStrapService.importaCodiceAttivazione(params.codCommerciale?:'')) {
+					return completata()
+				} else {
+					return errore()
+				}
+			}
+			on ("completata").to("completata")
+			on ("errore").to("configuraCodCommerciale")
+		}
+
+		nuovoConsul {
+			on ("completato").to "creaConsul"
+			on ("configuraCodCommerciale").to "configuraCodCommerciale"
+			on ("configuraProxy"){[provenienza:'nuovoConsul']}.to "configuraProxyMaster"
+			on ("configuraSSH"){[provenienza:'nuovoConsul']}.to "configuraMaster"
+			on ("configuraOnion"){[provenienza:'nuovoConsul']}.to "configuraOnion"
+			on ("fallita"){ [messaggioOlark:"Salve. Serve aiuto per configurare la piattaforma?"] }.to("fallita")
+		}
+
+		parametriConsul {
+			on ("completato").to "verifica"
+			on ("configuraCodCommerciale").to "configuraCodCommerciale"
+			on ("configuraProxy"){[provenienza:'parametriConsul']}.to "configuraProxyMaster"
+			on ("configuraSSH"){[provenienza:'parametriConsul']}.to "configuraMaster"
+			on ("configuraOnion"){[provenienza:'parametriConsul']}.to "configuraOnion"
+			on ("fallita"){ [messaggioOlark:"Salve. Serve aiuto per configurare la piattaforma?"] }.to("fallita")
+		}
+
+		configuraProxyMaster {
+			on ("success"){provenienza:params.provenienza?:''}.to "testProxyMaster"
+			on ("indietro").to params.provenienza?:"entrata"
+			on ("configuraSSH"){[provenienza:params.provenienza?:"entrata"]}.to "configuraMaster"
+			on ("configuraOnion"){[provenienza:params.provenienza?:"entrata"]}.to "configuraOnion"
+		}
+
+		testProxyMaster {
+			action {
+				bootStrapService.proxyMasterInternet=params.proxyMaster?:bootStrapService.proxyMasterInternet
+				bootStrapService.passwordProxyMasterInternet=params.passwordProxyMaster?:bootStrapService.passwordProxyMasterInternet
+			}
+			on ("success").to params.provenienza?:"entrata"
+			on ("errore"){[provenienza:params.provenienza?:"entrata"]}.to "configuraProxyMaster"
+		}
+
+		configuraMaster {
+			on ("indietro").to params.provenienza?:"entrata"
+			on ("verificaMaster"){[provenienza:params.provenienza?:"entrata"]}.to "verificaMaster"
+			on ("configuraProxy"){[provenienza:params.provenienza?:"entrata"]}.to "configuraProxyMaster"
+			on ("configuraOnion"){[provenienza:params.provenienza?:"entrata"]}.to "configuraOnion"
+		}
+
+		verificaMaster {
+			action {
+				bootStrapService.proxyMasterInternet=params.proxyMaster?:bootStrapService.proxyMasterInternet
+				bootStrapService.passwordProxyMasterInternet=params.passwordProxyMaster?:bootStrapService.passwordProxyMasterInternet
+			}
+			on ("success").to params.provenienza?:"entrata"
+			on ("errore"){[provenienza:params.provenienza?:"entrata"]}.to "configuraMaster"
+		}
+
+		configuraOnion {
+			on ("success"){provenienza:params.provenienza?:''}.to "testOnion"
+			on ("indietro").to params.provenienza?:"entrata"
+			on ("configuraSSH"){[provenienza:params.provenienza?:"entrata"]}.to "configuraMaster"
+			on ("configuraProxy"){[provenienza:params.provenienza?:"entrata"]}.to "configuraProxyMaster"
+		}
+
+		testOnion {
+			action {
+				bootStrapService.proxyMasterInternet=params.proxyMaster?:bootStrapService.proxyMasterInternet
+				bootStrapService.passwordProxyMasterInternet=params.passwordProxyMaster?:bootStrapService.passwordProxyMasterInternet
+			}
+			on ("success").to params.provenienza?:"entrata"
+			on ("errore"){[provenienza:params.provenienza?:"entrata"]}.to "configuraOnion"
+		}
+
+		creaConsul {
+			action {
+				bootStrapService.proxyMasterInternet=params.proxyMaster?:bootStrapService.proxyMasterInternet
+				bootStrapService.passwordProxyMasterInternet=params.passwordProxyMaster?:bootStrapService.passwordProxyMasterInternet
+			}
+			on ("success").to "verifica"
+			on ("errore").to "nuovoConsul"
+		}
+
+		verifica {
+			action {
+				bootStrapService.proxyMasterInternet=params.proxyMaster?:bootStrapService.proxyMasterInternet
+				bootStrapService.passwordProxyMasterInternet=params.passwordProxyMaster?:bootStrapService.passwordProxyMasterInternet
+				def contesti
+			}
+			on ("success"){contesti:contesti}.to "scegliContesto"
+			on ("errore").to "parametriConsul"
+		}
+
+		scegliContesto {
+			on ("indietro").to "verifica"
+			on ("scegliInterfaccia").to "provaContesto"
+		}
+
+		provaContesto {
+			action {
+				if (bootStrapService.caricaContesto(params.contesto)) {
+					return scegliInterfaccia()
+				} else {
+					return errore()
+				}
+			}
+			on ("scegliInterfaccia"){
+				def lista = []
+				bootStrapService.interfacceInContesto.each{
+					lista.add([descrizione:it.etichetta,id:it.idInterfaccia])
+				}
+				[listaInterfacce:lista]
+			}.to "scegliInterfaccia"
+			on ("errore").to "verifica"
+		}
+
+		scegliInterfaccia {
+			on ("indietro").to "verifica"
+			on ("avvia").to "provaUtente"
+		}
+
+		provaUtente {
+			action {
+				bootStrapService.idInterfacciaScelta = params.interfaccia
+				if(bootStrapService.utentiInContesto.size()>0) {
+					return completata()
+				} else {
+					return configuraAmministratore()
+				}
+			}
+			on ("configuraAmministratore").to "configuraAmministratore"
+			on ("completata").to("testFinale")
+		}
+
+		configuraAmministratore {
+			on ("completata").to("testFinale")
+			on ("fallita"){ [messaggioOlark:"Salve. Serve aiuto per configurare la piattaforma?"] }.to("fallita")
+		}
+
+		testFinale {
+			action {
+				if(params.utenteDemo ) {
+					if ( params.passwordDemo1 == params.passwordDemo2 && params.passwordDemo1 != '') {
+						log.info("Creo l'utente "+params.utenteDemo)
+						bootStrapService.aggiungiUtente(params.utenteDemo,params.passwordDemo1)
+					} else {
+						log.info("Le password NON corrispondo per creare l'utente "+params.utenteDemo)
+						if ( params.utenteDemo) {
+							return configuraAmministratore()
+						}
+					}
+				}
+
+				if(bootStrapService.avvia()) {
+					return completata()
+				} else {
+					return fallita()
+				}
+			}
+			on ("completata").to("mascheraFinale")
+			on ("noConsul").to("verifica")
+			on ("fallita"){
+				[rapporto:bootStrapService.toString(),messaggioOlark:"Salve. Serve aiuto per configurare la piattaforma?"]
+			}.to("fallita")
+		}
+
+		mascheraFinale {
+			on ("completata").to("redirezione")
+		}
+
+		redirezione { redirect controller:'admin' }
+
+		// Implementare pagina aiuto via Olark
+		fallita {
+			on ("indietro").to "entrata"
+			on ("configuraCodCommerciale").to "configuraCodCommerciale"
+		}
+
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+	/** Gestisce il workflow di bootstrap */
+	def bootFlowBK = {
+		entrata {
+			action {
+				if (bootStrapService.inAvvio == false) {
+					return completata()
+				} else {
+					if (bootStrapService.inReset == true) {
+						return reset()
+					} else {
+						return success()
+					}
+				}
+			}
+			on ("success"){
+				[verifica:bootStrapService.verificaConnettivitaInterfaccia()]
+			}.to "showBenvenuto"
 			on (Exception).to "showBenvenuto"
 			on ("completata").to("completata")
 			on ("reset").to("verificaMaster")
 		}
+
+
+
+
+
+
+
+
+
+
+
 
 		showBenvenuto {
 			on ("configuraProxyJvm").to "aggiungiProxy"
@@ -121,7 +368,9 @@ class BootStrapController {
 			}
 			on ("scegliContesto"){
 				def lista = []
-				bootStrapService.contestiInMaster.each{lista.add([descrizione:it.etichetta,id:it.idContesto])}
+				bootStrapService.contestiInMaster.each{
+					lista.add([descrizione:it.etichetta,id:it.idContesto])
+				}
 				[listaContesti:lista]
 			}.to "scegliContesto"
 			on ("configuraProxyMaster").to "configuraProxyMaster"
@@ -154,10 +403,7 @@ class BootStrapController {
 			on ("sconnesso").to "configuraProxyMaster"
 		}
 
-		scegliContesto {
-			on ("indietro").to "configuraMaster"
-			on ("scegliInterfaccia").to "provaContesto"
-		}
+
 
 		provaContesto {
 			action {
@@ -169,7 +415,9 @@ class BootStrapController {
 			}
 			on ("scegliInterfaccia"){
 				def lista = []
-				bootStrapService.interfacceInContesto.each{lista.add([descrizione:it.etichetta,id:it.idInterfaccia])}
+				bootStrapService.interfacceInContesto.each{
+					lista.add([descrizione:it.etichetta,id:it.idInterfaccia])
+				}
 				[listaInterfacce:lista]
 			}.to "scegliInterfaccia"
 			on ("errore").to "scegliContesto"
@@ -219,7 +467,9 @@ class BootStrapController {
 			}
 			on ("completata").to("completata")
 			on ("configuraAmministratore").to "configuraAmministratore"
-			on ("fallita"){[rapporto:bootStrapService.toString()]}.to("fallita")
+			on ("fallita"){
+				[rapporto:bootStrapService.toString()]
+			}.to("fallita")
 		}
 
 		completata { redirect controller:'admin' }
