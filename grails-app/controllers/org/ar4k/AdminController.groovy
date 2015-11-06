@@ -585,6 +585,152 @@ class AdminController {
 	def timeline() {
 		render(template: "timeline",contentType:"text/css",model:[grafica: interfacciaContestoService.interfaccia.grafica])
 	}
+	
+	
+	
+	/** verifica connettività e utente*/
+	def testConnessione() {
+		try {
+			render "Connessione con utente "+springSecurityService.currentUser.username+" id: "+springSecurityService.currentUser.id
+		} catch (Exception e) {
+			render "utente anonimo"
+		}
+	}
 
+	/**
+	 * Restituisce il form di avvio per il processo
+	 * @return form inizio processo
+	 */
+	def avvioProcessoForm(String idProcesso) {
+		String formStream = formService.getRenderedStartForm(idProcesso)
+		render formStream
+	}
+	
+	def taskProcessoForm(String idTask) {
+		String formStream = formService.getRenderedTaskForm(idTask)
+		render formStream
+	}
+
+	/**
+	 * Restituisce un percorso relativo al repository di un Meme
+	 */
+	def ritornaFile(String idMeme,String target) {
+		String fileTarget = interfacciaContestoService.contesto.memi.find{it.idMeme == idMeme}.pathVaso + target
+		render interfacciaContestoService.contesto.vasoMaster.leggiConCat(fileTarget)
+	}
+
+	/**
+	 * Restituisce la maschera dello stato attuale di un meme
+	 * @return maschera meme
+	 */
+
+	def mascheraMeme(String idMeme) {
+		log.info "Richiesta maschera per meme "+idMeme
+		render interfacciaContestoService.contesto.memi.find{it.idMeme == idMeme}.maschera()
+	}
+	
+	def cancellaMeme(String idMeme) {
+		log.info "Richiesta disinstallazione per meme "+idMeme
+		render interfacciaContestoService.contesto.memi.find{it.idMeme == idMeme}.disinstallazione
+	}
+
+	/** ritorna l'elenco di parametri necessari nella maschera di avvio */
+	def variabiliAvvioProcesso(String idProcesso) {
+		def variabili = []
+		formService.getStartFormData(idProcesso).getFormProperties().each{
+			variabili.add([id:it.getId(),name:it.getName(),type:it.getType(),
+				value:it.getValue(),readable:it.isReadable(),writable:it.isWritable(),
+				required:it.isRequired()])
+		}
+		def incapsulato = [variabili:variabili]
+		render incapsulato as JSON
+	}
+
+	/** Avvia il processo -chiamata POST-*/
+	def avviaProcesso() {
+		String idProcesso = request.JSON.idProcesso
+		String dati = request.JSON.dati
+		log.info "Richiesto avvio processo: "+idProcesso
+		def processo = runtimeService.startProcessInstanceById(idProcesso,dati)
+		render processo?'avviato...':'errore!'
+	}
+
+
+	def diagrammaStatoProcesso(String idProcesso) {
+		ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery()
+				.processDefinitionId(idProcesso).singleResult()
+		String diagramResourceName = processDefinition.getDiagramResourceName()
+		InputStream imageStream = repositoryService.getResourceAsStream(processDefinition.getDeploymentId(), diagramResourceName)
+		render file: imageStream, contentType: 'image/png'
+	}
+
+	/**
+	 * @return immagine processo
+	 */
+	def diagrammaProcesso(String idProcesso) {
+		ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery()
+				.processDefinitionId(idProcesso).singleResult()
+		String diagramResourceName = processDefinition.getDiagramResourceName()
+		InputStream imageStream = repositoryService.getResourceAsStream(processDefinition.getDeploymentId(), diagramResourceName)
+		render file: imageStream, contentType: 'image/png'
+	}
+
+	def listaIstanze(String idProcesso){
+		def variabili = []
+		runtimeService.createProcessInstanceQuery().processDefinitionId(idProcesso).list().each{
+			String taskid = taskService.createTaskQuery().processInstanceId(it.getId()).list().last().id
+			variabili.add([
+				id:it.getId(),
+				businessKey:it.getBusinessKey(),
+				activityId:it.getActivityId(),
+				deploymentId:it.getDeploymentId(),
+				name:it.getName(),
+				processInstanceId:it.getProcessInstanceId(),
+				sospeso:it.isSuspended(),
+				taskid:taskid
+			])
+		}
+		def incapsulato = [istanze:variabili]
+		render incapsulato as JSON
+	}
+
+	def listaTask(){
+		def risultato = []
+		/*
+		taskService.createTaskQuery().list().each{
+			String icona = interfacciaContestoService.contesto.memi.find{ meme->
+				ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery()
+				.processDefinitionId(it.getProcessDefinitionId()).singleResult()
+				String depId = processDefinition.getDeploymentId()
+				meme.idMeme == repositoryService.createDeploymentQuery().deploymentId(depId).singleResult().getName()
+			}.icona
+			
+			
+			it.getProcessDefinitionId()
+			risultato.add([id:it.id,
+				icona:icona,
+				assignee:it.getAssignee(),
+				category:it.getCategory(),
+				createTime:it.getCreateTime(),
+				delegationState:it.getDelegationState(),
+				description:it.getDescription(),
+				dueDate:it.getDueDate(),
+				executionId:it.getExecutionId(),
+				formKey:it.getFormKey(),
+				name:it.getName(),
+				owner:it.getOwner(),
+				parentTaskId:it.getParentTaskId(),
+				priority:it.getPriority(),
+				processDefinitionId:it.getProcessDefinitionId(),
+				processInstanceId:it.getProcessInstanceId(),
+				processVariables:it.getProcessVariables(),
+				taskDefinitionKey:it.getTaskDefinitionKey(),
+				tenantId:it.getTenantId()
+			])
+		}
+		*/
+		def incapsulato = [tasks:risultato,conto:risultato.size()]
+		render incapsulato as JSON
+	}
 }
 

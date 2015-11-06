@@ -7,7 +7,6 @@ describe('Toggle Switch', function() {
   var knobLabelTemplate = '<toggle-switch ng-model="switchState" knob-label="CUSTOM">\n</toggle-switch>';
   var htmlLabelsTemplate = '<toggle-switch ng-model="switchState" on-label="<i class=\'icon-ok icon-white\'></i>" off-label="<i class=\'icon-remove\'></i>">\n</toggle-switch>';
   var disabledTemplate = '<toggle-switch ng-model="switchState" ng-disabled="isDisabled">\n</toggle-switch>';
-  var changeTemplate = '<toggle-switch ng-model="switchState" ng-change="changedState()">\n</toggle-switch>';
 
   // Load up just our module
   beforeEach(module('toggle-switch'));
@@ -56,20 +55,12 @@ describe('Toggle Switch', function() {
       $scope.$apply(function() {
         $scope.switchState = true;
       });
-      $scope.changedState = function(){};
-      spyOn($scope, 'changedState');
     });
 
     it('changes model to false when clicked', function() {
       var elm = compileDirective(baseTemplate, $scope);
       elm.triggerHandler('click');
       expect($scope.switchState).toEqual(false);
-    });
-
-    it('change handler is called when clicked', function() {
-      var elm = compileDirective(changeTemplate, $scope);
-      elm.triggerHandler('click');
-      expect($scope.changedState).toHaveBeenCalled();
     });
   });
 
@@ -79,20 +70,12 @@ describe('Toggle Switch', function() {
       $scope.$apply(function() {
         $scope.switchState = false;
       });
-      $scope.changedState = function(){};
-      spyOn($scope, 'changedState');
     });
 
     it('changes model to true when clicked', function() {
       var elm = compileDirective(baseTemplate, $scope);
       elm.triggerHandler('click');
       expect($scope.switchState).toEqual(true);
-    });
-
-    it('change handler is called when clicked', function() {
-      var elm = compileDirective(changeTemplate, $scope);
-      elm.triggerHandler('click');
-      expect($scope.changedState).toHaveBeenCalled();
     });
   });
 

@@ -532,9 +532,6 @@
     <script>contact_form_IE9_placeholder_fix();</script>
     <![endif]-->
 
-	<script type="text/javascript"
-	src="${resource(dir: 'js', file: 'd3/d3.js')}"></script>
-
 	<%-- begin olark code --%>
 	<script data-cfasync="false" type='text/javascript'>
 		/*<![CDATA[*/

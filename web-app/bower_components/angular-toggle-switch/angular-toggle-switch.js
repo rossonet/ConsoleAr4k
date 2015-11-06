@@ -1,7 +1,7 @@
 (function() {
   var module = angular.module('toggle-switch', ['ng']);
 
-  module.provider('toggleSwitchConfig', [function() {
+  module.provider('toggleSwitchConfig', function() {
     this.onLabel = 'On';
     this.offLabel = 'Off';
     this.knobLabel = '\u00a0';
@@ -14,9 +14,9 @@
         knobLabel: self.knobLabel
       };
     };
-  }]);
+  });
 
-  module.directive('toggleSwitch',['toggleSwitchConfig', function (toggleSwitchConfig) {
+  module.directive('toggleSwitch', function (toggleSwitchConfig) {
     return {
       restrict: 'EA',
       replace: true,
@@ -63,10 +63,6 @@
           return viewValue;
         });
 
-        ngModelCtrl.$viewChangeListeners.push(function() {
-          scope.$eval(attrs.ngChange);
-        });
-
         ngModelCtrl.$render = function(){
             scope.model = ngModelCtrl.$viewValue;
         };
@@ -79,5 +75,5 @@
         };
       }
     };
-  }]);
+  });
 })();

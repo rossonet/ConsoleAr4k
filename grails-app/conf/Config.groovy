@@ -241,25 +241,24 @@ grails.plugin.springsecurity.controllerAnnotations.staticRules = [
 	'/**/js/**':                      ['permitAll'],
 	'/**/css/**':                     ['permitAll'],
 	'/**/images/**':                  ['permitAll'],
+	'/bower_components/**':                  ['permitAll'],
 	// by Andrea Ambrosini
 	'/register/**':                   ['permitAll'],
 	'/bootStrap/**':                  ['permitAll'], // Ricordarsi di bloccare la sicurezza sul Controller!
 //	'/console/**':                    ['permitAll'], // Solo per debug della sicurezza!!! 
 //	'/plugins/console-1.5.4/**':      ['permitAll'], // Solo per debug della sicurezza!!!
-	'/login/**':    				  ['permitAll'],
+	'/login/**':    		  ['permitAll'],
 	'/logout/**':                     ['permitAll'],
 	'/oauth/**':                      ['permitAll'],
 	'/oauth/authorize.dispatch':      ["isFullyAuthenticated() and (request.getMethod().equals('GET') or request.getMethod().equals('POST'))"],
 	'/oauth/token.dispatch':          ["isFullyAuthenticated() and request.getMethod().equals('POST')"],
 	'/atterraggio/**':                ['permitAll'],
-	'/springSecurityOAuth/**':	      ['permitAll'],
-	'/codeqr':			        	  ['permitAll'],
+	'/springSecurityOAuth/**':	  ['permitAll'],
+	'/codeqr':			  ['permitAll'],
 	// Accesso a Admin -per utente demo-
 	'/**':                            ['ROLE_ADMIN'],
 	//'/admin/**':                    ['ROLE_USER'],
 	'/admin/**':                      ['ROLE_ADMIN','ROLE_USER'],
-	//'/Ar4kActiviti/**':               ['ROLE_ADMIN','ROLE_USER'], 
-	'/Ar4kActiviti/**':               ['permitAll'], // Attenzione!!
 	// Accesso a tutti autenticati
 	//'/**':                          ['IS_AUTHENTICATED_REMEMBERED'],
 	// Accesso a tutti

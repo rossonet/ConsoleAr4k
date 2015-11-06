@@ -41,14 +41,14 @@ angular.module('sbAdminApp')
   	$scope.dettagli = function(idProcesso) {
   			$scope.processfocus = $scope.splitta(idProcesso,0);
   			$scope.titolo = "Diagramma processo "+$scope.processfocus;
-        	$scope.focus = "${createLink(controller:'Ar4kActiviti',action:'diagrammaProcesso',absolute:'true')}?idProcesso="+idProcesso;
+        	$scope.focus = "${createLink(controller:'admin',action:'diagrammaProcesso',absolute:'true')}?idProcesso="+idProcesso;
         	$scope.pannello = true;
   		};
   		
   	$scope.maschera = function(idProcesso) {
   			$scope.processfocus = $scope.splitta(idProcesso,0);
   			$scope.titoloMaschera = "Istanze attive di "+$scope.processfocus;
-        	$http.get("${createLink(controller:'Ar4kActiviti',action:'listaIstanze',absolute:'true')}?idProcesso="+idProcesso).success(function (response) {
+        	$http.get("${createLink(controller:'admin',action:'listaIstanze',absolute:'true')}?idProcesso="+idProcesso).success(function (response) {
         		$scope.focusMaschera = response.istanze;
 			    // Per task list
 				$scope.totalItems = $scope.focusMaschera.length;
@@ -65,17 +65,17 @@ angular.module('sbAdminApp')
   	$scope.mascheraNuovo = function(idProcesso) {
   			$scope.processfocus = $scope.splitta(idProcesso,0);
   			$scope.titolo = "Nuova istanza di "+idProcesso;
-        	$scope.focusPlay = "${createLink(controller:'Ar4kActiviti',action:'avvioProcessoForm',absolute:'true')}?idProcesso="+idProcesso;
+        	$scope.focusPlay = "${createLink(controller:'admin',action:'avvioProcessoForm',absolute:'true')}?idProcesso="+idProcesso;
         	$scope.pannelloPlay = true;
   		};
   		
   	$scope.azioneMeme = function(idMeme) {
-        	$scope.azioneMemeFocus = "${createLink(controller:'Ar4kActiviti',action:'mascheraMeme',absolute:'true')}?idMeme="+idMeme;
+        	$scope.azioneMemeFocus = "${createLink(controller:'admin',action:'mascheraMeme',absolute:'true')}?idMeme="+idMeme;
         	$scope.azioneMemePlay = true;
   		};
   		
   	$scope.cancellaMeme = function(idMeme) {
-        	$scope.azioneMemeFocus = "${createLink(controller:'Ar4kActiviti',action:'cancellaMeme',absolute:'true')}?idMeme="+idMeme;
+        	$scope.azioneMemeFocus = "${createLink(controller:'admin',action:'cancellaMeme',absolute:'true')}?idMeme="+idMeme;
         	$scope.azioneMemePlay = true;
   		};
   		
@@ -91,7 +91,7 @@ angular.module('sbAdminApp')
     
     $scope.svolgiistanza = function(idIstanza) {
     	  	$scope.titolo = "Esegui il compito "+idIstanza;
-        	$scope.focusPlay = "${createLink(controller:'Ar4kActiviti',action:'taskProcessoForm',absolute:'true')}?idTask="+idIstanza;
+        	$scope.focusPlay = "${createLink(controller:'admin',action:'taskProcessoForm',absolute:'true')}?idTask="+idIstanza;
         	$scope.pannelloPlay = true;
     }
     

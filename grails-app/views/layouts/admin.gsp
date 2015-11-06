@@ -21,72 +21,72 @@
 <!-- In sviluppo non usiamo i minificati -->
 <g:if env="development">
 	<link rel="stylesheet"
-		href="admin/bower_components/bootstrap/dist/css/bootstrap.css" />
+		href="bower_components/bootstrap/dist/css/bootstrap.css" />
 
 
 	<link rel="stylesheet"
-		href="admin/bower_components/metisMenu/dist/metisMenu.css">
+		href="bower_components/metisMenu/dist/metisMenu.css">
 	<link rel="stylesheet"
-		href="admin/bower_components/angular-loading-bar/build/loading-bar.css">
+		href="bower_components/angular-loading-bar/build/loading-bar.css">
 	<link rel="stylesheet"
-		href="admin/bower_components/font-awesome/css/font-awesome.css"
+		href="bower_components/font-awesome/css/font-awesome.css"
 		type="text/css">
 
-	<script src="admin/bower_components/jquery/dist/jquery.js"></script>
-	<script src="admin/bower_components/angular/angular.js"></script>
-	<script src="admin/bower_components/bootstrap/dist/js/bootstrap.js"></script>
+	<script src="bower_components/jquery/dist/jquery.js"></script>
+	<script src="bower_components/angular/angular.js"></script>
+	<script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
 	<script
-		src="admin/bower_components/angular-ui-router/release/angular-ui-router.js"></script>
-	<script src="admin/bower_components/json3/lib/json3.js"></script>
-	<script src="admin/bower_components/oclazyload/dist/ocLazyLoad.js"></script>
+		src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+	<script src="bower_components/json3/lib/json3.js"></script>
+	<script src="bower_components/oclazyload/dist/ocLazyLoad.js"></script>
 	<script
-		src="admin/bower_components/angular-loading-bar/build/loading-bar.js"></script>
+		src="bower_components/angular-loading-bar/build/loading-bar.js"></script>
 	<script
-		src="admin/bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
-	<script src="admin/bower_components/metisMenu/dist/metisMenu.js"></script>
-	<script src="admin/bower_components/marked/lib/marked.js"></script>
-	<script src="admin/bower_components/angular-marked/angular-marked.js"></script>
-	<script src="admin/bower_components/restangular/dist/restangular.js"></script>
-	<script src="admin/bower_components/lodash/dist/lodash.js"></script>
-	<script src="admin/bower_components/angular-animate/angular-animate.js"></script>
-	<script src="admin/bower_components/jsoneditor/dist/jsoneditor.js"></script>
+		src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+	<script src="bower_components/metisMenu/dist/metisMenu.js"></script>
+	<script src="bower_components/marked/lib/marked.js"></script>
+	<script src="bower_components/angular-marked/angular-marked.js"></script>
+	<script src="bower_components/restangular/dist/restangular.js"></script>
+	<script src="bower_components/lodash/dist/lodash.js"></script>
+	<script src="bower_components/angular-animate/angular-animate.js"></script>
+	<script src="bower_components/jsoneditor/dist/jsoneditor.js"></script>
 </g:if>
 <g:if env="production">
 	<link rel="stylesheet"
-		href="admin/bower_components/bootstrap/dist/css/bootstrap.min.css" />
+		href="bower_components/bootstrap/dist/css/bootstrap.min.css" />
 
 	<link rel="stylesheet"
-		href="admin/bower_components/metisMenu/dist/metisMenu.min.css">
+		href="bower_components/metisMenu/dist/metisMenu.min.css">
 	<link rel="stylesheet"
-		href="admin/bower_components/angular-loading-bar/build/loading-bar.min.css">
+		href="bower_components/angular-loading-bar/build/loading-bar.min.css">
 	<link rel="stylesheet"
-		href="admin/bower_components/font-awesome/css/font-awesome.min.css"
+		href="bower_components/font-awesome/css/font-awesome.min.css"
 		type="text/css">
 
-	<script src="admin/bower_components/jquery/dist/jquery.min.js"></script>
-	<script src="admin/bower_components/angular/angular.min.js"></script>
-	<script src="admin/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+	<script src="bower_components/jquery/dist/jquery.min.js"></script>
+	<script src="bower_components/angular/angular.min.js"></script>
+	<script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 	<script
-		src="admin/bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
-	<script src="admin/bower_components/json3/lib/json3.min.js"></script>
-	<script src="admin/bower_components/oclazyload/dist/ocLazyLoad.min.js"></script>
+		src="bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
+	<script src="bower_components/json3/lib/json3.min.js"></script>
+	<script src="bower_components/oclazyload/dist/ocLazyLoad.min.js"></script>
 	<script
-		src="admin/bower_components/angular-loading-bar/build/loading-bar.min.js"></script>
+		src="bower_components/angular-loading-bar/build/loading-bar.min.js"></script>
 	<script
-		src="admin/bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
-	<script src="admin/bower_components/metisMenu/dist/metisMenu.min.js"></script>
-	<script src="admin/bower_components/marked/marked.min.js"></script>
+		src="bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+	<script src="bower_components/metisMenu/dist/metisMenu.min.js"></script>
+	<script src="bower_components/marked/marked.min.js"></script>
 	<script
-		src="admin/bower_components/angular-marked/angular-marked.min.js"></script>
+		src="bower_components/angular-marked/angular-marked.min.js"></script>
 	<script
-		src="admin/bower_components/restangular/dist/restangular.min.js"></script>
-	<script src="admin/bower_components/lodash/dist/lodash.min.js"></script>
+		src="bower_components/restangular/dist/restangular.min.js"></script>
+	<script src="bower_components/lodash/dist/lodash.min.js"></script>
 	<script
-		src="admin/bower_components/angular-animate/angular-animate.min.js"></script>
-	<script src="admin/bower_components/jsoneditor/dist/jsoneditor.min.js"></script>
+		src="bower_components/angular-animate/angular-animate.min.js"></script>
+	<script src="bower_components/jsoneditor/dist/jsoneditor.min.js"></script>
 </g:if>
 
-<script src="admin/bower_components/angular-lodash/angular-lodash.js"></script>
+<script src="bower_components/angular-lodash/angular-lodash.js"></script>
 <link rel="stylesheet" href="admin/jsoneditor.css" type="text/css">
 <link rel="stylesheet" href="admin/main">
 <link rel="stylesheet" href="admin/sbadmin2">

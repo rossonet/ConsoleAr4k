@@ -20,7 +20,7 @@ angular
   .config(['$stateProvider','$urlRouterProvider','$ocLazyLoadProvider',function ($stateProvider,$urlRouterProvider,$ocLazyLoadProvider) {
     
     $ocLazyLoadProvider.config({
-      debug:false,
+      debug:true,
       events:true,
     });
 
@@ -29,50 +29,45 @@ angular
     $stateProvider
       .state('dashboard', {
         url:'/dashboard',
-        templateUrl: 'admin/app/views/dashboard/main.html',
+        templateUrl: "${resource(dir: 'admin', file: 'app/views/dashboard/main.html')}",
         resolve: {
             loadMyDirectives:function($ocLazyLoad){
                 return $ocLazyLoad.load(
                 {
                     name:'sbAdminApp',
                     files:[
-                    'admin/app/scripts/directives/header/header.js',
-                    'admin/app/scripts/directives/header/header-notification/header-notification.js',
-                    'admin/app/scripts/directives/sidebar/sidebar.js',
-                    'admin/app/scripts/directives/sidebar/sidebar-search/sidebar-search.js'
+                    "${resource(dir: 'admin', file: 'app/scripts/directives/header/header.js')}",
+                    "${resource(dir: 'admin', file: 'app/scripts/directives/header/header-notification/header-notification.js')}",
+                    "${resource(dir: 'admin', file: 'app/scripts/directives/sidebar/sidebar.js')}",
+                    "${resource(dir: 'admin', file: 'app/scripts/directives/sidebar/sidebar-search/sidebar-search.js')}"
                     ]
                 }),
                 $ocLazyLoad.load(
                 {
                    name:'toggle-switch',
-                   files:["admin/bower_components/angular-toggle-switch/angular-toggle-switch.min.js",
-                          "admin/bower_components/angular-toggle-switch/angular-toggle-switch.css"
+                   files:["${resource(dir: 'bower_components', file: 'angular-toggle-switch/angular-toggle-switch.min.js')}",
+                          "${resource(dir: 'bower_components', file: 'angular-toggle-switch/angular-toggle-switch.css')}"
                       ]
                 }),
                 $ocLazyLoad.load(
                 {
                   name:'ngAnimate',
-                  files:['admin/bower_components/angular-animate/angular-animate.js']
+                  files:["${resource(dir: 'bower_components', file: 'angular-animate/angular-animate.js')}"]
                 })
                 $ocLazyLoad.load(
                 {
                   name:'ngCookies',
-                  files:['admin/bower_components/angular-cookies/angular-cookies.js']
-                })
-                $ocLazyLoad.load(
-                {
-                  name:'ngResource',
-                  files:['admin/bower_components/angular-animate/angular-animate.js']
+                  files:["${resource(dir: 'bower_components', file: 'angular-cookies/angular-cookies.js')}"]
                 })
                 $ocLazyLoad.load(
                 {
                   name:'ngSanitize',
-                  files:['admin/bower_components/angular-sanitize/angular-sanitize.js']
+                  files:["${resource(dir: 'bower_components', file: 'angular-sanitize/angular-sanitize.js')}"]
                 })
                 $ocLazyLoad.load(
                 {
                   name:'ngTouch',
-                  files:['admin/bower_components/angular-touch/angular-touch.js']
+                  files:["${resource(dir: 'bower_components', file: 'angular-touch/angular-touch.js')}"]
                 })
             }
         }
@@ -80,16 +75,16 @@ angular
       .state('dashboard.home',{
         url:'/home',
         controller: 'MainCtrl',
-        templateUrl:'admin/app/views/dashboard/home.html',
+        templateUrl:"${resource(dir: 'admin', file: 'app/views/dashboard/home.html')}",
         resolve: {
           loadMyFiles:function($ocLazyLoad) {
             return $ocLazyLoad.load({
               name:'sbAdminApp',
               files:[
-              'admin/app/scripts/controllers/main.js',
-              'admin/app/scripts/directives/timeline/timeline.js',
-              'admin/app/scripts/directives/chat/chat.js',
-              'admin/app/scripts/directives/dashboard/stats/stats.js'
+              "${resource(dir: 'admin', file: 'app/scripts/controllers/main.js')}",
+              "${resource(dir: 'admin', file: 'app/scripts/directives/timeline/timeline.js')}",
+              "${resource(dir: 'admin', file: 'app/scripts/directives/chat/chat.js')}",
+              "${resource(dir: 'admin', file: 'app/scripts/directives/dashboard/stats/stats.js')}"
               ]
             })
           }
@@ -98,13 +93,13 @@ angular
       .state('dashboard.api',{
         url:'/apiAr4k',
         controller: 'ApiAr4kCtrl',
-        templateUrl:'admin/apiAr4k',
+        templateUrl:"${resource(dir: 'admin', file: 'apiAr4k')}",
         resolve: {
           loadMyFiles:function($ocLazyLoad) {
             return $ocLazyLoad.load({
               name:'sbAdminApp',
               files:[
-              'admin/apiAr4kCtrl'
+              "${resource(dir: 'admin', file: 'apiAr4kCtrl')}"
               ]
             })
           }
@@ -113,13 +108,13 @@ angular
       .state('dashboard.rossonet',{
         url:'/rossonet',
         controller: 'RossonetCtrl',
-        templateUrl:'admin/rossonet',
+        templateUrl:"${resource(dir: 'admin', file: 'rossonet')}",
         resolve: {
           loadMyFiles:function($ocLazyLoad) {
             return $ocLazyLoad.load({
               name:'sbAdminApp',
               files:[
-              'admin/rossonetCtrl'
+              "${resource(dir: 'admin', file: 'rossonetCtrl')}"
               ]
             })
           }
@@ -128,13 +123,13 @@ angular
       .state('dashboard.oggetti',{
         url:'/oggetti',
         controller: 'OggettiCtrl',
-        templateUrl:'admin/oggetti',
+        templateUrl:"${resource(dir: 'admin', file: 'oggetti')}",
         resolve: {
           loadMyFiles:function($ocLazyLoad) {
             return $ocLazyLoad.load({
               name:'sbAdminApp',
               files:[
-              'admin/oggettiCtrl'
+              "${resource(dir: 'admin', file: 'oggettiCtrl')}"
               ]
             })
           }
@@ -143,13 +138,13 @@ angular
       .state('dashboard.utenti',{
         url:'/utenti',
         controller: 'UtentiCtrl',
-        templateUrl:'admin/utenti',
+        templateUrl:"${resource(dir: 'admin', file: 'utenti')}",
         resolve: {
           loadMyFiles:function($ocLazyLoad) {
             return $ocLazyLoad.load({
               name:'sbAdminApp',
               files:[
-              'admin/utentiCtrl'
+              "${resource(dir: 'admin', file: 'utentiCtrl')}"
               ]
             })
           }
@@ -158,13 +153,13 @@ angular
      .state('dashboard.dashrossonet',{
         url:'/dashrossonet',
         controller: 'DashRossonetCtrl',
-        templateUrl:'admin/dashrossonet',
+        templateUrl:"${resource(dir: 'admin', file: 'dashrossonet')}",
         resolve: {
           loadMyFiles:function($ocLazyLoad) {
             return $ocLazyLoad.load({
               name:'sbAdminApp',
               files:[
-              'admin/dashrossonetCtrl'
+              "${resource(dir: 'admin', file: 'dashrossonetCtrl')}"
               ]
             })
           }
@@ -173,13 +168,13 @@ angular
       .state('dashboard.memi',{
         url:'/memi',
         controller: 'MemiCtrl',
-        templateUrl:'admin/memi',
+        templateUrl:"${resource(dir: 'admin', file: 'memi')}",
         resolve: {
           loadMyFiles:function($ocLazyLoad) {
             return $ocLazyLoad.load({
               name:'sbAdminApp',
               files:[
-              'admin/memiCtrl'
+              "${resource(dir: 'admin', file: 'memiCtrl')}"
               ]
             })
           }
@@ -188,13 +183,13 @@ angular
       .state('dashboard.memoria',{
         url:'/memoria',
         controller: 'MemoriaCtrl',
-        templateUrl:'admin/memoria',
+        templateUrl:"${resource(dir: 'admin', file: 'memoria')}",
         resolve: {
           loadMyFiles:function($ocLazyLoad) {
             return $ocLazyLoad.load({
               name:'sbAdminApp',
               files:[
-              'admin/memoriaCtrl'
+              "${resource(dir: 'admin', file: 'memoriaCtrl')}"
               ]
             })
           }
@@ -203,13 +198,13 @@ angular
       .state('dashboard.ricettari',{
         url:'/ricettari',
         controller: 'RicettariCtrl',
-        templateUrl:'admin/ricettari',
+        templateUrl:"${resource(dir: 'admin', file: 'ricettari')}",
         resolve: {
           loadMyFiles:function($ocLazyLoad) {
             return $ocLazyLoad.load({
               name:'sbAdminApp',
               files:[
-              'admin/ricettariCtrl'
+              "${resource(dir: 'admin', file: 'ricettariCtrl')}"
               ]
             })
           }
@@ -218,13 +213,13 @@ angular
       .state('dashboard.reti',{
         url:'/reti',
         controller: 'RetiCtrl',
-        templateUrl:'admin/reti',
+        templateUrl:"${resource(dir: 'admin', file: 'reti')}",
         resolve: {
           loadMyFiles:function($ocLazyLoad) {
             return $ocLazyLoad.load({
               name:'sbAdminApp',
               files:[
-              'admin/retiCtrl'
+              "${resource(dir: 'admin', file: 'retiCtrl')}"
               ]
             })
           }
@@ -233,79 +228,79 @@ angular
       .state('dashboard.processi',{
         url:'/processi',
         controller: 'ProcessiCtrl',
-        templateUrl:'admin/processi',
+        templateUrl:"${resource(dir: 'admin', file: 'processi')}",
         resolve: {
           loadMyFiles:function($ocLazyLoad) {
             return $ocLazyLoad.load({
               name:'sbAdminApp',
               files:[
-              'admin/processiCtrl'
+              "${resource(dir: 'admin', file: 'processiCtrl')}"
               ]
             })
           }
         }
       })
       .state('dashboard.form',{
-        templateUrl:'admin/app/views/form.html',
+        templateUrl:"${resource(dir: 'admin', file: 'app/views/form.html')}",
         url:'/form'
     })
       .state('dashboard.blank',{
-        templateUrl:'admin/app/views/pages/blank.html',
+        templateUrl:"${resource(dir: 'admin', file: 'app/views/pages/blank.html')}",
         url:'/blank'
     })
       .state('login',{
-        templateUrl:'admin/app/views/pages/login.html',
+        templateUrl:"${resource(dir: 'admin', file: 'app/views/pages/login.html')}",
         url:'/login'
     })
       .state('dashboard.chart',{
-        templateUrl:'admin/app/views/chart.html',
+        templateUrl:"${resource(dir: 'admin', file: 'app/views/chart.html')}",
         url:'/chart',
         controller:'ChartCtrl',
         resolve: {
           loadMyFile:function($ocLazyLoad) {
             return $ocLazyLoad.load(
-                'admin/bower_components/Chart.js/Chart.min.js'
+                "${resource(dir: 'bower_components', file: 'Chart.js/Chart.min.js')}"
             ),
             $ocLazyLoad.load({
               name:'chart.js',
               files:[
-                'admin/bower_components/angular-chart.js/dist/angular-chart.min.js',
-                'admin/bower_components/angular-chart.js/dist/angular-chart.css'
+                "${resource(dir: 'bower_components', file: 'angular-chart.js/dist/angular-chart.min.js')}",
+                "${resource(dir: 'bower_components', file: 'angular-chart.js/dist/angular-chart.css')}"
               ]
             }),
             $ocLazyLoad.load({
                 name:'sbAdminApp',
-                files:['admin/app/scripts/controllers/chartContoller.js']
+                files:["${resource(dir: 'admin', file: 'app/scripts/controllers/chartContoller.js')}"]
             })
           }
         }
     })
       .state('dashboard.table',{
-        templateUrl:'admin/app/views/table.html',
+        templateUrl:"${resource(dir: 'admin', file: 'app/views/table.html')}",
         url:'/table'
     })
       .state('dashboard.panels-wells',{
-          templateUrl:'admin/app/views/ui-elements/panels-wells.html',
+          templateUrl:"${resource(dir: 'admin', file: 'app/views/ui-elements/panels-wells.html')}",
           url:'/panels-wells'
       })
       .state('dashboard.buttons',{
-        templateUrl:'admin/app/views/ui-elements/buttons.html',
+        templateUrl:"${resource(dir: 'admin', file: 'app/views/ui-elements/buttons.html')}",
         url:'/buttons'
     })
       .state('dashboard.notifications',{
-        templateUrl:'admin/app/views/ui-elements/notifications.html',
+        templateUrl:"${resource(dir: 'admin', file: 'app/views/ui-elements/notifications.html')}",
         url:'/notifications'
     })
       .state('dashboard.typography',{
-       templateUrl:'admin/app/views/ui-elements/typography.html',
+       templateUrl:"${resource(dir: 'admin', file: 'app/views/ui-elements/typography.html')}",
        url:'/typography'
    })
       .state('dashboard.icons',{
-       templateUrl:'admin/app/views/ui-elements/icons.html',
+       templateUrl:"${resource(dir: 'admin', file: 'app/views/ui-elements/icons.html')}",
        url:'/icons'
    })
       .state('dashboard.grid',{
-       templateUrl:'admin/app/views/ui-elements/grid.html',
+       templateUrl:"${resource(dir: 'admin', file: 'app/views/ui-elements/grid.html')}",
        url:'/grid'
    })
   }])
@@ -314,17 +309,17 @@ angular
 	$scope.focusMain='';
 	
     $scope.svolgiistanza = function(idTask) {
-       	$scope.focusMain = "${createLink(controller:'Ar4kActiviti',action:'taskProcessoForm',absolute:'true')}?idTask="+idTask;
+       	$scope.focusMain = "${createLink(controller:'admin',action:'taskProcessoForm',absolute:'true')}?idTask="+idTask;
        	$scope.pannelloMain = true;
        	};
 
-    $http.get("${createLink(controller:'ar4kActiviti',action:'listaTask',absolute:'true')}")
+    $http.get("${createLink(controller:'admin',action:'listaTask',absolute:'true')}")
     	.success(function (response) {
     		$scope.tasks = response.tasks;
     		$scope.numeroTasks = response.conto;
     		}); 
     $scope.aggiornaDaMessaggio = function() {
-    	$http.get("${createLink(controller:'ar4kActiviti',action:'listaTask',absolute:'true')}")
+    	$http.get("${createLink(controller:'admin',action:'listaTask',absolute:'true')}")
     		.success(function (response) {
     			$scope.tasks = response.tasks;
     			$scope.numeroTasks = response.conto;

@@ -217,8 +217,12 @@ if (location.href.indexOf('is-external=true') == -1) {
 </dt><dd> <div class="block">verifica ed eventualmente prova a riavviare tutti gli oggetti collegati</div></dd>
 <dt><span class="strong"><a href="org/ar4k/Interfaccia.html#avviaInterfaccia()" title="Method in Interfaccia">avviaInterfaccia()</a></span> - Method in <a href="org/ar4k/Interfaccia.html">Interfaccia</a>
 </dt><dd> <div class="block">configura i service in funzione dell'interfaccia</div></dd>
+<dt><span class="strong"><a href="org/ar4k/AdminController.html#avviaProcesso()" title="Method in AdminController">avviaProcesso()</a></span> - Method in <a href="org/ar4k/AdminController.html">AdminController</a>
+</dt><dd> <div class="block">Avvia il processo -chiamata POST-</div></dd>
 <dt><span class="strong"><a href="org/ar4k/Vaso.html#avviaRicettario(org.ar4k.Ricettario)" title="Method in Vaso">avviaRicettario(Ricettario)</a></span> - Method in <a href="org/ar4k/Vaso.html">Vaso</a>
 </dt><dd> <div class="block">scarica un ricettario sul nodo se attivo</div></dd>
+<dt><span class="strong"><a href="org/ar4k/AdminController.html#avvioProcessoForm(java.lang.String)" title="Method in AdminController">avvioProcessoForm(String)</a></span> - Method in <a href="org/ar4k/AdminController.html">AdminController</a>
+</dt><dd> <div class="block">Restituisce il form di avvio per il processo</div></dd>
 </dl>
 
     
@@ -277,6 +281,8 @@ if (location.href.indexOf('is-external=true') == -1) {
 <h2 class="title">C</h2>
 <dl>
 
+<dt><span class="strong"><a href="org/ar4k/AdminController.html#cancellaMeme(java.lang.String)" title="Method in AdminController">cancellaMeme(String)</a></span> - Method in <a href="org/ar4k/AdminController.html">AdminController</a>
+</dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="org/ar4k/AdminController.html#cancellaValoreKV()" title="Method in AdminController">cancellaValoreKV()</a></span> - Method in <a href="org/ar4k/AdminController.html">AdminController</a>
 </dt><dd> <div class="block">Salva un valore in consul</div></dd>
 <dt><span class="strong"><a href="org/ar4k/Meme.html#caricaInBootstrap" title="Property in Meme">caricaInBootstrap</a></span> - Property in <a href="org/ar4k/Meme.html">Meme</a>
@@ -484,6 +490,10 @@ if (location.href.indexOf('is-external=true') == -1) {
 </dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="org/ar4k/Contesto.html#destroy()" title="Method in Contesto">destroy()</a></span> - Method in <a href="org/ar4k/Contesto.html">Contesto</a>
 </dt><dd> <div class="block">ditruttore di classe (utile per la gestione della pulizia dei vasi)</div></dd>
+<dt><span class="strong"><a href="org/ar4k/AdminController.html#diagrammaProcesso(java.lang.String)" title="Method in AdminController">diagrammaProcesso(String)</a></span> - Method in <a href="org/ar4k/AdminController.html">AdminController</a>
+</dt><dd> <div class="block">@return immagine processo</div></dd>
+<dt><span class="strong"><a href="org/ar4k/AdminController.html#diagrammaStatoProcesso(java.lang.String)" title="Method in AdminController">diagrammaStatoProcesso(String)</a></span> - Method in <a href="org/ar4k/AdminController.html">AdminController</a>
+</dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="org/ar4k/Meme.html#dipendenze" title="Property in Meme">dipendenze</a></span> - Property in <a href="org/ar4k/Meme.html">Meme</a>
 </dt><dd> <div class="block">lista funzionalità di cui è necessaria la presenza nel contesto per operare</div></dd>
 <dt><span class="strong"><a href="org/ar4k/Meme.html#disinstallazione" title="Property in Meme">disinstallazione</a></span> - Property in <a href="org/ar4k/Meme.html">Meme</a>
@@ -918,6 +928,8 @@ if (location.href.indexOf('is-external=true') == -1) {
 </dt><dd> <div class="block">lista connessioni SSH per accedere a Consul disponibili</div></dd>
 <dt><span class="strong"><a href="org/ar4k/Stato.html#listaIdContesti()" title="Method in Stato">listaIdContesti()</a></span> - Method in <a href="org/ar4k/Stato.html">Stato</a>
 </dt><dd> <div class="block">Ritorna l'elenco degli id contesti per il bootstrap</div></dd>
+<dt><span class="strong"><a href="org/ar4k/AdminController.html#listaIstanze(java.lang.String)" title="Method in AdminController">listaIstanze(String)</a></span> - Method in <a href="org/ar4k/AdminController.html">AdminController</a>
+</dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="org/ar4k/AdminController.html#listaMemi()" title="Method in AdminController">listaMemi()</a></span> - Method in <a href="org/ar4k/AdminController.html">AdminController</a>
 </dt><dd> <div class="block">@return Memi collegati in JSON</div></dd>
 <dt><span class="strong"><a href="org/ar4k/AdminController.html#listaProcessi()" title="Method in AdminController">listaProcessi()</a></span> - Method in <a href="org/ar4k/AdminController.html">AdminController</a>
@@ -930,6 +942,8 @@ if (location.href.indexOf('is-external=true') == -1) {
 </dt><dd> <div class="block">@return Chiamata JSON per ottenere la lista di semi in un ricettario.</div></dd>
 <dt><span class="strong"><a href="org/ar4k/AdminController.html#listaStore()" title="Method in AdminController">listaStore()</a></span> - Method in <a href="org/ar4k/AdminController.html">AdminController</a>
 </dt><dd> <div class="block">@return Store dati JCloud collegati in JSON</div></dd>
+<dt><span class="strong"><a href="org/ar4k/AdminController.html#listaTask()" title="Method in AdminController">listaTask()</a></span> - Method in <a href="org/ar4k/AdminController.html">AdminController</a>
+</dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="org/ar4k/AdminController.html#listaVasi()" title="Method in AdminController">listaVasi()</a></span> - Method in <a href="org/ar4k/AdminController.html">AdminController</a>
 </dt><dd> <div class="block">@return Vasi e oggetti collegati in JSON</div></dd>
 <dt><span class="strong"><a href="org/ar4k/CustomUserQuery.html#listPage(int, int)" title="Method in CustomUserQuery">listPage(int, int)</a></span> - Method in <a href="org/ar4k/CustomUserQuery.html">CustomUserQuery</a>
@@ -979,6 +993,8 @@ if (location.href.indexOf('is-external=true') == -1) {
 </dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="org/ar4k/Meme.html#maschera()" title="Method in Meme">maschera()</a></span> - Method in <a href="org/ar4k/Meme.html">Meme</a>
 </dt><dd> <div class="block">ritorna la maschera html relativa allo stato corrente del meme</div></dd>
+<dt><span class="strong"><a href="org/ar4k/AdminController.html#mascheraMeme(java.lang.String)" title="Method in AdminController">mascheraMeme(String)</a></span> - Method in <a href="org/ar4k/AdminController.html">AdminController</a>
+</dt><dd> <div class="block">Restituisce la maschera dello stato attuale di un meme</div></dd>
 <dt><span class="strong"><a href="org/ar4k/MasterCamelRoute.html" title="Class in org.ar4k">MasterCamelRoute</a></span> - Class in <a href="./org/ar4k/package-summary.html">org.ar4k</a>
 </dt><dd><div class="block">Rotte principali Apache Camel</div></dd>
 <dt><span class="strong"><a href="org/ar4k/MasterCamelRoute.html#MasterCamelRoute()" title="Constructor in MasterCamelRoute">MasterCamelRoute()</a></span> - Constructor in <a href="org/ar4k/MasterCamelRoute.html">MasterCamelRoute</a>
@@ -1203,6 +1219,8 @@ if (location.href.indexOf('is-external=true') == -1) {
 </dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="org/ar4k/Metodo.html#riferimento" title="Property in Metodo">riferimento</a></span> - Property in <a href="org/ar4k/Metodo.html">Metodo</a>
 </dt><dd> <div class="block">percorso file bar (Activiti) nel repository git -Ricettario-</div></dd>
+<dt><span class="strong"><a href="org/ar4k/AdminController.html#ritornaFile(java.lang.String, java.lang.String)" title="Method in AdminController">ritornaFile(String, String)</a></span> - Method in <a href="org/ar4k/AdminController.html">AdminController</a>
+</dt><dd> <div class="block">Restituisce un percorso relativo al repository di un Meme</div></dd>
 <dt><span class="strong"><a href="org/ar4k/Utente.html#ritrovaPassword(java.lang.String)" title="Method in Utente">ritrovaPassword(String)</a></span> - Method in <a href="org/ar4k/Utente.html">Utente</a>
 </dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="org/ar4k/AdminController.html#rossonet()" title="Method in AdminController">rossonet()</a></span> - Method in <a href="org/ar4k/AdminController.html">AdminController</a>
@@ -1325,12 +1343,16 @@ if (location.href.indexOf('is-external=true') == -1) {
 <h2 class="title">T</h2>
 <dl>
 
+<dt><span class="strong"><a href="org/ar4k/AdminController.html#taskProcessoForm(java.lang.String)" title="Method in AdminController">taskProcessoForm(String)</a></span> - Method in <a href="org/ar4k/AdminController.html">AdminController</a>
+</dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="org/ar4k/TemplateInterfaccia.html" title="Class in org.ar4k">TemplateInterfaccia</a></span> - Class in <a href="./org/ar4k/package-summary.html">org.ar4k</a>
 </dt><dd><div class="block">descrive il template grafico dell'interfaccia</div></dd>
 <dt><span class="strong"><a href="org/ar4k/TemplateInterfaccia.html#TemplateInterfaccia()" title="Constructor in TemplateInterfaccia">TemplateInterfaccia()</a></span> - Constructor in <a href="org/ar4k/TemplateInterfaccia.html">TemplateInterfaccia</a>
 </dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="org/ar4k/AdminController.html#terminale()" title="Method in AdminController">terminale()</a></span> - Method in <a href="org/ar4k/AdminController.html">AdminController</a>
 </dt><dd> <div class="block">@return Componente html con terminale legato ai websocks</div></dd>
+<dt><span class="strong"><a href="org/ar4k/AdminController.html#testConnessione()" title="Method in AdminController">testConnessione()</a></span> - Method in <a href="org/ar4k/AdminController.html">AdminController</a>
+</dt><dd> <div class="block">verifica connettività e utente</div></dd>
 <dt><span class="strong"><a href="org/ar4k/Stato.html#testConnessione()" title="Method in Stato">testConnessione()</a></span> - Method in <a href="org/ar4k/Stato.html">Stato</a>
 </dt><dd> <div class="block">testa la connessione senza sincronizzare i dati e chiudendola immediatamente</div></dd>
 <dt><span class="strong"><a href="org/ar4k/InterfacciaContestoService.html#testStampaMemoria(java.lang.String)" title="Method in InterfacciaContestoService">testStampaMemoria(String)</a></span> - Method in <a href="org/ar4k/InterfacciaContestoService.html">InterfacciaContestoService</a>
@@ -1473,6 +1495,8 @@ if (location.href.indexOf('is-external=true') == -1) {
 </dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="org/ar4k/RefreshToken.html#value" title="Property in RefreshToken">value</a></span> - Property in <a href="org/ar4k/RefreshToken.html">RefreshToken</a>
 </dt><dd> <div class="block"></div></dd>
+<dt><span class="strong"><a href="org/ar4k/AdminController.html#variabiliAvvioProcesso(java.lang.String)" title="Method in AdminController">variabiliAvvioProcesso(String)</a></span> - Method in <a href="org/ar4k/AdminController.html">AdminController</a>
+</dt><dd> <div class="block">ritorna l'elenco di parametri necessari nella maschera di avvio</div></dd>
 <dt><span class="strong"><a href="org/ar4k/Contesto.html#vasi" title="Property in Contesto">vasi</a></span> - Property in <a href="org/ar4k/Contesto.html">Contesto</a>
 </dt><dd> <div class="block">vasi disponibili nel contesto</div></dd>
 <dt><span class="strong"><a href="org/ar4k/Vaso.html" title="Class in org.ar4k">Vaso</a></span> - Class in <a href="./org/ar4k/package-summary.html">org.ar4k</a>
