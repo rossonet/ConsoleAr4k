@@ -75,4 +75,7 @@ Per creare un war installabile su Tomcat >= 7
 ```bash
 ./grailsw war
 ```
+##Documentazione progetto
 
+[API Groovy](http://rossonet.github.io/ConsoleAr4k/web-app/docs/gapi/index.html)
+[API Java](http://rossonet.github.io/ConsoleAr4k/web-app/docs/api/index.html)
