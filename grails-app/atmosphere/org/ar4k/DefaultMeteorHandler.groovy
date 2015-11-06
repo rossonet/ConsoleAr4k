@@ -29,7 +29,7 @@ import org.atmosphere.cpr.Meteor
 
 class DefaultMeteorHandler extends HttpServlet {
 	def atmosphereMeteor = Holders.applicationContext.getBean("atmosphereMeteor")
-	def webSocketService = Holders.applicationContext.getBean("webSocketService")
+	//def webSocketService = Holders.applicationContext.getBean("webSocketService")
 
 	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {

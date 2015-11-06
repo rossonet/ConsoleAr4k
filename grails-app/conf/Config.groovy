@@ -143,7 +143,6 @@ log4j.main = {
 					info 'org.codehaus.groovy.grails.web.sitemesh'
 					info 'org.codehaus.groovy.grails.plugins'
 					info 'org.codehaus.groovy.grails.commons'
-					info 'org.activiti'
 					info 'org.ar4k'
 					//debug 'org.hibernate'
 				}
@@ -171,7 +170,7 @@ oauth {
 			successUri = '/oauth/twitter/success'
 			failureUri = '/oauth/twitter/error'
 			//callback = "${baseURL}/oauth/twitter/callback"
-			callback = "http://localhost:8080/AgenteAr4k/oauth/twitter/callback"
+			callback = "http://localhost:8080/ConsoleAr4k/oauth/twitter/callback"
 		}
 		linkedin {
 			api = org.scribe.builder.api.LinkedInApi
@@ -180,7 +179,7 @@ oauth {
 			successUri = '/oauth/linkedin/success'
 			failureUri = '/oauth/linkedin/error'
 			//callback = "${baseURL}/oauth/linkedin/callback"
-			callback = "http://localhost:8080/AgenteAr4k/oauth/linkedin/callback"
+			callback = "http://localhost:8080/ConsoleAr4k/oauth/linkedin/callback"
 		}
 		google {
 			api = org.grails.plugin.springsecurity.oauth.GoogleApi20
@@ -190,7 +189,7 @@ oauth {
 			successUri = '/oauth/google/success'
 			failureUri = '/oauth/google/error'
 			//callback = "${baseURL}/oauth/google/callback"
-			callback = "http://localhost:8080/AgenteAr4k/oauth/google/callback"
+			callback = "http://localhost:8080/ConsoleAr4k/oauth/google/callback"
 			scope = 'https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email'
 		}
 		facebook {
@@ -200,7 +199,7 @@ oauth {
 			successUri = '/oauth/facebook/success'
 			failureUri = '/oauth/facebook/error'
 			//callback = "${baseURL}/oauth/facebook/callback"
-			callback = "http://localhost:8080/AgenteAr4k/oauth/facebook/callback"
+			callback = "http://localhost:8080/ConsoleAr4k/oauth/facebook/callback"
 		}
 	}
 }
@@ -222,61 +221,7 @@ grails {
 // Per l'assistenza remota
 olark.key='1445-771-10-6904'
 
-master.host = '127.0.0.1'
-master.port = 22
-master.user = 'ar4k'
-// Iniziare la stringa chiave con """ e concludere con uguale combinazione
-master.key = """
------BEGIN RSA PRIVATE KEY-----
-MIIEoAIBAAKCAQEAnMVL/qgLI9p7kAPC/JDH9Z8tv1dRpLWCyBxMr8Z2p94K+/NE
-avP10wflj8Mxk89v9Z4JOPsP5vSVsFdNJJD5oD++5cD5XGlBSjtKfxZPVz+VKgBo
-Aouke+mrnQ27BUYH6g7Aas/LUXhDkqBCckKE1f8ukwEAWkTvKcTJ0t8Ir6WqONiu
-8ITxxRa7LNxFYIzt+1N3ScMVLEfszQe4xsG02WwPS2JgBT2mVjg3J3cWy78RDJjm
-oO6UpT7QpxykV/pVBkRTBwzN+gqKfXxc2xvULbHgfpakGs/GijTKNiqOonsB3eyV
-D9MacP/kWMUkh2REjzE7jw5UKfwKM/8o5NMcPwIBIwKCAQAj1VMy5JTU/r0oO1/E
-s2Dnr1rp6BKpTg9DrrJxUe88UAKCu0LWnimPUkMZi7OPf98TkdY46O2xIfZUMTY0
-PmTxbaf6ADj/LgBLe0Q6Tj4FUFyb4tXx9AhW1lMclWyTfbiqhwdo3wnmvGc3dRaA
-hDueoLowOr5AhMjzmrHJzJRFZ1ZKpZt/2mAXRYde0Hn4ujdyddGgw0LAFkchUCHN
-/Ymsi7Nl75o5idE/CxF+2HtknolldcnPBP7H7WtFQYOFBH6e2MVuR/BMhuVQMfO9
-RDktF3uyv7aFn/LfGGfnoZ86mt3tF441OU4Crhyz03yvHDwk3M1wtxeoiYYQzZrd
-0TkLAoGBAMrRI743ALpUvunf5sxlBAI1p1I54YC722IsAiQT6qe9ckVHm+dnIviX
-EAXYx200D2QVh6xrxKuPGRmsviSqNf2fI/orGaHbZXf1dScHX0zcTQykSf2teB0d
-CCxwm+EHhpbOV/f/2O1nSoG6+/mCLGU++t4JF7zkilwM8MUeI7pZAoGBAMXhIGhq
-KNMKh6EOJWNbWjkw6K/wi1BoCxNvRwDNodLJFpklzjXiX7pLV8TDvI2/ehPbLedL
-dA5rdwGrX+BH0K1wK/kZeHDP1udJLKt3sg0sHhasRefku+LdIdcwK5T6juAiTY7n
-H3e9+6ULC+mHHFgu8Fq41Y/EGAOdit48PAhXAoGAaE5M5XtfdcUu++9+ArebqV1r
-/mbpAGCctiVC7fudQFLNDa/MhaLBhykeLuSD0cMAmd8v1QQ5QkmX4VGGW//D/sbf
-TXVAYd6L9IzdKgPKnI6OBoBgkRdiWB2PLMwy6MIKs/UXTFexZCZ+FtUxITuhzatc
-cjCP3XzZcSs5/vmOt5sCgYBra5U//x154SUOSYICvJAQawH5HC5e2WUZLcd1dvFy
-bSmGVln//ou85xJjgDMoYKFbPHgBN5bF/9Ljpiy7lLMcUtYK4fDsyJk7ugJOdC10
-3W9rZNV94pHhjfxtgIyv9btGeQWIFxEVHf2ivNqUtw9jEiq05/7npPcX588K7X+s
-wQKBgHwRHbOAi1L5SrZgPpdMa/Y3hxd9HXz/E8k0S5PuXgIR/uIwM31j6AvQTh0b
-By5hGzU8Jimq23HxpiO8w3zpFN7pLVQWb+WVFBUsz8rH2OfI5x/SF2Od2MQr/g+G
-XY4EKah0OgIHWHJ1FkWvyVUYDn+BTSGj6roqszef3NNOsutc
------END RSA PRIVATE KEY-----
-"""
-
-// Contesto
-contesto = 'Bootstrap-Ar4k'
-
-// Interfaccia
-interfaccia = 'Bootstrap-Ar4k'
-
-// Codice attivazione Ar4K (Attivazioni commerciali)
-//codiceAttivazione = ''
-
-// Configurazione proxy tra la JVM e il vaso master
-//proxyVersoMaster = ''
-
-// Configurazione proxy tra il vaso master e Internet
-//proxyMasterInternet = ''
-
-// Configurazione ActiveMQ
-grails.plugin.routing.jms.brokerURL = 'tcp://localhost:61616'
-grails.plugin.routing.jms.userName = 'admin'
-grails.plugin.routing.jms.password =  'admin'
-
-grails.routing.camelContextId = 'ar4kInterfaccia'
+grails.routing.camelContextId = 'ContestoAr4kBootstrap'
 
 ///////////////////////////////////////////////////////////////////////////
 ///////////// FINE CONFIGURAZIONI ROSSONET ////////////////////////////////
@@ -336,18 +281,7 @@ grails.plugin.springsecurity.ui.register.defaultRoleNames = ['ROLE_REGISTRATO']
 grails.plugin.springsecurity.ui.forgotPassword.emailBody = 'Salve $user,<br>per completare la procedura di cambio della password AR4K selezionare <a href="$url">questo link</a>.<br><br><bold>BOT AR4K</bold><br>(sistema automatico)'
 grails.plugin.springsecurity.ui.forgotPassword.emailSubject = 'Completa il reset della password AR4K'
 
-
-// configurazioni activiti
-activiti {
-	  jobExecutorActivate = true
-	  mailServerHost = "smtp.yourserver.com"
-	  mailServerPort = "25"
-	  mailServerUsername = ""
-	  mailServerPassword = ""
-	  mailServerDefaultFrom = "ar4k@rossonet.com"
-	  history = "audit" // "none", "activity", "audit" or "full"
-}
-
+// Configurazione Cross domain -Attenzione alla sicurezza!!-
 cors.headers = ['Access-Control-Allow-Origin': '*']
 
 

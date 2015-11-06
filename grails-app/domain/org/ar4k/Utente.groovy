@@ -4,18 +4,29 @@
  * <p>Utente</p>
  *
  * <p style="text-justify">
- * Gli utenti possono avere più ruoli (tramite UtenteRuolo) e possono
- * essere agganciati a più utenti su fonti di autenticazione OAuth.
- * In pratica ad un utente Ar4k possono corrispondere più account social. 
- * L'interfaccia grafica di ar4k guida l'utente nelle procedure di gestione 
- * necessarie.</br>
+ * Utente sistema Ar4k
+ * 
+ * La fonte primaria per la gestione degli utenti, la loro registrazione e l'accesso a gli applicativi è la console.
+ * La console mantiene in database tutti i valori relativi.
+ * 
+ * Le classi coinvolte nella gestione degli utenti sono: Utente,Ruolo,UtenteRuolo,Client,OAuthID,AccessToken e RefreshToken.
  * </p>
+ * 
+ * 
+ * TODO: implementazione OAuthID server per tutta l'infrastruttura Ar4k sulla Console
+ *
+ * TODO: esportazione e gestione sincronizzazione con alberi ldap esterni  
  *
  * @author Andrea Ambrosini (Rossonet s.c.a r.l)
  * @version 0.1-alpha
+ * @see org.ar4k.Contesto
+ * @see org.ar4k.Utente
  * @see org.ar4k.Ruolo
  * @see org.ar4k.UtenteRuolo
- * @see org.ar4k.Contesto
+ * @see org.ar4k.Client
+ * @see org.ar4k.OAuthID
+ * @see org.ar4k.AccessToken
+ * @see org.ar4k.RefreshToken
  */
 
 package org.ar4k
@@ -47,6 +58,7 @@ class Utente implements User{
 	boolean accountLocked
 	boolean passwordExpired
 
+	/** Vero se il dato contiene la password in chiaro. Esportare la password in chiaro non è mai una buona idea in ambienti di produzione...*/
 	boolean esportatoConPasswordInChiaro = true
 
 	static transients = ['springSecurityService']
@@ -97,25 +109,25 @@ class Utente implements User{
 	static Utente importa(Map json){
 		Utente utente =Utente.findAllByUsername(json.username)[0]
 		if(!utente){
-		utente = new Utente(
-				username:json.username,
-				firstName:json.firstName,
-				lastName:json.lastName,
-				email:json.email,
-				sms:json.sms,
-				jabber:json.jabber,
-				workingTime:json.workingTime,
-				//dateCreated:json.dateCreated,
-				//lastUpdated:json.lastUpdated,
-				avatar:json.avatar,
-				enabled:json.enabled,
-				accountExpired:json.accountExpired,
-				accountLocked:json.accountLocked,
-				passwordExpired:json.passwordExpired,
-				password:json.password,
-				esportatoConPasswordInChiaro:json.esportatoConPasswordInChiaro
-				)
-		json.oAuthIDs.each{utenteCreato.oAuthIDs.add(new OAuthID(it))}
+			utente = new Utente(
+					username:json.username,
+					firstName:json.firstName,
+					lastName:json.lastName,
+					email:json.email,
+					sms:json.sms,
+					jabber:json.jabber,
+					workingTime:json.workingTime,
+					//dateCreated:json.dateCreated,
+					//lastUpdated:json.lastUpdated,
+					avatar:json.avatar,
+					enabled:json.enabled,
+					accountExpired:json.accountExpired,
+					accountLocked:json.accountLocked,
+					passwordExpired:json.passwordExpired,
+					password:json.password,
+					esportatoConPasswordInChiaro:json.esportatoConPasswordInChiaro
+					)
+			json.oAuthIDs.each{utenteCreato.oAuthIDs.add(new OAuthID(it))}
 		}
 		//utenteCreato.save(flush:true)
 		return utente

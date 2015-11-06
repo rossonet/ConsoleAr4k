@@ -19,14 +19,16 @@ import org.apache.camel.builder.RouteBuilder
 class MasterCamelRoute extends RouteBuilder {
 	def grailsApplication
 
-	@Override 
+	@Override
 	void configure() {
 		def config = grailsApplication?.config
-		from('activemq:topic:interfaccia.memoria').to('bean:interfacciaContestoService?method=testStampaMemoria')
-		from('activemq:topic:interfaccia.eventi').to('bean:interfacciaContestoService?method=eventiInterfaccia')
-		from('activemq:topic:consul.eventi').to('bean:interfacciaContestoService?method=eventiConsul')
-		from('activemq:topic:activiti.eventi').to('bean:interfacciaContestoService?method=eventiActiviti')
-		from('activemq:topic:jcloud.eventi').to('bean:interfacciaContestoService?method=eventiJCloud')
-		from('activemq:topic:sistema.messaggi').to('bean:interfacciaContestoService?method=codaMessaggiInfo')
+		/*
+		 from('activemq:topic:interfaccia.memoria').to('bean:interfacciaContestoService?method=testStampaMemoria')
+		 from('activemq:topic:interfaccia.eventi').to('bean:interfacciaContestoService?method=eventiInterfaccia')
+		 from('activemq:topic:consul.eventi').to('bean:interfacciaContestoService?method=eventiConsul')
+		 from('activemq:topic:activiti.eventi').to('bean:interfacciaContestoService?method=eventiActiviti')
+		 from('activemq:topic:jcloud.eventi').to('bean:interfacciaContestoService?method=eventiJCloud')
+		 from('activemq:topic:sistema.messaggi').to('bean:interfacciaContestoService?method=codaMessaggiInfo')
+		 */
 	}
 }

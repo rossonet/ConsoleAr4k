@@ -7,14 +7,18 @@
  * Il contesto rappresenta un progetto, un insieme di risorse, utenti e codice che interagiscono.</br>
  * Il contesto espone la factory dei dns, QR e risorse di calcolo fornite da Provider.</br>
  * i memi possono associare degli eventi ai contesti.</br>
+ * Il Contesto è collegato ad un sistema Consul attivo tramite accesso diretto alle API HTTP di un server Consul oppure tramite un
+ * bridge SSH passante per la rete o tramite Onion (TOR)
  * </br>
- * Un contesto parte sempre con un ricettario base che contiene i meme base per la gestione dei suoi eventi.
+ * Scopo di questa classe è mantenere le comunicazioni con il contesto Consul e mappare tutte le risorse del sistema mantenedo
+ * la sincronizzaizone dei dati con lo storage dati Consul.
  * </p>
  *
  * @author Andrea Ambrosini (Rossonet s.c.a r.l)
  * @version 0.1-alpha
  * @see org.ar4k.Meme
  * @see org.ar4k.Vaso
+ * @see org.ar4k.Regione
  * @see org.ar4k.Ricettario
  * @see org.ar4k.Interfaccia
  * @see org.ar4k.Connesione
@@ -30,32 +34,101 @@ import grails.util.Holders
 class Contesto {
 	/** id univoco contesto */
 	String idContesto = UUID.randomUUID()
-	/** etichetta contesto */
-	String etichetta = ''
-	/** descrizione contesto */
-	String descrizione ='Contesto operativo AR4K by Rossonet'
-	/** campo per link a CRM (progetto)*/
-	String idProgetto ='00 - LAB Rossonet'
-	/** campo per l'avanzamanto del bootstrap (nascita,vita,virus,morte)*/
-	private String statoBootStrap = 'nascita'
-	/** se vero, salva il contesto su tutti i vasi connessi  */
-	Boolean clonaOvunque = false
 	/** chiave criptografia Consul per il protocollo gossip. Si può ottenere con #consul genkey */
 	String consulKey = 'yIetiZno0c7464rOCaIThQ=='
+	/** etichetta contesto */
+	String etichetta = null
+	/** descrizione contesto */
+	String descrizione = null
+	/** campo per link a CRM (progetto)*/
+	String idProgetto = null
 	/** dominio consul - inserire il punto finale come nella configurazione di Bind -*/
-	String dominioConsul = 'bottegaio.net.'
-	/** Datacenter vasi contesto - condivisibile tra più contesti - */
-	String datacenterConsul = 'caverna'
+	String dominioConsul = null
 	/** ricettari a disposizione del contesto*/
 	List<Ricettario> ricettari= []
 	/** interfacce collegate al contesto*/
 	List<Interfaccia> interfacce= []
-	/** utenti del contesto da importare in configurazione */
-	List<UtenteRuolo> utentiRuoli = []
 	/** memi attivi nel contesto */
 	List<Meme> memi = []
 	/** vasi disponibili nel contesto */
 	List<Vaso> vasi =[]
+	/** lista nodi disponibili */
+	List<Nodo> nodi = []
+	/** lista regioni (datacenter Consul) disponibili */
+	List<Regione> regioni = []
+	/** factories installazioni e Cloud */
+	List<Fabbrica> fabbriche = []
+	/** utenti del contesto da importare in configurazione */
+	List<UtenteRuolo> utentiRuoli = []
+	
+	
+	/** dump oggetto per funzioni di salvataggio*/
+	def esporta() {
+		log.info("esporta() il contesto: "+idContesto)
+		return [
+			idContesto:idContesto,
+			etichetta:etichetta,
+			descrizione:descrizione,
+			idProgetto:idProgetto,
+			interfacce:interfacce*.idInterfaccia,
+			memi:memi*.idMeme,
+			nodi:nodi*.idNodo,
+			regioni:regioni*.idRegione,
+			fabbriche:fabbriche*.idFabbrica,
+			vasi:vasi*.idVaso,
+			ricettari:ricettari*.idRicettario,
+			consulKey:consulKey,
+			dominioConsul:dominioConsul,
+			utentiRuoli:utentiRuoli.each{it.ruolo+'/'+it.utente}
+		]
+	}
+	
+	/** salva il contesto sul nodo master */
+	Boolean salva(Stato stato) {
+		stato.salvaValore(idContesto,'org-ar4k-Contesto',(esporta() as JSON).toString())
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+		/** campo per l'avanzamanto del bootstrap (nascita,vita,virus,morte)*/
+	private String statoBootStrap = 'nascita'
+	/** se vero, salva il contesto su tutti i vasi connessi  */
+	Boolean clonaOvunque = false
+
+
+	/** Datacenter vasi contesto - condivisibile tra più contesti - */
+	String datacenterConsul = 'caverna'
+
+
+
 	/** lista provider Cloud - da verificare - */
 	List<CloudProvider> cloudProviders= []
 	/** short link e qr */
@@ -109,40 +182,9 @@ class Contesto {
 		return risultato
 	}
 
-	/** salva il contesto sul nodo master */
-	Boolean salva() {
-		Boolean risultato = false
-		if (clonaOvunque) {
-			vasi*.salvaContesto(this)
-			risultato = true // da definire
-		} else {
-			if (vasoMaster.salvaContesto(this)) risultato = true
-		}
-		return risultato
-	}
 
-	/** dump oggetto per funzioni di salvataggio*/
-	def esporta() {
-		log.info("esporta() il contesto: "+idContesto)
-		return [
-			idContesto:idContesto,
-			etichetta:etichetta,
-			descrizione:descrizione,
-			idProgetto:idProgetto,
-			interfacce:interfacce*.esporta(),
-			memi:memi*.esporta(),
-			utentiRuoli:utentiRuoli*.esporta(),
-			//utentiRuoli:UtenteRuolo.findAll()*.esporta(),
-			vasi:vasi*.esporta(),
-			vasoMaster:vasoMaster.esporta(),
-			ricettari:ricettari*.esporta(),
-			clonaOvunque:clonaOvunque,
-			cloudProviders:cloudProviders*.esporta(),
-			puntatori:puntatori*.esporta(),
-			consulKey:consulKey,
-			dominioConsul:dominioConsul
-		]
-	}
+
+
 
 	Contesto importa(Map json){
 		log.info("importa() il contesto: "+json.idContesto)

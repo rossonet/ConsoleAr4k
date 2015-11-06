@@ -92,7 +92,7 @@ public class Launcher extends AbstractLauncher {
 		}
 		catch (Exception e) {
 			e.printStackTrace();
-			System.err.println("Error loading Tomcat: " + e.getMessage());
+			System.err.println("Errore caricamento Tomcat: " + e.getMessage());
 			System.exit(1);
 		}
 		try {
@@ -264,7 +264,7 @@ public class Launcher extends AbstractLauncher {
 	protected void startTomcat(String host, int port, String contextPath, Integer securePort) {
 		try {
 			tomcat.start();
-			String message = "Server running. Browse to http://" +
+			String message = "Server funzionante. Browse to http://" +
 					(host != null ? host : "localhost") +
 					":" + port + contextPath;
 			if (securePort != null) {
@@ -276,7 +276,7 @@ public class Launcher extends AbstractLauncher {
 		}
 		catch (LifecycleException e) {
 			e.printStackTrace();
-			System.err.println("Error loading Tomcat: " + e.getMessage());
+			System.err.println("Errore caricando Tomcat: " + e.getMessage());
 			System.exit(1);
 		}
 	}

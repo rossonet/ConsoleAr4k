@@ -1,5 +1,5 @@
 /**
- * Controller grails di default
+ * Controller grails di default generato automaticamente
  */
 
 

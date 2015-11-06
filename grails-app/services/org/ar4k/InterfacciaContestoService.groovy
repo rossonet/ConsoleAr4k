@@ -54,6 +54,34 @@ class InterfacciaContestoService {
 	Stato stato
 	/** Interfaccia corrente */
 	Interfaccia interfaccia
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	/** connessione ssh consul */
 	JSch connessioneConsul = null
 	/** connessione ssh activemq */

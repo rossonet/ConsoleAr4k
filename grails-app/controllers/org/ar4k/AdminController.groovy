@@ -1,5 +1,5 @@
 /**
- * Controller interfaccia web principale
+ * Controller interfaccia web principale della console amministrativa
  * 
  * <p>
  * AdminController gestisce tutte le richieste dell'interfaccia utente tranne autenticazione e bootstrap
@@ -186,7 +186,7 @@ class AdminController {
 		interfacciaContestoService.contesto.vasi.each{ vaso ->
 			String macchina = vaso.macchina
 			Boolean eMaster = false;
-			def stato = interfacciaContestoService.stato.consulBind.getHealthChecksForNode(macchina,new QueryParams(interfacciaContestoService.contesto.datacenterConsul)).getValue()
+			def stato = interfacciaContestoService.stato.consul.getHealthChecksForNode(macchina,new QueryParams(interfacciaContestoService.contesto.datacenterConsul)).getValue()
 			if (interfacciaContestoService.contesto.vasoMaster.idVaso == vaso.idVaso ) {
 				eMaster = true;
 			}
@@ -202,8 +202,8 @@ class AdminController {
 	 */
 	def listaProcessi() {
 		def risultato = []
-		interfacciaContestoService.stato.consulBind.getAgentServices().getValue().each{
-			String stato = interfacciaContestoService.stato.consulBind.getHealthChecksForService(it.getValue().service,new QueryParams(interfacciaContestoService.contesto.datacenterConsul)).getValue()
+		interfacciaContestoService.stato.consul.getAgentServices().getValue().each{
+			String stato = interfacciaContestoService.stato.consul.getHealthChecksForService(it.getValue().service,new QueryParams(interfacciaContestoService.contesto.datacenterConsul)).getValue()
 			risultato.add(processo:it.getValue(),stato:stato)
 		}
 		def incapsulato = [processi:risultato]
@@ -216,11 +216,11 @@ class AdminController {
 	 */
 	def listaDataCenters() {
 		def risultato = []
-		interfacciaContestoService.stato.consulBind.getCatalogDatacenters().getValue().each{
-			List<String> nodi = interfacciaContestoService.stato.consulBind.getCatalogNodes(new QueryParams(it)).getValue()
+		interfacciaContestoService.stato.consul.getCatalogDatacenters().getValue().each{
+			List<String> nodi = interfacciaContestoService.stato.consul.getCatalogNodes(new QueryParams(it)).getValue()
 			def nodiElaborati = []
 			nodi.each{ nodo ->
-				def stato = interfacciaContestoService.stato.consulBind.getHealthChecksForNode(nodo.node,new com.ecwid.consul.v1.QueryParams(it))
+				def stato = interfacciaContestoService.stato.consul.getHealthChecksForNode(nodo.node,new com.ecwid.consul.v1.QueryParams(it))
 				nodiElaborati.add([nodo:nodo,stato:stato])
 			}
 			risultato.add(datacenter:it,nodi:nodiElaborati)
@@ -231,8 +231,8 @@ class AdminController {
 
 	/** @return dettagli per un nodo Consul */
 	def nodo(String identificativo,String datacenter) {
-		def risultato = interfacciaContestoService.stato.consulBind.getCatalogNode(identificativo,new com.ecwid.consul.v1.QueryParams(datacenter))
-		def stato = interfacciaContestoService.stato.consulBind.getHealthChecksForNode(identificativo,new com.ecwid.consul.v1.QueryParams(datacenter))
+		def risultato = interfacciaContestoService.stato.consul.getCatalogNode(identificativo,new com.ecwid.consul.v1.QueryParams(datacenter))
+		def stato = interfacciaContestoService.stato.consul.getHealthChecksForNode(identificativo,new com.ecwid.consul.v1.QueryParams(datacenter))
 		def incapsulato = [nodo:risultato,stato:stato]
 		render incapsulato as JSON
 	}
@@ -282,7 +282,7 @@ class AdminController {
 	def listaStore() {
 		def risultato = []
 		def risultatoBin = []
-		interfacciaContestoService.stato.consulBind.getKVValues('').getValue().each{ risultato.add([key:it.key,createIndex:it.createIndex,modifyIndex:it.modifyIndex,value:new String(it.value.decodeBase64())]) }
+		interfacciaContestoService.stato.consul.getKVValues('').getValue().each{ risultato.add([key:it.key,createIndex:it.createIndex,modifyIndex:it.modifyIndex,value:new String(it.value.decodeBase64())]) }
 		def incapsulato = [storedati:risultato]
 		render incapsulato as JSON
 	}
@@ -294,7 +294,7 @@ class AdminController {
 	def salvaValoreKV() {
 		String chiave = request.JSON.chiave
 		String valore = request.JSON.valore
-		interfacciaContestoService.stato.consulBind.setKVValue(chiave, valore)
+		interfacciaContestoService.stato.consul.setKVValue(chiave, valore)
 		sendMessage("activemq:topic:interfaccia.eventi",([tipo:'KVAGGIUNTO',chiave:chiave,valore:valore] as JSON).toString())
 		render "ok"
 	}
@@ -305,7 +305,7 @@ class AdminController {
 	 */
 	def cancellaValoreKV() {
 		String chiave = request.JSON.chiave
-		interfacciaContestoService.stato.consulBind.deleteKVValue(chiave)
+		interfacciaContestoService.stato.consul.deleteKVValue(chiave)
 		sendMessage("activemq:topic:interfaccia.eventi",([tipo:'KVRIMOSSO',chiave:chiave] as JSON).toString())
 		render "ok"
 	}
@@ -316,7 +316,7 @@ class AdminController {
 	 */
 	def salvaContestoinKV() {
 		JSON contestoJson = interfacciaContestoService.contesto.esporta() as JSON
-		interfacciaContestoService.stato.consulBind.setKVValue("contesto_"+new Date().format("yyyyMMddHHmmss", TimeZone.getTimeZone("UTC")), contestoJson.toString())
+		interfacciaContestoService.stato.consul.setKVValue("contesto_"+new Date().format("yyyyMMddHHmmss", TimeZone.getTimeZone("UTC")), contestoJson.toString())
 		sendMessage("activemq:topic:interfaccia.eventi",([tipo:'KVSALVATAGGIOCONTESTO',contesto:interfacciaContestoService.contesto.descrizione] as JSON).toString())
 		render "ok"
 	}

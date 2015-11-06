@@ -26,22 +26,14 @@ package org.ar4k
 import grails.converters.JSON
 
 class Interfaccia {
-
-	/** service per interagire con il contesto */
-	InterfacciaContestoService interfacciaContestoService
-
 	/** id univoco interfaccia */
 	String idInterfaccia = UUID.randomUUID()
 	/** etichetta interfaccia */
 	String etichetta = ''
 	/** descrizione interfaccia */
-	String descrizione ='UI AR4K by Rossonet'
+	String descrizione =''
 	/** schema grafico */
 	TemplateInterfaccia grafica = new TemplateInterfaccia()
-	/** porta bind tunnel ssh per Consul */
-	int portaConsul = 8501
-	/** porta bind tunnel ssh per ActiveMQ */
-	int portaActiveMQ = 61616
 
 	/** esporta la configurazione dell'interfaccia */
 	def esporta() {
@@ -50,22 +42,26 @@ class Interfaccia {
 			idInterfaccia:idInterfaccia,
 			etichetta:etichetta,
 			descrizione:descrizione,
-			grafica:grafica.esporta(),
-			portaConsul:portaConsul,
-			portaActiveMQ:portaActiveMQ
+			grafica:grafica.esporta()
 		]
 	}
-	
+
+	/** salva il contesto sul nodo master */
+	Boolean salva(Stato stato) {
+		stato.salvaValore(idInterfaccia,'org-ar4k-Interfaccia',((esporta() as JSON).toString()))
+	}
+
+
 	Interfaccia importa(Map json){
 		log.info("importa() l'interfaccia: "+json.idInterfaccia)
 		Interfaccia interfacciaCreata = new Interfaccia(
-			idInterfaccia:json.idInterfaccia,
-			etichetta:json.etichetta,
-			descrizione:json.descrizione,
-			grafica:new TemplateInterfaccia(json.grafica),
-			portaConsul:json.portaConsul,
-			portaActiveMQ:json.portaActiveMQ
-			)	
+				idInterfaccia:json.idInterfaccia,
+				etichetta:json.etichetta,
+				descrizione:json.descrizione,
+				grafica:new TemplateInterfaccia(json.grafica),
+				portaConsul:json.portaConsul,
+				portaActiveMQ:json.portaActiveMQ
+				)
 		return interfacciaCreata
 	}
 
@@ -82,6 +78,7 @@ class Interfaccia {
 
 /** descrive il template grafico dell'interfaccia */
 class TemplateInterfaccia {
+	String idGrafica = UUID.randomUUID()
 	String etichetta = 'Base Ar4k'
 	String immagineLogo = 'http://www.rossonet.org/wp-content/uploads/2015/01/logoRossonet4.png'
 	Boolean sviluppo = true
@@ -127,7 +124,7 @@ class TemplateInterfaccia {
 				info: colori.info,
 				warning: colori.warning,
 				danger: colori.danger
-			] 
+			]
 		]
 	}
 

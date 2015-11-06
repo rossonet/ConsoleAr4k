@@ -1,17 +1,32 @@
 /**
- * Associazione Utente Ruolo
+ * UtenteRuolo Ar4k
  *
- * <p>Associazioni Utenti Ruoli</p>
+ * <p>UtenteRuolo</p>
  *
  * <p style="text-justify">
- * I dati degli utenti sono caricati dal Contesto</br>
+ * UtenteRuolo Ar4k
+ *
+ * Gestione associazione molti a molti tra Utenti e Ruoli.
+ * La console mantiene in database tutti i valori relativi.
+ *
+ * Le classi coinvolte nella gestione degli utenti sono: Utente,Ruolo,UtenteRuolo,Client,OAuthID,AccessToken e RefreshToken.
  * </p>
+ *
+ *
+ * TODO: implementazione OAuthID server per tutta l'infrastruttura Ar4k sulla Console
+ *
+ * TODO: esportazione e gestione sincronizzazione con alberi ldap esterni
  *
  * @author Andrea Ambrosini (Rossonet s.c.a r.l)
  * @version 0.1-alpha
+ * @see org.ar4k.Contesto
  * @see org.ar4k.Utente
  * @see org.ar4k.Ruolo
- * @see org.ar4k.Contesto
+ * @see org.ar4k.UtenteRuolo
+ * @see org.ar4k.Client
+ * @see org.ar4k.OAuthID
+ * @see org.ar4k.AccessToken
+ * @see org.ar4k.RefreshToken
  */
 
 package org.ar4k
@@ -27,7 +42,7 @@ class UtenteRuolo implements Serializable {
 	Utente utente
 	Ruolo ruolo
 
-	/** esporta gli utenti nel contesto */
+	/** esporta gli utenti nel contesto. Esportando UtenteRuolo si ottengo anche i dettagli degli oggetti annidati (Utente,Ruolo) */
 	def esporta() {
 		log.info("Esporta UtenteRuolo: "+utente?.username+" nel ruolo "+ruolo?.authority)
 		return [
