@@ -77,5 +77,6 @@ Per creare un war installabile su Tomcat >= 7
 ```
 ##Documentazione progetto
 
-[API Groovy](http://rossonet.github.io/ConsoleAr4k/web-app/docs/gapi/index.html)
-[API Java](http://rossonet.github.io/ConsoleAr4k/web-app/docs/api/index.html)
+[Classi Groovy](http://rossonet.github.io/ConsoleAr4k/web-app/docs/gapi/index.html)
+
+[Classi Java](http://rossonet.github.io/ConsoleAr4k/web-app/docs/api/index.html)
