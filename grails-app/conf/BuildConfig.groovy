@@ -96,7 +96,7 @@ grails.project.dependency.resolution = {
 		}
 
 		compile "org.atmosphere:atmosphere-runtime:2.2.3", { excludes "slf4j-api" }
-		/*
+		
 		compile 'org.activiti:activiti-engine:5.18.0', { excludes "spring-beans" }
 
 		compile 'org.activiti:activiti-image-generator:5.18.0', { excludes "spring-beans" }
@@ -104,12 +104,11 @@ grails.project.dependency.resolution = {
 		runtime ('org.activiti:activiti-spring:5.18.0') {
 			excludes 'spring-context', 'spring-jdbc', 'spring-orm', 'slf4j-log4j12', 'commons-dbcp'
 		}
-		*/
-		/*
-		 runtime ('org.activiti:activiti-rest:5.18.0') {
+		
+		runtime ('org.activiti:activiti-rest:5.18.0') {
 		 excludes 'spring-context', 'spring-jdbc', 'spring-orm', 'slf4j-log4j12', 'commons-dbcp'
-		 }
-		 */
+		}
+		
 		compile "com.ecwid.consul:consul-api:1.1.4"
 		
 		compile 'com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider:2.5.4'
