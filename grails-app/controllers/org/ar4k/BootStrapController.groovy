@@ -43,7 +43,7 @@ class BootStrapController {
 				[verificaInternet:bootStrapService.verificaConnettivitaInterfaccia(),
 					vedrificaSSH:bootStrapService.verificaSSH(),
 					verificaProxy:bootStrapService.verificaProxy(),
-					verificaOnion:bootStrapService.verificaProxy()
+					verificaOnion:bootStrapService.verificaOnion()
 				]
 			}.to "showBenvenuto"
 			on (Exception){[eccezione:true]}.to "showBenvenuto"

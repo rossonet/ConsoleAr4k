@@ -42,9 +42,20 @@ class BootStrapService {
 	String interfaccia = null
 	/** host pubblico per test di raggiungibilità */
 	String indirizzoTest='http://hc.rossonet.name'
+	/** host test per connessione Onion */
+	String indirizzoTestOnion='http://mvgf7rnxqeczjb4i.onion'
 	/** identificativo di boot */
 	String valoreCasuale=org.apache.commons.lang.RandomStringUtils.random(5, true, true).toString()
 
+	/** lanciato dalla procedura di boot di Grails. 
+	 * Grails si preoccupa di popolare il servizio BootStrap (scope singleton)
+	 * con i parametri trovati nel file di configurazione
+	 * o recuperati dalla linea di comando. Per passare un parametro
+	 * durante il lancio dell'applicatico
+	 * JAVA usare la sintassi "-Drossonet.parametro=valore"
+	 * 
+	 * @see BootStrap 
+	 * */
 	Boolean inizio() {
 		Boolean risultato = true
 		if (stato.connetti()) {
@@ -75,7 +86,8 @@ class BootStrapService {
 		}
 		return risultato
 	}
-
+	
+	/** crea un contesto sullo Stato corrente */
 	Contesto creaNuovoContestoVergine(String idContestoTarget,String idInterfaccia) {
 		Contesto nuovoContesto = new Contesto()
 		nuovoContesto.idContesto = idContestoTarget
@@ -88,7 +100,8 @@ class BootStrapService {
 		nuovoContesto.interfacce.add(nuovaInterfaccia)
 		return nuovoContesto
 	}
-
+	
+	/** Aggiunge un utente amministratore */
 	Boolean aggiungiUtente(String nome,String password) {
 		log.debug("Creo l'utente "+nome)
 		Boolean risultato = false
@@ -108,10 +121,10 @@ class BootStrapService {
 		} catch (Exception e){
 			log.warn("Impossibile salvare l'utente. Errore: "+e.toString())
 		}
-
 		return risultato
 	}
-
+	
+	/** verifica la raggiungibilità di Internet -la variabile indirizzoTest è impostata staticamente. Attualmente-*/
 	Boolean verificaConnettivitaInterfaccia() {
 		Boolean risultato=false
 		log.debug("verificaConnettivitaInterfaccia() verso "+indirizzoTest)
@@ -133,12 +146,23 @@ class BootStrapService {
 		}
 		return risultato
 	}
+	
+	/** verifica la presenza di una connessione funzionante via ssh.
+	 * Se è presente un proxy o una connesione Onion verrano utilizzate nel test*/
+	Boolean verificaSSH() {
+		return true
+	}
+	
+	/** verifica la presenza di un proxy funzionante per connettersi via ssh */
+	Boolean verificaProxy() {
+		return true
+	}
+	
+	/** verifica la raggiungibilità di un gateway Onion funzionate */
+	Boolean verificaOnion() {
+		return true
+	}
 }
-
-
-
-
-
 /*
  Boolean provaConnessioneMaster() {
  Boolean risultato=false

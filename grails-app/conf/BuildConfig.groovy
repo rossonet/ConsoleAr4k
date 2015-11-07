@@ -46,7 +46,7 @@ grails.project.dependency.resolution = {
 		mavenLocal()
 		grailsCentral()
 		mavenCentral()
-		//mavenRepo "http://snapshots.repository.codehaus.org/"
+		mavenRepo "http://snapshots.repository.codehaus.org/"
 		mavenRepo "http://repository.codehaus.org/"
 		mavenRepo "http://download.java.net/maven/2/"
 		mavenRepo "http://repository.jboss.com/maven2/"
@@ -96,14 +96,15 @@ grails.project.dependency.resolution = {
 		}
 
 		compile "org.atmosphere:atmosphere-runtime:2.2.3", { excludes "slf4j-api" }
-
+		/*
 		compile 'org.activiti:activiti-engine:5.18.0', { excludes "spring-beans" }
 
 		compile 'org.activiti:activiti-image-generator:5.18.0', { excludes "spring-beans" }
-
+	
 		runtime ('org.activiti:activiti-spring:5.18.0') {
 			excludes 'spring-context', 'spring-jdbc', 'spring-orm', 'slf4j-log4j12', 'commons-dbcp'
 		}
+		*/
 		/*
 		 runtime ('org.activiti:activiti-rest:5.18.0') {
 		 excludes 'spring-context', 'spring-jdbc', 'spring-orm', 'slf4j-log4j12', 'commons-dbcp'
@@ -112,7 +113,6 @@ grails.project.dependency.resolution = {
 		compile "com.ecwid.consul:consul-api:1.1.4"
 		
 		compile 'com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider:2.5.4'
-
 	}
 
 	plugins {
