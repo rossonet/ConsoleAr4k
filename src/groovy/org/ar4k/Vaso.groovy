@@ -17,8 +17,6 @@
 
 package org.ar4k
 
-import org.activiti.engine.ProcessEngine;
-import org.activiti.engine.RepositoryService
 import org.jclouds.json.config.GsonModule.ByteArrayAdapter;
 
 import com.google.common.io.ByteStreams.ByteArrayDataInputStream
@@ -442,35 +440,6 @@ class Vaso {
 			return false
 		}
 	}
-
-	/** legge i processi e li carica nell engine 
-	 *  @deprecated
-	 * */
-	Boolean caricaProcesso(ProcessEngine processEngine,String processo,String etichetta,String idMeme) {
-		Boolean ritorno = false
-		try {
-			String comandoRicerca = "cd ~/.ar4k/ricettari ; find . -name '"+processo+"'"
-			File ricerca = new File(esegui(comandoRicerca).tokenize('\n').last())
-			if (ricerca) {
-				String percorso =  ".ar4k/ricettari/"+ricerca.getParent()
-				File definizione = new File(leggiBinarioProcesso(percorso,ricerca.getName()))
-				log.debug("carico processo da copia locale: "+definizione)
-				ZipInputStream processoDefinizione = new ZipInputStream(new FileInputStream(definizione))
-				RepositoryService repositoryService = processEngine.getRepositoryService()
-				//def targetEngine = processEngine.getRepositoryService().createDeploymentQuery().deploymentName(idMeme).singleResult() {
-				repositoryService.createDeployment().name(idMeme)
-						.addZipInputStream(processoDefinizione)
-						.deploy()
-				definizione.delete()
-				ritorno = true
-				log.debug("caricamento completato: "+percorso+"/"+ricerca.getName())
-			}
-		} catch(Exception e) {
-			log.warn(e.printStackTrace())
-		}
-		return ritorno
-	}
-
 }
 
 

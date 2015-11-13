@@ -33,9 +33,8 @@ package org.ar4k
 
 import grails.converters.JSON;
 
-import org.activiti.engine.identity.User
 
-class Utente implements User{
+class Utente {
 
 	transient springSecurityService
 

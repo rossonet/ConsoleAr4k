@@ -33,9 +33,8 @@ package org.ar4k
 
 import grails.converters.JSON;
 
-import org.activiti.engine.identity.Group
 
-class Ruolo implements Group {
+class Ruolo {
 
 	/** etichetta per la definizione del ruolo */
 	String id

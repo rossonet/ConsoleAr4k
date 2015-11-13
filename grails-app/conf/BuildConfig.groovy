@@ -46,7 +46,7 @@ grails.project.dependency.resolution = {
 		mavenLocal()
 		grailsCentral()
 		mavenCentral()
-		mavenRepo "http://snapshots.repository.codehaus.org/"
+		//mavenRepo "http://snapshots.repository.codehaus.org/"
 		mavenRepo "http://repository.codehaus.org/"
 		mavenRepo "http://download.java.net/maven/2/"
 		mavenRepo "http://repository.jboss.com/maven2/"
@@ -66,7 +66,7 @@ grails.project.dependency.resolution = {
 
 		// Aggiunte
 		runtime 'com.jcraft:jsch:0.1.51'
-		runtime ('com.openshift:openshift-java-client:2.5.0.Final') { excludes 'slf4j-log4j12' }
+		//runtime ('com.openshift:openshift-java-client:2.5.0.Final') { excludes 'slf4j-log4j12' }
 
 		//Kettle
 		runtime 'pentaho-kettle:kettle-core:4.4.0-stable'
@@ -97,6 +97,7 @@ grails.project.dependency.resolution = {
 
 		compile "org.atmosphere:atmosphere-runtime:2.2.3", { excludes "slf4j-api" }
 		
+		/*
 		compile 'org.activiti:activiti-engine:5.18.0', { excludes "spring-beans" }
 
 		compile 'org.activiti:activiti-image-generator:5.18.0', { excludes "spring-beans" }
@@ -108,6 +109,7 @@ grails.project.dependency.resolution = {
 		runtime ('org.activiti:activiti-rest:5.18.0') {
 		 excludes 'spring-context', 'spring-jdbc', 'spring-orm', 'slf4j-log4j12', 'commons-dbcp'
 		}
+		*/
 		
 		compile "com.ecwid.consul:consul-api:1.1.4"
 		

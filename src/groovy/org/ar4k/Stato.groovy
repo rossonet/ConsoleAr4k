@@ -19,6 +19,8 @@ import com.ecwid.consul.v1.ConsulClient
 import com.jcraft.jsch.*;
 
 class Stato {
+	/** server bootsrap iniettato */
+	BootStrapService bootStrapService
 	/** id univoco stato connessione a Consul */
 	String idStato = UUID.randomUUID()
 	/** client Consul collegato allo Stato */
@@ -88,7 +90,8 @@ class Stato {
 			log.debug("Connessione Consul. Datacenter disponibili: "+risposta)
 			if (risposta) ritorno = true
 		} catch (Exception ee) {
-			log.warn("Errore connessione Consul: "+ee.printStackTrace())
+			// non stampa tutto lo stacktrace in avvio
+			log.warn("Errore connessione Consul")
 		}
 
 		return ritorno

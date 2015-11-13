@@ -21,9 +21,6 @@ import java.util.zip.ZipInputStream
 
 import grails.converters.JSON
 import grails.util.Holders
-import org.activiti.engine.ProcessEngine
-import org.activiti.engine.ProcessEngineConfiguration
-import org.activiti.engine.RepositoryService
 import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.grails.plugins.atmosphere_meteor.AtmosphereMeteor
 import org.jclouds.Context
@@ -89,8 +86,6 @@ class InterfacciaContestoService {
 
 	List<JSch> connnessioniSSH = []
 
-	/** engine Activiti BPM -dipendenza iniettata */
-	ProcessEngine processEngine
 	/** lista contesti JCloud operativi */
 	List<Context> jCloudServer = []
 	/** lista repositories Kettle operativi */
@@ -171,18 +166,6 @@ class InterfacciaContestoService {
 		} catch (Exception e){
 			log.warn("Errore avvio JCloud EC2: "+e.printStackTrace())
 		}
-	}
-
-	/** carica un processo in Activiti **/
-	String caricaProcesso(String processo) {
-		InputStream zipFile = new FileInputStream(new File(grailsApplication.parentContext.getResource(processo).file.toString()))
-		ZipInputStream inputStream = new ZipInputStream(zipFile)
-		RepositoryService repositoryService = processEngine.getRepositoryService();
-		repositoryService.createDeployment()
-				//.addInputStream(grailsApplication.parentContext.getResource(processo).file.toString(),xmlFile)
-				.addZipInputStream(inputStream)
-				.deploy()
-		return repositoryService.createProcessDefinitionQuery().count()
 	}
 
 	/** descrizione contesto */

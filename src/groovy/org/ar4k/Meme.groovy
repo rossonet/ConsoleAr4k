@@ -15,7 +15,6 @@
  */
 package org.ar4k
 
-import org.activiti.engine.ProcessEngine;
 
 import grails.converters.JSON
 import grails.util.Holders
@@ -59,22 +58,6 @@ class Meme {
 	String disinstallazione = '<div>INTERFACCIA DISINSTALLAZIONE</div>'
 	/** se vero, carica il meme in fase di bootstrap */
 	Boolean caricaInBootstrap = false
-
-	/** carica i processi disponibili nel motore Activiti */
-	Boolean caricaProcessiActiviti(Vaso vasoMaster,ProcessEngine processEngine) {
-		Boolean ritorno = true
-		metodi.each{ processo ->
-			if ( vasoMaster.caricaProcesso(processEngine,processo.riferimento,processo.etichetta,idMeme) == false ) {
-				ritorno = false
-			}
-		}
-		try {
-			Holders.applicationContext.getBean("interfacciaContestoService").sendMessage("activemq:topic:interfaccia.eventi",([tipo:'CARICORISORSEACTIVITI',messaggio:'Caricamento processo '+processo.etichetta+' da meme '+etichetta+' in vaso '+vasoMaster.etichetta+' : '+ritorno.toString()] as JSON).toString())
-		} catch (Exception ee){
-			log.info "Evento da vaso non comunicato: "+ee.toString()
-		}
-		return ritorno
-	}
 
 	/** dump dati del meme */
 	def esporta() {

@@ -46,7 +46,7 @@ class BootStrapController {
 					verificaOnion:bootStrapService.verificaOnion()
 				]
 			}.to "showBenvenuto"
-			on (Exception){[eccezione:true]}.to "showBenvenuto"
+			on (Exception).to "showBenvenuto"
 			on ("completata").to("completata")
 			on ("reset"){[inReset:true]}.to("showBenvenuto")
 		}
@@ -96,7 +96,7 @@ class BootStrapController {
 
 		configuraProxyMaster {
 			on ("success"){provenienza:params.provenienza?:''}.to "testProxyMaster"
-			on ("indietro").to params.provenienza?:"entrata"
+			on ("indietro").to {params.provenienza?:"entrata"}
 			on ("configuraSSH"){[provenienza:params.provenienza?:"entrata"]}.to "configuraMaster"
 			on ("configuraOnion"){[provenienza:params.provenienza?:"entrata"]}.to "configuraOnion"
 		}
@@ -106,12 +106,12 @@ class BootStrapController {
 				bootStrapService.proxyMasterInternet=params.proxyMaster?:bootStrapService.proxyMasterInternet
 				bootStrapService.passwordProxyMasterInternet=params.passwordProxyMaster?:bootStrapService.passwordProxyMasterInternet
 			}
-			on ("success").to params.provenienza?:"entrata"
+			on ("success").to {params.provenienza?:"entrata"}
 			on ("errore"){[provenienza:params.provenienza?:"entrata"]}.to "configuraProxyMaster"
 		}
 
 		configuraMaster {
-			on ("indietro").to params.provenienza?:"entrata"
+			on ("indietro").to {params.provenienza?:"entrata"}
 			on ("verificaMaster"){[provenienza:params.provenienza?:"entrata"]}.to "verificaMaster"
 			on ("configuraProxy"){[provenienza:params.provenienza?:"entrata"]}.to "configuraProxyMaster"
 			on ("configuraOnion"){[provenienza:params.provenienza?:"entrata"]}.to "configuraOnion"
@@ -122,13 +122,13 @@ class BootStrapController {
 				bootStrapService.proxyMasterInternet=params.proxyMaster?:bootStrapService.proxyMasterInternet
 				bootStrapService.passwordProxyMasterInternet=params.passwordProxyMaster?:bootStrapService.passwordProxyMasterInternet
 			}
-			on ("success").to params.provenienza?:"entrata"
+			on ("success").to {params.provenienza?:"entrata"}
 			on ("errore"){[provenienza:params.provenienza?:"entrata"]}.to "configuraMaster"
 		}
 
 		configuraOnion {
 			on ("success"){provenienza:params.provenienza?:''}.to "testOnion"
-			on ("indietro").to params.provenienza?:"entrata"
+			on ("indietro").to {params.provenienza?:"entrata"}
 			on ("configuraSSH"){[provenienza:params.provenienza?:"entrata"]}.to "configuraMaster"
 			on ("configuraProxy"){[provenienza:params.provenienza?:"entrata"]}.to "configuraProxyMaster"
 		}
@@ -138,7 +138,7 @@ class BootStrapController {
 				bootStrapService.proxyMasterInternet=params.proxyMaster?:bootStrapService.proxyMasterInternet
 				bootStrapService.passwordProxyMasterInternet=params.passwordProxyMaster?:bootStrapService.passwordProxyMasterInternet
 			}
-			on ("success").to params.provenienza?:"entrata"
+			on ("success").to {params.provenienza?:"entrata"}
 			on ("errore"){[provenienza:params.provenienza?:"entrata"]}.to "configuraOnion"
 		}
 

@@ -1,4 +1,4 @@
-import org.activiti.engine.impl.interceptor.SessionFactory
+//import org.activiti.engine.impl.interceptor.SessionFactory
 
 // Place your Spring DSL code here
 
