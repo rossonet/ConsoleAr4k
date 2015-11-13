@@ -1,11 +1,10 @@
 /**
  * Vaso
  *
- * <p>Un vaso rappresenta un container SSH</p>
+ * <p>Un vaso rappresenta un account su un nodo Linux</p>
  *
  * <p style="text-justify">
- * Il vaso è l'unita base in cui operano i memi, garantisce l'esecuzione degli stessi, ospita il loro file system e
- * ospita il demone Consul</br>
+ * Il vaso è l'unita base in cui operano i memi, garantisce l'esecuzione degli stessi.</br>
  * </p>
  *
  * @author Andrea Ambrosini (Rossonet s.c.a r.l)
@@ -37,32 +36,35 @@ class Vaso {
 	/** id univoco vaso */
 	String idVaso = UUID.randomUUID()
 	/** etichetta vaso */
-	String etichetta = ''
+	String etichetta = null
 	/** descrizione vaso */
-	String descrizione ='Vaso AR4K by Rossonet'
+	String descrizione = null
 	/** host vaso */
-	String macchina = '127.0.0.1'
+	String macchina = null
 	/** porta vaso */
 	Integer porta = 22
 	/** utente vaso */
-	String utente = 'ar4k'
+	String utente = 'root'
 	/** chiave privata ssh */
 	String key = null
 	/** variabile PATH sulla macchina */
 	String path = '/usr/local/bin:/usr/bin:/bin'
-	/** sistema rilevato */
-	String uname = ''
 	/** da definire: rappresenta le funzionalità del vaso root/user space, memoria, capacità computazionale, spazio store. */
 	List<String> funzionalita = []
 	/** Stringa proxy (esportata come http_proxy) */
 	String proxy = null
-	/** l'utenza ha l'accesso root sulla macchina come root? */
+	/** l'utenza ha l'accesso root sulla macchina come root usando #sudo su - */
 	Boolean sudo = false
-	/** versione java -se installato-*/
+	/** versione java -se installato- rilevata con #java -version*/
 	String javaVersion = null
-
 	/** funziona da gw ssh per altri vasi? */
 	Boolean gwRete = false
+	/** nodo contenitore del vaso. Ovvero l'host che ospita l'account ssh associato a questo vaso */
+	Nodo nodo = null
+	/** il vaso ospita una istanza Consul */
+	IstanzaConsul consul = null
+	/** host pubblico per test di raggiungibilità */
+	String indirizzoTest='http://hc.rossonet.name'
 
 	/** esporta il vaso */
 	def esporta() {
@@ -76,13 +78,15 @@ class Vaso {
 			key:key,
 			sudo:sudo,
 			path:path,
-			uname:uname,
 			funzionalita:funzionalita,
 			javaVersion:javaVersion,
-			proxy:proxy
+			proxy:proxy,
+			nodo:nodo.idNodo,
+			consul:consul.idIstanzaConsul
 		]
 	}
 
+	/** importa la configurazione di un vaso da json */
 	Vaso importa(Map json){
 		log.debug("importa() il vaso: "+json.idVaso)
 		Vaso vasoCreato = new Vaso(
@@ -95,7 +99,6 @@ class Vaso {
 				key:json.key,
 				sudo:json.sudo,
 				path:json.path,
-				uname:json.uname,
 				funzionalita:json.funzionalita,
 				javaVersion:json.javaVersion,
 				proxy:json.proxy
@@ -106,14 +109,16 @@ class Vaso {
 	/** verifica la raggiungibilità di internet dal vaso */
 	Boolean verificaConnettivita() {
 		log.debug("Verifico se "+etichetta+" raggiunge l'esterno.")
-		String comando = 'wget hc.rossonet.name -O - 2>/dev/null | grep hera | wc -l'
+		String comando = 'wget '+indirizzoTest+' -O - 2>/dev/null | grep hera | wc -l'
 		String atteso = '1\n'
 		String risultato = esegui(comando)
 		log.debug("risultato "+comando+" = "+risultato+" (atteso: "+atteso+')')
 		return risultato == atteso?true:false
 	}
 
-	/** salva un contesto sul vaso*/
+	/** salva un contesto sul vaso
+	 *  @deprecated
+	 * */
 	Boolean salvaContesto(Contesto contesto) {
 		JSON file = contesto.esporta() as JSON
 		String interruzione = "EOF-"+UUID.randomUUID()+"-AR4K"
@@ -178,11 +183,14 @@ class Vaso {
 		return risultato
 	}
 
+	/** legge un target sul vaso con il comando cat e ritorna l'output */
 	String leggiConCat(String target){
 		return esegui('cat '+target)
 	}
 
-	/** carica un file .bar dal vaso all'interfaccia */
+	/** carica un file .bar dal vaso all'interfaccia 
+	 * @deprecated
+	 * */
 	String leggiBinarioProcesso(String percorso,String target) {
 		String ritorno = '/tmp/'+UUID.randomUUID()+'.bar'
 		FileOutputStream ritornoStream = new FileOutputStream(new File(ritorno))
@@ -257,7 +265,7 @@ class Vaso {
 		return risultato == atteso?true:false
 	}
 
-	/** Avvia il demone consul sul vaso e configura una sessione ssh permanente per accedere tramite le API JAVA */
+	/** Avvia il demone consul sul vaso e configura una sessione ssh permanente per accedere tramite le API JAVA al demone Consul creato */
 	Boolean avviaConsul(JSch connessione) {
 		String consulKey = Holders.applicationContext.getBean("interfacciaContestoService").contesto.consulKey
 		String dominioConsul = Holders.applicationContext.getBean("interfacciaContestoService").contesto.dominioConsul
@@ -283,6 +291,7 @@ class Vaso {
 		return esegui(verifica) == '1\n'?true:false
 	}
 
+	/** Avvia consul in modalità client */
 	Boolean avviaConsulClient(String serverJoin) {
 		String consulKey = Holders.applicationContext.getBean("interfacciaContestoService").contesto.consulKey
 		String dominioConsul = Holders.applicationContext.getBean("interfacciaContestoService").contesto.dominioConsul
@@ -328,7 +337,9 @@ class Vaso {
 		}
 	}
 
-	/** recupera i contesti salvati sul vaso */
+	/** recupera i contesti salvati sul vaso
+	 *  @deprecated
+	 *  */
 	List<Contesto> listaContesti() {
 		List<Contesto> contesti = []
 		String comandoRicerca = "cd ~/.ar4k/contesti ;"
@@ -432,7 +443,9 @@ class Vaso {
 		}
 	}
 
-	/** legge i processi e li carica nell engine */
+	/** legge i processi e li carica nell engine 
+	 *  @deprecated
+	 * */
 	Boolean caricaProcesso(ProcessEngine processEngine,String processo,String etichetta,String idMeme) {
 		Boolean ritorno = false
 		try {
@@ -458,6 +471,59 @@ class Vaso {
 		return ritorno
 	}
 
+}
+
+
+/**
+ * IstanzaConsul
+ *
+ * <p>Rappresenta un'istanza consul su un vaso</p>
+ *
+ * <p style="text-justify">
+ * 
+ * </p>
+ *
+ * @author Andrea Ambrosini (Rossonet s.c.a r.l)
+ * @version 0.1-alpha
+ * @see org.ar4k.Meme
+ * @see org.ar4k.Ricettario
+ * @see org.ar4k.Interfaccia
+ * @see org.ar4k.Contesto
+ */
+
+class IstanzaConsul {
+	/** id univoco */
+	String idIstanzaConsul = UUID.randomUUID()
+	/** ciclo di vita nel vaso */
+	String stato = 'Inizializzazione'
+	/** dns - The DNS server, -1 to disable. Default 8600.*/
+	Integer portaDNS = 8600
+	/** http - The HTTP API, -1 to disable. Default 8500.*/
+	Integer portaHTTP = 8500
+	/** https - The HTTPS API, -1 to disable. Default -1 (disabled).*/
+	Integer portaHTTPS = -1
+	/** rpc - The RPC endpoint. Default 8400.*/
+	Integer portaRPC = 8400
+	/** serf_lan - The Serf LAN port. Default 8301.*/
+	Integer portaSerfLAN = 8301
+	/** serf_wan - The Serf WAN port. Default 8302.*/
+	Integer portaSerfWAN = 8302
+	/** server - Server RPC address. Default 8300.*/
+	Integer portaServer = 8300
+	/** indirizzo presentazione wan per protocollo gossip */
+	String advertiseWan = null
+	/** avviare Consul in modalità bootstrap? */
+	Boolean avvioInBootStrap = false
+	/** encript key per consul */
+	String chiave = null
+	/** nodi Consul su cui tentare la connessione durante il bootstrap 
+	 * verrà usato il comando "-retry-join"
+	 */
+	List<String> listaJoin =[]
+	/** lista nodi per il join wan in bootstrap */
+	List<String> listaJoinWan =[]
+	/** l'agente Consul è in modalità server */
+	Boolean server = true
 }
 
 
