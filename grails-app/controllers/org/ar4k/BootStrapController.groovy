@@ -2,7 +2,7 @@
  * Controller bootstrap del Contesto
  *
  * <p>
- * BootStrapController gestisce tutte le fasi di avvio applicativo.
+ * Il controller gestisce le chiamate per l'avvio dell'ambiente Ar4k
  * Accessibile a tutti all'inizio, diventa accessibile solo all'amministratore
  * dopo la configurazione iniziale.
  * </p>
@@ -55,7 +55,8 @@ class BootStrapController {
 			on ("configuraConsul").to "parametriConsul"
 			on ("configuraCodCommerciale").to "configuraCodCommerciale"
 			on ("configuraNuovoConsul").to "nuovoConsul"
-			on ("fallita"){ [messaggioOlark:"Salve. Serve aiuto per configurare la piattaforma?"] }.to("fallita")
+			on ("configuraProxy"){[provenienza:'entrata']}.to "configuraProxyMaster"
+			on ("fallita"){ [messaggioOlark:"Salve..."] }.to("fallita")
 		}
 
 		configuraCodCommerciale {
@@ -72,7 +73,7 @@ class BootStrapController {
 					return errore()
 				}
 			}
-			on ("completata").to("completata")
+			on ("completata").to("mascheraFinale")
 			on ("errore").to("configuraCodCommerciale")
 		}
 

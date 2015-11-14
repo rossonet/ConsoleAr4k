@@ -4,20 +4,22 @@
 
 <meta name="layout" content="atterraggio" />
 
-<title>Benvenuti in Ar4k!</title>
+<title>Nuova Console Ar4k in fa bootstrap</title>
 
 
 <style type="text/css">
 .s2ui_hidden_button {
 	visibility: hidden;
 }
+
 .fade {
-    opacity: 0;
+	opacity: 0;
 }
+
 .fade.in {
-    opacity: 0.9;
-    -webkit-transition: opacity 5s ease-in;
-    transition: opacity 5s ease-in;
+	opacity: 0.9;
+	-webkit-transition: opacity 5s ease-in;
+	transition: opacity 5s ease-in;
 }
 </style>
 
@@ -26,12 +28,12 @@
 <body>
 	<!-- #main-content -->
 
-	<div
-		style="z-index: 1050; display: block; background-color: black;"
+	<div style="z-index: 1050; display: block; background-color: black;"
 		modal-animation="true" animate="animate" index="0"
 		uib-modal-window="modal-window" modal-render="true" tabindex="-1"
 		role="dialog" class="modal fade ng-isolate-scope"
-		uib-modal-animation-class="fade" modal-in-class="in" id="benvenutoModal">
+		uib-modal-animation-class="fade" modal-in-class="in"
+		id="benvenutoModal">
 		<div class="modal-dialog modal-lg" style="width: 90%;">
 			<div class="modal-content" uib-modal-transclude="">
 
@@ -42,54 +44,50 @@
 				<div class="col-md-10 col-xs-12 col-sm-12 pull-right">
 					<h2>Configurazione iniziale console AR4K</h2>
 					<p class="text-justify" style="text-align: justify;">
-						La piattaforma non è ancora configurata. Il sistema Ar4k è
-						composto dalla console (denominata <strong>interfaccia</strong>)
-						che genera le pagine web che state leggendo in questo momento e da
-						uno o più macchine a cui la console accede via ssh con
-						autenticazione tramite chiave privata. Nella terminologia del
-						progetto Ar4k un <strong>vaso</strong> è un accesso ssh a un <strong>nodo</strong>
-						con una specifica utenza. Un <strong>nodo</strong> è un sistema
-						operativo in esecuzione su un server reale o virtuale.
+						La console Ar4k non è ancora configurata. Il sistema Ar4k è
+						composto dalla console che genera le pagine web che state leggendo
+						in questo momento e da uno o più macchine a cui la console accede
+						via ssh con autenticazione tramite chiave privata. Nella
+						terminologia del progetto Ar4k un <strong>vaso</strong> è un
+						accesso ssh a un <strong>nodo</strong> con una specifica utenza.
+						Un <strong>nodo</strong> è un sistema operativo in esecuzione su
+						un server reale o virtuale.
 					</p>
 
 				</div>
-				<g:if test="${verifica==true}">
+				<g:if test="${verificaInternet==true}">
 					<!-- Se il server raggiunge internet -->
 					<div class="col-md-10 col-xs-12 col-sm-12 pull-right">
 						<p class="text-justify" style="text-align: justify;">
 							E' possibile inserire un codice di configurazione automatica
 							reperibile dopo la registrazione gratuita su <a
 								href="https://registrazione.ar4k.eu" target="_new">https://registrazione.ar4k.eu</a>
-							per avviare questa interfaccia con una configurazione
-							predefinita.
+							per avviare questa interfaccia.
 						</p>
 						<p>
 							<a href="${createLink(event: 'configuraCodCommerciale')}"
 								class="link-scroll btn-success btn btn-outline-inverse btn-lg">Inserisci
 								codice AR4K</a>
 						</p>
-						<p class="text-justify" style="text-align: justify;">
-							oppure si può procedere alla configurazione inserendo manualmente
-							i parametri.<br />Per iniziare bisogna configurare l'accesso SSH
-							con un utente, non necessariamente "root", su una macchina
-							Unix/Linux. Un account su una macchina linux, nella terminologia
-							di Ar4k è denominato <strong>vaso</strong>. Maggiore
-							documentazione è disponibile nella <a
-								href="https://github.com/rossonet/agenteAr4k" target="_new">pagina
-								del progetto su GitHub</a>.<strong> Nel video seguente
-								viene illustrata la procedura per creare un utenza per l'accesso
-								e la relativa chiave ssh. Per inserire i parametri di
-								connessione, la chiave e procedere con la configurazione
-								dell'interfaccia, usare il pulsante rosso sotto il video.</strong>
-						</p>
-						<iframe width="560" height="315"
-							src="https://www.youtube.com/embed/FohP0BmYhB8" frameborder="0"
-							allowfullscreen></iframe>
-						<p>
-							<br /> <a href="${createLink(event: 'configuraMaster')}"
-								class="link-scroll btn btn-danger btn-outline-inverse btn-lg">Procedi
-								nella configurazione</a>
-						</p>
+						<p class="text-justify" style="text-align: justify;">oppure si
+							può procedere alla configurazione inserendo manualmente i
+							parametri. Se si vuole connettere questa console ad una
+							installazione esistente</p>
+						<a href="${createLink(event: 'configuraConsul')}"
+							class="link-scroll btn btn-success btn-outline-inverse btn-lg">Connetti
+							questa interfaccia a una istallazione esistente</a>
+						<p class="text-justify" style="text-align: justify;">Per
+							creare un nuovo ambiente Ar4k:</p>
+						<a href="${createLink(event: 'configuraNuovoConsul')}"
+							class="link-scroll btn btn-warning btn-outline-inverse btn-lg">Crea
+							un nuovo ambiente Ar4k</a>
+						<p class="text-justify" style="text-align: justify;">è anche
+							possibile, tramite questa interfaccia, ricevere assistenza in
+							tempo reale tramite un programma di chat integrato.</p>
+						<a href="${createLink(event: 'fallita')}"
+							class="link-scroll btn btn-danger btn-outline-inverse btn-lg">Richiedi
+							assistenza</a>
+
 						<!-- .col-sm-10 -->
 					</div>
 				</g:if>

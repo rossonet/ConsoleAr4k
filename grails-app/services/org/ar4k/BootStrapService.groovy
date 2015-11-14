@@ -86,7 +86,7 @@ class BootStrapService {
 		}
 		return risultato
 	}
-	
+
 	/** crea un contesto sullo Stato corrente */
 	Contesto creaNuovoContestoVergine(String idContestoTarget,String idInterfaccia) {
 		Contesto nuovoContesto = new Contesto()
@@ -100,7 +100,7 @@ class BootStrapService {
 		nuovoContesto.interfacce.add(nuovaInterfaccia)
 		return nuovoContesto
 	}
-	
+
 	/** Aggiunge un utente amministratore */
 	Boolean aggiungiUtente(String nome,String password) {
 		log.debug("Creo l'utente "+nome)
@@ -123,7 +123,7 @@ class BootStrapService {
 		}
 		return risultato
 	}
-	
+
 	/** verifica la raggiungibilità di Internet -la variabile indirizzoTest è impostata staticamente. Attualmente-*/
 	Boolean verificaConnettivitaInterfaccia() {
 		Boolean risultato=false
@@ -146,20 +146,25 @@ class BootStrapService {
 		}
 		return risultato
 	}
-	
+
 	/** verifica la presenza di una connessione funzionante via ssh.
 	 * Se è presente un proxy o una connesione Onion verrano utilizzate nel test*/
 	Boolean verificaSSH() {
 		return true
 	}
-	
+
 	/** verifica la presenza di un proxy funzionante per connettersi via ssh */
 	Boolean verificaProxy() {
 		return true
 	}
-	
+
 	/** verifica la raggiungibilità di un gateway Onion funzionate */
 	Boolean verificaOnion() {
+		return true
+	}
+
+	/** utilizza un codice di attivazione Ark4*/
+	Boolean importaCodiceAttivazione(String codice) {
 		return true
 	}
 }

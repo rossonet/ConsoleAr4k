@@ -39,24 +39,15 @@
 				<div class="col-sm-10 col-md-9 pull-right">
 
 					<section class="feature-text">
-						<h2>Configurazione Annullata</h2>
+						<h2>Configurazione Completata</h2>
 						<p class="text-justify" style="text-align: justify;">
-							La configurazione della piattaforma non è andata a buon fine. Se
-							il browser con cui state visualizzando queste pagine accede a
-							Internet, potete ricominciare la procedura con il supporto di un
-							operatore. Una chat apparira nell'angolo sinistro in basso, sarà
-							possibile interagire con un operatore o delegare l'operatività
-							sulla console a <a href="http://www.rossonet.org" target="_new">Rossonet</a>.
+							<i class="fa fa-check fa-3x"></i> La console è correttamente
+							configurata.
 						</p>
 						<p>
-							<a href="${createLink(event: 'indietro')}"
-								class="link-scroll btn btn-success btn-outline-inverse btn-lg">Ricomincia
-								la procedura di configurazione iniziale</a>
-						</p>
-						<p>
-							<a href="${createLink(event: 'configuraCodCommerciale')}"
-								class="link-scroll btn btn-success btn-outline-inverse btn-lg">Utilizza
-								un codice AR4K emesso da Rossonet</a>
+							<a href="${createLink(event: 'completata')}"
+								class="link-scroll btn btn-success btn-outline-inverse btn-lg">Inizia
+								ad usare Ar4k</a>
 						</p>
 					</section>
 
