@@ -85,14 +85,14 @@ Per creare un war installabile su Tomcat >= 7
 è possibile avviare l'installazione in cloud direttamente su Amazon o scaricare un'app virtuale utilizzabile con Oracle VirtualBox.
 L'installazione è basata su un sistema operativo CentOS 6.x preconfigurato. [Il codice sorgente degli script per la gestione delle immagini in cloud utilizzato è disponibile su GitHub](https://github.com/rossonet/Strumenti-RCloud).
 
-![alt text](http://www.rossonet.org/wp-content/uploads/2015/01/centOS_logo.png "CentOS")
+![alt text](http://www.rossonet.org/wp-content/uploads/2015/01/centOS_logo.png =150x "CentOS")
 Il sistema operativo completamente open source installato nelle nostre app virtuali. [Tutti i dettagli del progetto sono disponibili nel sito del progetto](https://www.centos.org/), una visione d'insieme del progetto e della sua storia è [disponibile su Wikipedia](https://it.wikipedia.org/wiki/CentOS). Il codice sorgente delle nostre personalizzazioni [è disponibile in questo repository git](https://github.com/rossonet/Strumenti-RCloud).
 
-![alt text](http://www.rossonet.org/wp-content/uploads/2015/01/AmazonWebservices_Logo.svg_.png "Amazon AWS")
+![alt text](http://www.rossonet.org/wp-content/uploads/2015/01/AmazonWebservices_Logo.svg_.png =150x "Amazon AWS")
 
-![alt text](http://www.rossonet.org/wp-content/uploads/2015/01/virtualbox-ova-512px.png "OVA")
+![alt text](http://www.rossonet.org/wp-content/uploads/2015/01/virtualbox-ova-512px.png =150x "OVA")
 
-![alt text](http://www.rossonet.org/wp-content/uploads/2015/11/virtualbox2.png "VirtualBox")
+![alt text](http://www.rossonet.org/wp-content/uploads/2015/11/virtualbox2.png =150x "VirtualBox")
 Oracle VirtualBox è un software open source che permette di eseguire sistemi operativi virtuali su piattaforme i386/x86. In pratica permette di ospitare computer simulati via software, le macchine virtuali, su sistemi operativi Windows,Linux e Macintosh.
 Maggiori dettagli e le procedure di installazioni sono [disponibili online](https://www.virtualbox.org/) 
 
