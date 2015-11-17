@@ -86,11 +86,13 @@ Per creare un war installabile su Tomcat >= 7
 L'installazione è basata su un sistema operativo CentOS 6.x preconfigurato. [Il codice sorgente degli script per la gestione delle immagini in cloud utilizzato è disponibile su GitHub](https://github.com/rossonet/Strumenti-RCloud).
 
 <img src="http://www.rossonet.org/wp-content/uploads/2015/01/centOS_logo.png" align="left" width="150px" alt="VirtualBox" >
-Il sistema operativo completamente open source installato nelle nostre app virtuali. [Tutti i dettagli del progetto sono disponibili nel sito del progetto](https://www.centos.org/), una visione d'insieme del progetto e della sua storia è [disponibile su Wikipedia](https://it.wikipedia.org/wiki/CentOS). Il codice sorgente delle nostre personalizzazioni [è disponibile in questo repository git](https://github.com/rossonet/Strumenti-RCloud).
+Il sistema operativo completamente open source installato nelle nostre app virtuali. [Tutti i dettagli del progetto sono disponibili nel sito www.centos.org](https://www.centos.org/), una visione d'insieme del progetto e della sua storia è [disponibile su Wikipedia](https://it.wikipedia.org/wiki/CentOS). Il codice sorgente delle nostre personalizzazioni [è disponibile in questo repository git](https://github.com/rossonet/Strumenti-RCloud).
 <br/>
 <img src="http://www.rossonet.org/wp-content/uploads/2015/01/AmazonWebservices_Logo.svg_.png" align="right" width="150px" alt="VirtualBox" >
+Il sistema operativo preparato per l'esecuzione in Amazon AWS al primo avvio scarica la versione più recente di Ar4kConsole, la compila e avvia il server.
 <br/>
 <img src="http://www.rossonet.org/wp-content/uploads/2015/01/virtualbox-ova-512px.png" align="left" width="150px" alt="VirtualBox" >
+Il formato OVA è uno standard aperto per il confezionamento di macchine virtuali. In particolare è possibili importare l'applicazione virtuale in formato OVA in ambienti di virtualizzazione VMware e VirtualBox. [Maggiori dettagli su Wikipedia](https://it.wikipedia.org/wiki/Open_Virtualization_Format)
 <br/>
 <img src="http://www.rossonet.org/wp-content/uploads/2015/11/virtualbox2.png" align="right" width="150px" alt="VirtualBox" >
 Oracle VirtualBox è un software open source che permette di eseguire sistemi operativi virtuali su piattaforme i386/x86. In pratica permette di ospitare computer simulati via software, le macchine virtuali, su sistemi operativi Windows,Linux e Macintosh.
