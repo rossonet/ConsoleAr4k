@@ -87,12 +87,12 @@ L'installazione è basata su un sistema operativo CentOS 6.x preconfigurato. [Il
 
 <img src="http://www.rossonet.org/wp-content/uploads/2015/01/centOS_logo.png" align="left" width="150px" alt="VirtualBox" >
 Il sistema operativo completamente open source installato nelle nostre app virtuali. [Tutti i dettagli del progetto sono disponibili nel sito del progetto](https://www.centos.org/), una visione d'insieme del progetto e della sua storia è [disponibile su Wikipedia](https://it.wikipedia.org/wiki/CentOS). Il codice sorgente delle nostre personalizzazioni [è disponibile in questo repository git](https://github.com/rossonet/Strumenti-RCloud).
-
-<img src="http://www.rossonet.org/wp-content/uploads/2015/01/AmazonWebservices_Logo.svg_.png" align="left" width="150px" alt="VirtualBox" >
-
+<br/>
+<img src="http://www.rossonet.org/wp-content/uploads/2015/01/AmazonWebservices_Logo.svg_.png" align="right" width="150px" alt="VirtualBox" >
+<br/>
 <img src="http://www.rossonet.org/wp-content/uploads/2015/01/virtualbox-ova-512px.png" align="left" width="150px" alt="VirtualBox" >
-
-<img src="http://www.rossonet.org/wp-content/uploads/2015/11/virtualbox2.png" align="left" width="150px" alt="VirtualBox" >
+<br/>
+<img src="http://www.rossonet.org/wp-content/uploads/2015/11/virtualbox2.png" align="right" width="150px" alt="VirtualBox" >
 Oracle VirtualBox è un software open source che permette di eseguire sistemi operativi virtuali su piattaforme i386/x86. In pratica permette di ospitare computer simulati via software, le macchine virtuali, su sistemi operativi Windows,Linux e Macintosh.
 Maggiori dettagli e le procedure di installazioni sono [disponibili online](https://www.virtualbox.org/) 
 
