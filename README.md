@@ -94,11 +94,11 @@ Il sistema operativo CentOS, basato su RedHat Enterprise Linux, è completamente
 L'app virtuale preparata per l'esecuzione in Amazon AWS al primo avvio scarica la versione più recente di Ar4kConsole, la compila e avvia il server.
 <br/>
 ###App in formato OVA
-<img src="http://www.rossonet.org/wp-content/uploads/2015/01/virtualbox-ova-512px.png" align="left" width="150px" alt="OVA" >
+<img src="http://www.rossonet.org/wp-content/uploads/2015/01/virtualbox-ova-512px.png" align="left" width="100px" alt="OVA" >
 Il formato OVA è uno standard aperto per il confezionamento di macchine virtuali. In particolare è possibili importare l'applicazione virtuale in formato OVA in ambienti di virtualizzazione VMware e VirtualBox. [Maggiori dettagli su Wikipedia](https://it.wikipedia.org/wiki/Open_Virtualization_Format)
 <br/>
 ###Oracle VirtualBox
-<img src="http://www.rossonet.org/wp-content/uploads/2015/11/virtualbox2.png" align="left" width="150px" alt="VirtualBox" >
+<img src="http://www.rossonet.org/wp-content/uploads/2015/11/virtualbox2.png" align="left" width="100px" alt="VirtualBox" >
 Oracle VirtualBox è un software open source che permette di eseguire sistemi operativi virtuali su piattaforme i386/x86. In pratica permette di ospitare computer simulati via software, le macchine virtuali, su sistemi operativi Windows,Linux e Macintosh.
 Maggiori dettagli e le procedure di installazioni sono [disponibili online](https://www.virtualbox.org/) 
 
