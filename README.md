@@ -91,7 +91,7 @@ Il sistema operativo CentOS, basato su RedHat Enterprise Linux, è completamente
 <br/>
 ###App virtuale Amazon AWS
 <img src="http://www.rossonet.org/wp-content/uploads/2015/01/AmazonWebservices_Logo.svg_.png" align="left" width="150px" alt="AWS" >
-L'app virtuale preparata per l'esecuzione in Amazon AWS al primo avvio scarica la versione più recente di Ar4kConsole, la compila e avvia il server. [Avvia la console Ar4K su Amazon AWS](https://console.aws.amazon.com/ec2/home?region=eu-west-1#launchAmi=ami-42c21831). Dopo l'avvio della macchina apsettare dieci minuti e connettersi con un browser all'indirizzo del server creato.
+L'app virtuale preparata per l'esecuzione in Amazon AWS al primo avvio scarica la versione più recente di Ar4kConsole, la compila e avvia il server. [Avvia la console Ar4K su Amazon AWS](https://console.aws.amazon.com/ec2/home?region=eu-west-1#launchAmi=ami-42c21831). Dopo l'avvio della macchina aspettare dieci minuti e connettersi con un browser all'indirizzo del server creato.
 <br/>
 ###App in formato OVA
 <img src="http://www.rossonet.org/wp-content/uploads/2015/01/virtualbox-ova-512px.png" align="left" width="100px" alt="OVA" >
