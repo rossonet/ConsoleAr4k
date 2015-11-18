@@ -50,7 +50,7 @@
 						<p>
 						<form class="form-style validate-form clearfix" autocomplete='off'
 							action="${createLink(event: 'completato')}"
-							name="configuraConsulEsistente" method="post">
+							name="configuraConsul" method="post">
 							<div class="form-group">
 								<label for="etichetta">Nome Contesto Ar4k</label> <input
 									type="text" name="etichetta"
@@ -61,21 +61,21 @@
 							<div class="form-group">
 								<label for="descrizione">Descrizione contesto.</label>
 								<textarea name="descrizione"
-									class="text-area form-control validate-field required"
+									class="text-area form-control validate-field"
 									data-validation-type="required" id="chiaveMaster"
 									placeholder='Contesto Ar4k generato automaticamente'></textarea>
 							</div>
 							<div class="form-group">
 								<label for="progetto">Riferimento progetto</label> <input
 									type="text" name="progetto"
-									class="text-field form-control validate-field required"
+									class="text-field form-control validate-field"
 									data-validation-type="string" id="porta"
 									placeholder="id progetto">
 							</div>
 							<div class="form-group">
 								<label for="keyConsul">Chiave crittografica Consul</label> <input
 									type="text" name="keyConsul"
-									class="text-field form-control validate-field required"
+									class="text-field form-control validate-field"
 									data-validation-type="string" id="macchina"
 									placeholder="yIetiZno0c7464rOCaIThQ==">
 							</div>
@@ -95,7 +95,7 @@
 								<button name="_eventId"
 									class="link-scroll btn btn-success btn-outline-inverse btn-lg"
 									value="completato"
-									onClick="document.forms['configuraCodCommerciale'].submit();">Crea
+									onClick="document.forms['configuraConsul'].submit();">Crea
 									servizio Consul</button>
 							</div>
 

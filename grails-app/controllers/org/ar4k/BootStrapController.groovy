@@ -146,10 +146,7 @@ class BootStrapController {
 		}
 
 		creaConsul {
-			action {
-				bootStrapService.proxyMasterInternet=params.proxyMaster?:bootStrapService.proxyMasterInternet
-				bootStrapService.passwordProxyMasterInternet=params.passwordProxyMaster?:bootStrapService.passwordProxyMasterInternet
-			}
+			action { return successo() }
 			on ("successo").to "verifica"
 			on ("errore").to "nuovoConsul"
 		}
@@ -218,10 +215,7 @@ class BootStrapController {
 		}
 
 		mascheraFinale {
-			on ("completata"){
-				bootStrapService.inAvvio = false
-				bootStrapService.inReset = false
-			}.to("redirezione")
+			on ("completata").to("redirezione")
 		}
 
 		redirezione { redirect controller:'admin' }
