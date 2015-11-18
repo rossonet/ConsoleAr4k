@@ -14,6 +14,8 @@
 
 .fade {
 	opacity: 0;
+	-webkit-transition: opacity 5s ease-in;
+	transition: opacity 5s ease-in;
 }
 
 .fade.in {
@@ -45,7 +47,7 @@
 							configurata.
 						</p>
 						<p>
-							<a href="${createLink(event: 'completata')}"
+							<a href="" onClick="fine();"
 								class="link-scroll btn btn-success btn-outline-inverse btn-lg">Inizia
 								ad usare Ar4k</a>
 						</p>
@@ -67,6 +69,12 @@
 		$(document).ready(function() {
 			scroll_to_top();
 		});
+
+		function fine() {
+			var d = document.getElementById("benvenutoModal");
+			d.className = "modal fade ng-isolate-scope";
+			setTimeout(function(){ window.location = "${createLink(event: 'completata')}";}, 6000);
+		}
 	</script>
 </body>
 </html>

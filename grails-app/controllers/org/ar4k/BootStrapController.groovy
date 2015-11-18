@@ -96,7 +96,8 @@ class BootStrapController {
 		}
 
 		configuraProxyMaster {
-			on ("success"){provenienza:params.provenienza?:''}.to "testProxyMaster"
+			on ("successo"){provenienza:params.provenienza?:''}.to "testProxyMaster"
+			on ("configuraCodCommerciale").to "configuraCodCommerciale"
 			on ("indietro").to {params.provenienza?:"entrata"}
 			on ("configuraSSH"){[provenienza:params.provenienza?:"entrata"]}.to "configuraMaster"
 			on ("configuraOnion"){[provenienza:params.provenienza?:"entrata"]}.to "configuraOnion"
@@ -113,7 +114,8 @@ class BootStrapController {
 
 		configuraMaster {
 			on ("indietro").to {params.provenienza?:"entrata"}
-			on ("verificaMaster"){[provenienza:params.provenienza?:"entrata"]}.to "verificaMaster"
+			on ("configuraCodCommerciale").to "configuraCodCommerciale"
+			on ("successo"){[provenienza:params.provenienza?:"entrata"]}.to "verificaMaster"
 			on ("configuraProxy"){[provenienza:params.provenienza?:"entrata"]}.to "configuraProxyMaster"
 			on ("configuraOnion"){[provenienza:params.provenienza?:"entrata"]}.to "configuraOnion"
 		}
@@ -148,38 +150,25 @@ class BootStrapController {
 				bootStrapService.proxyMasterInternet=params.proxyMaster?:bootStrapService.proxyMasterInternet
 				bootStrapService.passwordProxyMasterInternet=params.passwordProxyMaster?:bootStrapService.passwordProxyMasterInternet
 			}
-			on ("success").to "verifica"
+			on ("successo").to "verifica"
 			on ("errore").to "nuovoConsul"
 		}
 
 		verifica {
-			action {
-				bootStrapService.proxyMasterInternet=params.proxyMaster?:bootStrapService.proxyMasterInternet
-				bootStrapService.passwordProxyMasterInternet=params.passwordProxyMaster?:bootStrapService.passwordProxyMasterInternet
-				def contesti
-			}
-			on ("success"){contesti:contesti}.to "scegliContesto"
+			action { return successo() }
+			on ("successo").to "scegliContesto"
 			on ("errore").to "parametriConsul"
 		}
 
 		scegliContesto {
-			on ("indietro").to "verifica"
+			on ("indietro").to "entrata"
 			on ("scegliInterfaccia").to "provaContesto"
 		}
 
 		provaContesto {
-			action {
-				if (bootStrapService.caricaContesto(params.contesto)) {
-					return scegliInterfaccia()
-				} else {
-					return errore()
-				}
-			}
+			action { return scegliInterfaccia() }
 			on ("scegliInterfaccia"){
 				def lista = []
-				bootStrapService.interfacceInContesto.each{
-					lista.add([descrizione:it.etichetta,id:it.idInterfaccia])
-				}
 				[listaInterfacce:lista]
 			}.to "scegliInterfaccia"
 			on ("errore").to "verifica"
@@ -191,21 +180,14 @@ class BootStrapController {
 		}
 
 		provaUtente {
-			action {
-				bootStrapService.idInterfacciaScelta = params.interfaccia
-				if(bootStrapService.utentiInContesto.size()>0) {
-					return completata()
-				} else {
-					return configuraAmministratore()
-				}
-			}
+			action { return configuraAmministratore() }
 			on ("configuraAmministratore").to "configuraAmministratore"
-			on ("completata").to("testFinale")
+			on ("presente").to("testFinale")
 		}
 
 		configuraAmministratore {
 			on ("completata").to("testFinale")
-			on ("fallita"){ [messaggioOlark:"Salve. Serve aiuto per configurare la piattaforma?"] }.to("fallita")
+			on ("fallita"){ [messaggioOlark:"Salve! La configurazione era quasi finita. Che è successo?"] }.to("fallita")
 		}
 
 		testFinale {
@@ -222,7 +204,7 @@ class BootStrapController {
 					}
 				}
 
-				if(bootStrapService.avvia()) {
+				if(bootStrapService.inizio()) {
 					return completata()
 				} else {
 					return fallita()
@@ -236,7 +218,10 @@ class BootStrapController {
 		}
 
 		mascheraFinale {
-			on ("completata").to("redirezione")
+			on ("completata"){
+				bootStrapService.inAvvio = false
+				bootStrapService.inReset = false
+			}.to("redirezione")
 		}
 
 		redirezione { redirect controller:'admin' }

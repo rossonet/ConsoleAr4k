@@ -95,7 +95,7 @@ L'app virtuale preparata per l'esecuzione in Amazon AWS al primo avvio scarica l
 <br/>
 ###App in formato OVA
 <img src="http://www.rossonet.org/wp-content/uploads/2015/01/virtualbox-ova-512px.png" align="left" width="100px" alt="OVA" >
-Il formato OVA è uno standard aperto per il confezionamento di macchine virtuali. In particolare è possibili importare l'applicazione virtuale in formato OVA in ambienti di virtualizzazione VMware e VirtualBox. [Maggiori dettagli su Wikipedia](https://it.wikipedia.org/wiki/Open_Virtualization_Format). [Console Ar4k formato OVA](https://s3-eu-west-1.amazonaws.com/rossonet/20151118-ConsoleAr4k.01-RCloud-Rossonet.ova)
+Il formato OVA è uno standard aperto per il confezionamento di macchine virtuali. In particolare è possibili importare l'applicazione virtuale in formato OVA in ambienti di virtualizzazione VMware e VirtualBox. [Maggiori dettagli su Wikipedia](https://it.wikipedia.org/wiki/Open_Virtualization_Format). [Console Ar4k formato OVA](https://s3-eu-west-1.amazonaws.com/rossonet/20151118-ConsoleAr4k.01-RCloud-Rossonet.ova). Anche in questo caso, dopo la visualizzazione del prompt attendere circa dieci minuti prima di collegarsi con il browser all'indirizzo ip della macchina virtuale appena creata.
 <br/>
 ###Oracle VirtualBox
 <img src="http://www.rossonet.org/wp-content/uploads/2015/11/virtualbox2.png" align="left" width="100px" alt="VirtualBox" >

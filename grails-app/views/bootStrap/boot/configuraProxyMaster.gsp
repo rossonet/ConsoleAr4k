@@ -41,15 +41,10 @@
 					<section class="feature-text">
 						<h2>Configurazione proxy vaso master</h2>
 						<!-- Se il server non è connesso direttamente a internet -->
-						<p class="text-justify" style="text-align: justify;">Il vaso
-							master non è in grado di comunicare direttamente con Internet.
-							Potrebbe essere necessario l'utilizzo di un proxy (http o socks)
-							per permettere alla macchina di raggiungere le reti esterni. Per
-							evitare che la piattaforma faccia ulteriori test sulla
-							raggiungibilità di rete inserire "NO NETWORK TEST" nel campo
-							proxy.</p>
+						<p class="text-justify" style="text-align: justify;">Utilizzare
+							un proxy per accedere all'ambiente Ar4k.</p>
 						<form class="form-style validate-form clearfix" autocomplete='off'
-							action="${createLink(event: 'success')}" name="configuraProxyJvm"
+							action="${createLink(event: 'successo')}" name="configuraProxy"
 							method="post">
 							<div class="form-group">
 								<label for="proxyMaster">Indirizzo e utente</label> <input
@@ -66,11 +61,42 @@
 									placeholder="Password del proxy">
 							</div>
 							<div class="form-group">
-								<button name="_eventId" class="btn btn-sm btn-outline-inverse"
+								<button name="_eventId"
+									class="link-scroll btn btn-success btn-outline-inverse btn-lg"
 									value="configuraProxyMaster"
-									onClick="document.forms['configuraProxyJvm'].submit();">Configura
+									onClick="document.forms['configuraProxy'].submit();">Configura
 									i parametri del proxy sul vaso</button>
 							</div>
+							<p>
+								<a
+									href="${createLink(event: 'indietro')}&provenienza=${provenienza}"
+									class="link-scroll btn btn-warning btn-outline-inverse btn-lg">indietro</a>
+							</p>
+							<p>
+								Nella maggior parte dei casi per connettersi ad una
+								installazione si dovrà accedere via SSH ad un host.<br /> <a
+									href="${createLink(event: 'configuraSSH')}&provenienza=${provenienza}"
+									class="link-scroll btn btn-warning btn-outline-inverse btn-lg">Configura
+									i parametri di accesso SSH</a>
+							</p>
+
+							<p>
+								E' possibile accedere ad una installazione Consul in ascolto
+								sulla rete Onion.<br /> <a
+									href="${createLink(event: 'configuraOnion')}&provenienza=${provenienza}"
+									class="link-scroll btn btn-info btn-outline-inverse btn-lg">Configura
+									un accesso alla rete Onion</a>
+							</p>
+							<p>
+								<a href="${createLink(event: 'configuraCodCommerciale')}"
+									class="link-scroll btn btn-success btn-outline-inverse btn-lg">Utilizza
+									un codice Rossonet</a>
+							</p>
+							<p>
+								<a href="${createLink(event: 'fallita')}"
+									class="link-scroll btn btn-danger btn-outline-inverse btn-lg">Richiedi
+									assistenza</a>
+							</p>
 						</form>
 
 					</section>

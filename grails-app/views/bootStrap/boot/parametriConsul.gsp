@@ -69,7 +69,7 @@
 								<button name="_eventId"
 									class="link-scroll btn btn-success btn-outline-inverse btn-lg"
 									value="completato"
-									onClick="document.forms['configuraCodCommerciale'].submit();">Connetti
+									onClick="document.forms['configuraConsulEsistente'].submit();">Connetti
 									Consul</button>
 							</div>
 							<p>
