@@ -34,3 +34,6 @@
 
 # directory dati ActiveMQ
 /activemq-data
+
+# per avvio con nohup
+nohup.out
