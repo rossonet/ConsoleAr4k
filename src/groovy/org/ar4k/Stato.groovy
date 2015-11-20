@@ -164,6 +164,65 @@ class ConnessioneSSH {
 		return true
 	}
 
+	String toString() {
+		return utente+'@'+macchina+':'+porta
+	}
+
+
+	/** esegui un comando ssh */
+	String esegui(String comando) {
+		String risultato = ''
+		//comando = 'export PATH='+path+' ; '+comando
+		InputStream input = null
+		try {
+			Channel canale
+			// Aggiunge la chiave privata
+			connessione.addIdentity(utente,key.getBytes(),null,null)
+			Session sessione=connessione.getSession(utente, macchina, porta)
+			sessione.setConfig("StrictHostKeyChecking","no")
+			sessione.setConfig("UserKnownHostsFile","/dev/null")
+			try{
+				sessione.connect()
+				canale=sessione.openChannel("exec")
+				((ChannelExec)canale).setCommand(comando)
+				canale.setInputStream(null)
+				((ChannelExec)canale).setErrStream(System.err)
+				input=canale.getInputStream()
+				canale.connect()
+			}catch(Exception ee){}
+			byte[] tmp=new byte[1024]
+			if(input){
+				while(true){
+					while(input.available()>0){
+						int i=input.read(tmp, 0, 1024)
+						if(i<0)break
+							risultato += new String(tmp, 0, i)
+					}
+					if(canale.isClosed()){
+						if(input.available()>0) continue
+							//
+							break
+					}
+					try{Thread.sleep(500);}catch(Exception ee){}
+				}
+			}
+			canale.disconnect()
+			sessione.disconnect()
+		}catch(Exception e) {
+			log.warn("Errore connesione SSH nell'esecuzione del comando: "+comando+" ERRORE: "+e.toString())
+		}
+		return risultato
+	}
+
+	/** prova la connesione ssh */
+	Boolean provaConnessione() {
+		String comando = 'echo -n $((6+4))'
+		String atteso = '10'
+		String risultato = esegui(comando)
+		log.info("risultato connessione "+toString()+" "+risultato+" (atteso:"+atteso+")")
+		return risultato == atteso?true:false
+	}
+
 	/** Aggiunge un tunnel SSH Left*/
 	private void addLTunnel(int lport, String rhost, int rport) {
 		try {

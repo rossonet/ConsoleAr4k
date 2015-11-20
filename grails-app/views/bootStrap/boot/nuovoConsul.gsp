@@ -98,11 +98,15 @@
 									onClick="document.forms['configuraConsul'].submit();">Crea
 									servizio Consul</button>
 							</div>
-
+							<a href="${createLink(event: 'indietro')}"
+								class="link-scroll btn btn-info btn-outline-inverse btn-lg">Indietro
+								alla schermata di benvenuto</a>
 							<p>
 								Nella maggior parte dei casi per connettersi ad una
-								installazione si dovrà accedere via SSH ad un host.<br /> <a
-									href="${createLink(event: 'configuraSSH')}"
+								installazione si dovrà accedere via SSH ad un host.
+								<g:if test="${ssh}">Sono già configurate le connessioni a ${ssh}
+								</g:if>
+								<br /> <a href="${createLink(event: 'configuraSSH')}"
 									class="link-scroll btn btn-warning btn-outline-inverse btn-lg">Configura
 									i parametri di accesso SSH</a>
 							</p>

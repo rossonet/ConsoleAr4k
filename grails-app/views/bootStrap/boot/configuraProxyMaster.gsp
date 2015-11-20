@@ -39,6 +39,11 @@
 				<div class="col-md-10 col-xs-12 col-sm-12 pull-right">
 
 					<section class="feature-text">
+						<g:if test="${errore}">
+							<div class="alert alert-danger">
+								${errore}
+							</div>
+						</g:if>
 						<h2>Configurazione proxy vaso master</h2>
 						<!-- Se il server non è connesso direttamente a internet -->
 						<p class="text-justify" style="text-align: justify;">Utilizzare
@@ -74,7 +79,10 @@
 							</p>
 							<p>
 								Nella maggior parte dei casi per connettersi ad una
-								installazione si dovrà accedere via SSH ad un host.<br /> <a
+								installazione si dovrà accedere via SSH ad un host.
+								<g:if test="${ssh}">Sono già configurate le connessioni a ${ssh}
+								</g:if>
+								<br /> <a
 									href="${createLink(event: 'configuraSSH')}&provenienza=${provenienza}"
 									class="link-scroll btn btn-warning btn-outline-inverse btn-lg">Configura
 									i parametri di accesso SSH</a>

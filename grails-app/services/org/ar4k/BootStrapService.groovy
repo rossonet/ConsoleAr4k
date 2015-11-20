@@ -47,6 +47,9 @@ class BootStrapService {
 	/** identificativo di boot */
 	String valoreCasuale=org.apache.commons.lang.RandomStringUtils.random(5, true, true).toString()
 
+	/** stringhe di errore per interfaccia */
+	List<String> errori = []
+	
 	/** lanciato dalla procedura di boot di Grails. 
 	 * Grails si preoccupa di popolare il servizio BootStrap (scope singleton)
 	 * con i parametri trovati nel file di configurazione

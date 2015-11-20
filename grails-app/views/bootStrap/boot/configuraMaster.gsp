@@ -37,6 +37,11 @@
 		<div class="modal-dialog modal-lg" style="width: 90%;">
 			<div class="modal-content" uib-modal-transclude="">
 				<div class="col-md-10 col-xs-12 col-sm-12 pull-right">
+					<g:if test="${errore}">
+						<div class="alert alert-danger">
+							${errore}
+						</div>
+					</g:if>
 					<h2>Configura l'accesso SSH al vaso master</h2>
 					<p class="text-justify" style="text-align: justify;">
 						Per connettersi al vaso sono necessari l'indirizzo e la porta TCP
@@ -58,7 +63,7 @@
 				</div>
 				<div class="col-md-10 col-xs-12 col-sm-12 pull-right">
 					<form class="form-style validate-form clearfix" autocomplete='off'
-						action="${createLink(event: 'completato')}" name="vasoMaster"
+						action="${createLink(event: 'successo')}" name="vasoMaster"
 						method="post">
 						<div class="form-group">
 							<label for="indirizzoMaster">Indirizzo macchina (ip o
@@ -88,6 +93,7 @@
 								data-validation-type="required" id="chiaveMaster"
 								placeholder='copiare la chiave privata ssh comprese le linee di intestazione e chiusura "-----BEGIN RSA PRIVATE KEY-----" e "-----END RSA PRIVATE KEY-----"'></textarea>
 						</div>
+						<input type="hidden" name="provenienza" value="${provenienza}">
 						<div class="form-group">
 							<button name="_eventId"
 								class="btn btn-danger btn-sm btn-outline-inverse"
@@ -101,7 +107,8 @@
 								class="link-scroll btn btn-warning btn-outline-inverse btn-lg">indietro</a>
 						</p>
 						<p>
-							E' possibile utilizzare un proxy per connettersi via SSH.<br /> <a
+							E' possibile utilizzare un proxy per connettersi via SSH.<br />
+							<a
 								href="${createLink(event: 'configuraProxy')}&provenienza=${provenienza}"
 								class="link-scroll btn btn-warning btn-outline-inverse btn-lg">Configura
 								i parametri per il proxy</a>

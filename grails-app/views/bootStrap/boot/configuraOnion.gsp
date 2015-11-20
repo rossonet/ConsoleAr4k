@@ -39,7 +39,13 @@
 				<div class="col-md-10 col-xs-12 col-sm-12 pull-right">
 
 					<section class="feature-text">
-						<h2 style="text-align: right;">Configurazione accesso tramite rete Onion</h2>
+						<g:if test="${errore}">
+							<div class="alert alert-danger">
+								${errore}
+							</div>
+						</g:if>
+						<h2 style="text-align: right;">Configurazione accesso tramite
+							rete Onion</h2>
 						<!-- Se il server non è connesso direttamente a internet -->
 						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 							<img src="${resource(dir: 'images', file: 'onion.png')}"
@@ -83,7 +89,10 @@
 								</p>
 								<p>
 									Nella maggior parte dei casi per connettersi ad una
-									installazione si dovrà accedere via SSH ad un host.<br /> <a
+									installazione si dovrà accedere via SSH ad un host.
+									<g:if test="${ssh}">Sono già configurate le connessioni a ${ssh}
+									</g:if>
+									<br /> <a
 										href="${createLink(event: 'configuraSSH')}&provenienza=${provenienza}"
 										class="link-scroll btn btn-warning btn-outline-inverse btn-lg">Configura
 										i parametri di accesso SSH</a>
