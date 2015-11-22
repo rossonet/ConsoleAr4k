@@ -52,9 +52,9 @@ class BootStrapController {
 		}
 
 		showBenvenuto {
-			on ("configuraConsul"){[ssh:bootStrapService.stato.listaGWSSH.join(", ")]}.to "parametriConsul"
+			on ("configuraConsul"){[ssh:bootStrapService.stato.listaGWSSH.join(", "),proxies:bootStrapService.stato.listaProxy.join(", ")]}.to "parametriConsul"
 			on ("configuraCodCommerciale").to "configuraCodCommerciale"
-			on ("configuraNuovoConsul"){[ssh:bootStrapService.stato.listaGWSSH.join(", ")]}.to "nuovoConsul"
+			on ("configuraNuovoConsul"){[ssh:bootStrapService.stato.listaGWSSH.join(", "),proxies:bootStrapService.stato.listaProxy.join(", ")]}.to "nuovoConsul"
 			on ("fallita"){ [messaggioOlark:"Salve..."] }.to("fallita")
 		}
 
@@ -73,7 +73,7 @@ class BootStrapController {
 				}
 			}
 			on ("completata").to("mascheraFinale")
-			on ("errore"){ssh:bootStrapService.stato.listaGWSSH}.to("configuraCodCommerciale")
+			on ("errore").to("configuraCodCommerciale")
 		}
 
 		nuovoConsul {
@@ -106,11 +106,39 @@ class BootStrapController {
 
 		testProxyMaster {
 			action {
-				bootStrapService.proxyMasterInternet=params.proxyMaster?:bootStrapService.proxyMasterInternet
-				bootStrapService.passwordProxyMasterInternet=params.passwordProxyMaster?:bootStrapService.passwordProxyMasterInternet
+				Boolean errore = false
+				String macchina = '127.0.0.1'
+				Integer porta = 3128
+				String utente = ''
+				String password = ''
+				String protocollo = 'http'
+				try{
+					URL targetProxy = new URL(params.proxyMaster)
+					protocollo = targetProxy.getProtocol()?:'http'
+					porta = targetProxy.getPort()?:3128
+					macchina = targetProxy.getHost()?:'127.0.0.1'
+				} catch(Exception ee) {
+					errore = true
+					log.error(ee)
+				}
+				if (errore==false ) {
+					Proxy nuovoProxy = new Proxy(
+							macchina:macchina,
+							porta:porta,
+							utente:utente,
+							password:password,
+							protocollo:protocollo)
+					bootStrapService.stato.listaProxy.add(nuovoProxy)
+					bootStrapService.stato.connessioneProxy = true
+					return successo()
+				} else {
+					bootStrapService.errori.add("Errore nella configurazione del proxy")
+					return errore()
+				}
 			}
-			on ("success"){}.to {params.provenienza?:"entrata"}
+			on ("successo"){[proxies:bootStrapService.stato.listaProxy.join(", ")]}.to {params.provenienza?:"entrata"}
 			on ("errore").to "configuraProxyMaster"
+			on (Exception).to "configuraProxyMaster"
 		}
 
 		configuraMaster {
@@ -128,7 +156,7 @@ class BootStrapController {
 				if ( params.portaMaster != '' ) {
 					try {
 						porta = params.portaMaster.toInteger()?:22
-					} catch(ee) {
+					} catch(Exception ee) {
 					}
 				}
 				//costruisce l'oggetto connessione
@@ -152,6 +180,7 @@ class BootStrapController {
 			}
 			on ("successo"){[ssh:bootStrapService.stato.listaGWSSH.join(", ")]}.to {params.provenienza?:"entrata"}
 			on ("errore").to "configuraMaster"
+			on (Exception).to "configuraMaster"
 		}
 
 		configuraOnion {

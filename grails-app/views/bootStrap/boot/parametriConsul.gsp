@@ -37,87 +37,86 @@
 		<div class="modal-dialog modal-lg" style="width: 90%;">
 			<div class="modal-content" uib-modal-transclude="">
 
-
-
 				<div class="col-md-10 col-xs-12 col-sm-12 pull-right">
 
-					<div class="feature-text">
-						<h2>Connetti ad una installazione esistente</h2>
-						<p class="text-justify" style="text-align: justify;">
-							I dati di un <strong>contesto</strong> Ar4k sono mantenuti dal
-							suo servizio Consul. Per connettersi ad una installazione
-							esistente inserire l'indirizzo e la porta TCP di un server Consul
-							attivo.
+					<h2>Connetti ad una installazione esistente</h2>
+					<p class="text-justify" style="text-align: justify;">
+						I dati di un <strong>contesto</strong> Ar4k sono mantenuti dal suo
+						servizio Consul. Per connettersi ad una installazione esistente
+						inserire l'indirizzo e la porta TCP di un server Consul attivo.
+					<p>
+					<form class="form-style validate-form clearfix" autocomplete='off'
+						action="${createLink(event: 'completato')}"
+						name="configuraConsulEsistente" method="post">
+						<div class="form-group">
+							<label for="macchina">Indirizzo installazione Consul</label> <input
+								type="text" name="macchina"
+								class="text-field form-control validate-field required"
+								data-validation-type="string" id="macchina"
+								placeholder="127.0.0.1">
+						</div>
+						<div class="form-group">
+							<label for="porta">Porta TCP installazione Consul</label> <input
+								type="text" name="porta"
+								class="text-field form-control validate-field required"
+								data-validation-type="string" id="porta" placeholder="8500">
+						</div>
+						<div class="form-group">
+							<button name="_eventId"
+								class="link-scroll btn btn-success btn-outline-inverse btn-lg"
+								value="completato"
+								onClick="document.forms['configuraConsulEsistente'].submit();">Connetti
+								Consul</button>
+						</div>
+						<a href="${createLink(event: 'indietro')}"
+							class="link-scroll btn btn-info btn-outline-inverse btn-lg">Indietro
+							alla schermata di benvenuto</a>
 						<p>
-						<form class="form-style validate-form clearfix" autocomplete='off'
-							action="${createLink(event: 'completato')}"
-							name="configuraConsulEsistente" method="post">
-							<div class="form-group">
-								<label for="macchina">Indirizzo installazione Consul</label> <input
-									type="text" name="macchina"
-									class="text-field form-control validate-field required"
-									data-validation-type="string" id="macchina"
-									placeholder="127.0.0.1">
-							</div>
-							<div class="form-group">
-								<label for="porta">Porta TCP installazione Consul</label> <input
-									type="text" name="porta"
-									class="text-field form-control validate-field required"
-									data-validation-type="string" id="porta" placeholder="8500">
-							</div>
-							<div class="form-group">
-								<button name="_eventId"
-									class="link-scroll btn btn-success btn-outline-inverse btn-lg"
-									value="completato"
-									onClick="document.forms['configuraConsulEsistente'].submit();">Connetti
-									Consul</button>
-							</div>
-							<a href="${createLink(event: 'indietro')}"
-								class="link-scroll btn btn-info btn-outline-inverse btn-lg">Indietro
-								alla schermata di benvenuto</a>
-							<p>
-								Nella maggior parte dei casi per connettersi ad una
-								installazione si dovrà accedere via SSH ad un host.
-								<g:if test="${ssh}">Sono già configurate le connessioni a ${ssh}
-								</g:if>
-								<br /> <a href="${createLink(event: 'configuraSSH')}"
-									class="link-scroll btn btn-warning btn-outline-inverse btn-lg">Configura
-									i parametri di accesso SSH</a>
-							</p>
-							<p>
-								E' possibile utilizzare un proxy per la connessione SSH. Questa
-								funzionalità permette l'utilizzo di questa interfaccia da reti
-								che non accedono ad Internet direttamente.<br /> <a
-									href="${createLink(event: 'configuraProxy')}"
-									class="link-scroll btn btn-warning btn-outline-inverse btn-lg">Configura
-									un proxy</a>
-							</p>
-							<p>
-								E' possibile accedere ad una installazione Consul in ascolto
-								sulla rete Onion.<br /> <a
-									href="${createLink(event: 'configuraOnion')}"
-									class="link-scroll btn btn-info btn-outline-inverse btn-lg">Configura
-									un accesso alla rete Onion</a>
-							</p>
-							<p>
-								<a href="${createLink(event: 'configuraCodCommerciale')}"
-									class="link-scroll btn btn-success btn-outline-inverse btn-lg">Utilizza
-									un codice Rossonet</a>
-							</p>
-							<p>
-								<a href="${createLink(event: 'fallita')}"
-									class="link-scroll btn btn-danger btn-outline-inverse btn-lg">Richiedi
-									assistenza</a>
-							</p>
-						</form>
-					</div>
-
+							Nella maggior parte dei casi per connettersi ad una installazione
+							si dovrà accedere via SSH ad un host.
+							<g:if test="${ssh}">Sono già configurate le connessioni a ${ssh}
+							</g:if>
+							<br /> <a href="${createLink(event: 'configuraSSH')}"
+								class="link-scroll btn btn-warning btn-outline-inverse btn-lg">Configura
+								i parametri di accesso SSH</a>
+						</p>
+						<p>
+							E' possibile utilizzare un proxy per la connessione SSH o per
+							l'accesso al server Consul. Questa funzionalità permette
+							l'utilizzo di questa interfaccia da reti che non accedono ad
+							Internet direttamente.
+							<g:if test="${proxies}">Sono già configurate le connessioni a ${proxies}
+							</g:if>
+							<br /> <a href="${createLink(event: 'configuraProxy')}"
+								class="link-scroll btn btn-warning btn-outline-inverse btn-lg">Configura
+								un proxy</a>
+						</p>
+						<p>
+							E' possibile accedere ad una installazione Consul in ascolto
+							sulla rete Onion o utilizzare Tor come un proxy.<br /> <a
+								href="${createLink(event: 'configuraOnion')}"
+								class="link-scroll btn btn-info btn-outline-inverse btn-lg">Configura
+								un accesso alla rete Onion</a>
+						</p>
+						<p>
+							<a href="${createLink(event: 'configuraCodCommerciale')}"
+								class="link-scroll btn btn-success btn-outline-inverse btn-lg">Utilizza
+								un codice Rossonet</a>
+						</p>
+						<p>
+							<a href="${createLink(event: 'fallita')}"
+								class="link-scroll btn btn-danger btn-outline-inverse btn-lg">Richiedi
+								assistenza</a>
+						</p>
+					</form>
 				</div>
-				<!-- .col-sm-10 -->
+
 			</div>
-			<!-- .content-wrapper -->
+			<!-- .col-sm-10 -->
 		</div>
+		<!-- .content-wrapper -->
 	</div>
+
 	<script>
 		$(document).ready(function() {
 			scroll_to_top();

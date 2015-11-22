@@ -36,11 +36,6 @@
 		id="benvenutoModal">
 		<div class="modal-dialog modal-lg" style="width: 90%;">
 			<div class="modal-content" uib-modal-transclude="">
-
-
-
-
-
 				<div class="col-md-10 col-xs-12 col-sm-12 pull-right">
 					<h2>Configurazione iniziale console AR4K</h2>
 					<p class="text-justify" style="text-align: justify;">
@@ -141,8 +136,6 @@
 			</div>
 			<!-- .content-wrapper -->
 		</div>
-
-
 	</div>
 	<script>
 		$(document).ready(function() {

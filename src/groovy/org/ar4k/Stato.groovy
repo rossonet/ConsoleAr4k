@@ -33,7 +33,7 @@ class Stato {
 	Boolean connessioneSSH = false
 	/** lista connessioni SSH per accedere a Consul disponibili */
 	List<ConnessioneSSH> listaGWSSH = []/** necessario ssh over proxy Socks */
-	Boolean connessioneProxySocks = false
+	Boolean connessioneProxy = false
 	/** lista proxy disponibili */
 	List<Proxy> listaProxy = []
 	/** connessione Onion (Tor) */
@@ -71,7 +71,7 @@ class Stato {
 			// Avvia il client Tor - Onion
 		}
 
-		if(connessioneProxySocks) {
+		if(connessioneProxy) {
 			// configura i parametri per il proxy
 		}
 		if(connessioneSSH) {
@@ -138,7 +138,11 @@ class Proxy {
 	/** password proxy */
 	String password = ''
 	/** tipologia proxy */
-	String tipologia = 'SOCKS5'
+	String protocollo = 'http'
+
+	String toString() {
+		return protocollo+'://'+utente+'@'+macchina+':'+porta
+	}
 }
 
 class ConnessioneSSH {

@@ -37,36 +37,34 @@
 		<div class="modal-dialog modal-lg" style="width: 90%;">
 			<div class="modal-content" uib-modal-transclude="">
 				<div class="col-sm-12 col-md-10 pull-right">
+					<h2>Scegli il contesto applicativo</h2>
+					<p class="text-justify" style="text-align: justify;">
+						Una installazione Ar4k può ospitare più <strong>contesti</strong>.
+						Un <strong>contesto</strong> associa <strong>utenti</strong>, <strong>vasi</strong>,
+						<strong>connessioni</strong> e <strong>memi</strong>. Un'<strong>console</strong>
+						può essere associata ad un solo <strong>contesto</strong> per
+						volta. Scegliere il contesto per questa <strong>console
+							Ar4k</strong> tra quelli diponibili.
+					</p>
 
-					<section class="feature-text">
-						<h2>Scegli il contesto applicativo</h2>
-						<p class="text-justify" style="text-align: justify;">
-							Una installazione Ar4k può ospitare più <strong>contesti</strong>.
-							Un <strong>contesto</strong> associa <strong>utenti</strong>, <strong>vasi</strong>,
-							<strong>connessioni</strong> e <strong>memi</strong>. Un'<strong>console</strong>
-							può essere associata ad un solo <strong>contesto</strong> per
-							volta. Scegliere il contesto per questa <strong>console
-								Ar4k</strong> tra quelli diponibili.
-						</p>
+					<g:each in="[1,2]">
+						<g:if test="${it}">
+							<p>
+								<a
+									href="${createLink(event: 'scegliInterfaccia')}&contesto=${it}"
+									class="link-scroll btn btn-danger btn-outline-inverse btn-lg">Scegli
+									il contesto "${it}"
+								</a>
+							</p>
+						</g:if>
+					</g:each>
 
-						<g:each in="[1,2]">
-							<g:if test="${it}">
-								<p>
-									<a
-										href="${createLink(event: 'scegliInterfaccia')}&contesto=${it}"
-										class="link-scroll btn btn-danger btn-outline-inverse btn-lg">Scegli
-										il contesto "${it}"
-									</a>
-								</p>
-							</g:if>
-						</g:each>
+					<p>
+						<a
+							href="${createLink(event: 'indietro')}&provenienza=${provenienza}"
+							class="link-scroll btn btn-warning btn-outline-inverse btn-lg">indietro</a>
+					</p>
 
-						<p>
-							<a
-								href="${createLink(event: 'indietro')}&provenienza=${provenienza}"
-								class="link-scroll btn btn-warning btn-outline-inverse btn-lg">indietro</a>
-						</p>
-					</section>
 
 				</div>
 				<!-- .col-sm-10 -->

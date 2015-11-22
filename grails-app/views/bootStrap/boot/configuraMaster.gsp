@@ -107,8 +107,11 @@
 								class="link-scroll btn btn-warning btn-outline-inverse btn-lg">indietro</a>
 						</p>
 						<p>
-							E' possibile utilizzare un proxy per connettersi via SSH.<br />
-							<a
+							E' possibile utilizzare un proxy per connettersi via SSH o con il
+							client Consul.
+							<g:if test="${proxies}">Sono già configurate le connessioni a ${proxies}
+							</g:if>
+							<br /> <a
 								href="${createLink(event: 'configuraProxy')}&provenienza=${provenienza}"
 								class="link-scroll btn btn-warning btn-outline-inverse btn-lg">Configura
 								i parametri per il proxy</a>

@@ -40,18 +40,17 @@
 			<div class="modal-content" uib-modal-transclude="">
 				<div class="col-sm-10 col-md-9 pull-right">
 
-					<section class="feature-text">
-						<h2>Configurazione Completata</h2>
-						<p class="text-justify" style="text-align: justify;">
-							<i class="fa fa-check fa-3x"></i> La console è correttamente
-							configurata.
-						</p>
-						<p>
-							<a href="" onClick="fine();"
-								class="link-scroll btn btn-success btn-outline-inverse btn-lg">Inizia
-								ad usare Ar4k</a>
-						</p>
-					</section>
+					<h2>Configurazione Completata</h2>
+					<p class="text-justify" style="text-align: justify;">
+						<i class="fa fa-check fa-3x"></i> La console è correttamente
+						configurata.
+					</p>
+					<p>
+						<a href="" onClick="fine();"
+							class="link-scroll btn btn-success btn-outline-inverse btn-lg">Inizia
+							ad usare Ar4k</a>
+					</p>
+
 
 				</div>
 				<!-- .col-sm-10 -->
@@ -73,7 +72,9 @@
 		function fine() {
 			var d = document.getElementById("benvenutoModal");
 			d.className = "modal fade ng-isolate-scope";
-			setTimeout(function(){ window.location = "${createLink(event: 'completata')}";}, 6000);
+			setTimeout(function(){ window.location = "${createLink(event: 'completata')}
+		";
+			}, 6000);
 		}
 	</script>
 </body>

@@ -38,28 +38,28 @@
 			<div class="modal-content" uib-modal-transclude="">
 				<div class="col-sm-10 col-md-9 pull-right">
 
-					<section class="feature-text">
-						<h2>Scegli l'interfaccia applicativa</h2>
-						<p class="text-justify" style="text-align: justify;">Un
-							contesto dispone di varie impostazioni grafiche per la Console.
-							Scegliere una impostazione per questa installazione.</p>
-						<g:each in="[1,2]">
-							<g:if test="${it}">
-								<p>
-									<a href="${createLink(event: 'avvia')}&interfaccia=${it}"
-										class="link-scroll btn btn-danger btn-outline-inverse btn-lg">Scegli
-										l'interfaccia "${it}"
-									</a>
-								</p>
-							</g:if>
-						</g:each>
 
-						<p>
-							<a
-								href="${createLink(event: 'indietro')}&provenienza=${provenienza}"
-								class="link-scroll btn btn-warning btn-outline-inverse btn-lg">indietro</a>
-						</p>
-					</section>
+					<h2>Scegli l'interfaccia applicativa</h2>
+					<p class="text-justify" style="text-align: justify;">Un
+						contesto dispone di varie impostazioni grafiche per la Console.
+						Scegliere una impostazione per questa installazione.</p>
+					<g:each in="[1,2]">
+						<g:if test="${it}">
+							<p>
+								<a href="${createLink(event: 'avvia')}&interfaccia=${it}"
+									class="link-scroll btn btn-danger btn-outline-inverse btn-lg">Scegli
+									l'interfaccia "${it}"
+								</a>
+							</p>
+						</g:if>
+					</g:each>
+
+					<p>
+						<a
+							href="${createLink(event: 'indietro')}&provenienza=${provenienza}"
+							class="link-scroll btn btn-warning btn-outline-inverse btn-lg">indietro</a>
+					</p>
+
 				</div>
 				<!-- .col-sm-10 -->
 			</div>

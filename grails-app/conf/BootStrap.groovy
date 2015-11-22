@@ -53,7 +53,7 @@ class BootStrap {
 			bootStrapService.stato.connessioneSSH = grailsApplication.config.connessioneSSH?:false
 			bootStrapService.stato.connessioneOnion = grailsApplication.config.connessioneOnion?:false
 			bootStrapService.stato.controlloConsul = grailsApplication.config.controlloConsul?:true
-			bootStrapService.stato.connessioneProxySocks = grailsApplication.config.connessioneProxySocks?:false
+			bootStrapService.stato.connessioneProxy = grailsApplication.config.connessioneProxy?:false
 			if (grailsApplication.config.connessioneSSH) {
 				log.info("Configuro i parametri di configurazione trovati su file per un accesso SSH")
 				ConnessioneSSH connessione = new ConnessioneSSH()
@@ -63,7 +63,7 @@ class BootStrap {
 				connessione.key = grailsApplication.config.hostSSH.key?:null
 				bootStrapService.stato.listaGWSSH.add(connessione)
 			}
-			if (grailsApplication.config.connessioneProxySocks) {
+			if (grailsApplication.config.connessioneProxy) {
 				log.info("Configuro i parametri di configurazione trovati su file per un proxy")
 				Proxy proxy = Proxy()
 				proxy.macchina = grailsApplication.config.proxy.macchina?:null

@@ -36,55 +36,50 @@
 		id="benvenutoModal">
 		<div class="modal-dialog modal-lg" style="width: 90%;">
 			<div class="modal-content" uib-modal-transclude="">
-
-
-
 				<div class="col-md-10 col-xs-12 col-sm-12 pull-right">
-
-					<div class="feature-text">
-						<h2>AR4K by Rossonet</h2>
-						<p class="text-justify" style="text-align: justify;">
-							<a href="http://www.rossonet.org" target="_new">Rossonet</a>
-							offre servizi cloud, assistenza e moduli aggiuntivi per il
-							prodotto open source Ar4k. Maggiori dettagli nel nostro <a
-								href="http://www.rossonet.org/" target="_new">sito internet.</a>
+					<h2>AR4K by Rossonet</h2>
+					<p class="text-justify" style="text-align: justify;">
+						<a href="http://www.rossonet.org" target="_new">Rossonet</a> offre
+						servizi cloud, assistenza e moduli aggiuntivi per il prodotto open
+						source Ar4k. Maggiori dettagli nel nostro <a
+							href="http://www.rossonet.org/" target="_new">sito internet.</a>
+					<p>
+					<form class="form-style validate-form clearfix" autocomplete='off'
+						action="${createLink(event: 'completata')}"
+						name="configuraCodCommerciale" method="post">
+						<div class="form-group">
+							<label for="codCommerciale">Codice AR4K</label> <input
+								type="text" name="codCommerciale"
+								class="text-field form-control validate-field required"
+								data-validation-type="string" id="codCommerciale"
+								placeholder="Inserire il cod.ar4k ricevuto per email">
+						</div>
+						<div class="form-group">
+							<button name="_eventId"
+								class="link-scroll btn btn-success btn-outline-inverse btn-lg"
+								value="completata"
+								onClick="document.forms['configuraCodCommerciale'].submit();">Attiva
+								l'interfaccia AR4K con questo codice</button>
+						</div>
 						<p>
-						<form class="form-style validate-form clearfix" autocomplete='off'
-							action="${createLink(event: 'completata')}"
-							name="configuraCodCommerciale" method="post">
-							<div class="form-group">
-								<label for="codCommerciale">Codice AR4K</label> <input
-									type="text" name="codCommerciale"
-									class="text-field form-control validate-field required"
-									data-validation-type="string" id="codCommerciale"
-									placeholder="Inserire il cod.ar4k ricevuto per email">
-							</div>
-							<div class="form-group">
-								<button name="_eventId"
-									class="link-scroll btn btn-success btn-outline-inverse btn-lg"
-									value="completata"
-									onClick="document.forms['configuraCodCommerciale'].submit();">Attiva
-									l'interfaccia AR4K con questo codice</button>
-							</div>
-							<p>
-								<a href="${createLink(event: 'indietro')}"
-									class="link-scroll btn btn-warning btn-outline-inverse btn-lg">...ricomincia
-									la procedura di boot di questa interfaccia AR4K</a>
-							</p>
+							<a href="${createLink(event: 'indietro')}"
+								class="link-scroll btn btn-warning btn-outline-inverse btn-lg">...ricomincia
+								la procedura di boot di questa interfaccia AR4K</a>
+						</p>
 
-							<p>
-								<a href="${createLink(event: 'fallita')}"
-									class="link-scroll btn btn-danger btn-outline-inverse btn-lg">Richiedi assistenza</a>
-							</p>
-						</form>
-					</div>
-
+						<p>
+							<a href="${createLink(event: 'fallita')}"
+								class="link-scroll btn btn-danger btn-outline-inverse btn-lg">Richiedi
+								assistenza</a>
+						</p>
+					</form>
 				</div>
-				<!-- .col-sm-10 -->
 			</div>
-			<!-- .content-wrapper -->
+			<!-- .col-sm-10 -->
 		</div>
+		<!-- .content-wrapper -->
 	</div>
+
 	<script>
 		$(document).ready(function() {
 			scroll_to_top();
@@ -96,7 +91,6 @@
 			scroll_to_top();
 		});
 	</script>
-
 </body>
 </html>
 
