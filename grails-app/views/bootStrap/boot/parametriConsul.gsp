@@ -62,6 +62,19 @@
 								data-validation-type="string" id="porta" placeholder="8500">
 						</div>
 						<div class="form-group">
+							<label for="sshTunnel">Utilizza un tunnel ssh</label> <select
+								name="sshTunnel" class="selectpicker text-field form-control"
+								style="background-color: black; height: 54px; font-size: 0.97em; color: white;"
+								id="sshTunnel">
+								<option value="nessuno">Nessun tunnel ssh</option>
+								<g:each in="${ssh}">
+									<option value="${it}">
+										${it}
+									</option>
+								</g:each>
+							</select>
+						</div>
+						<div class="form-group">
 							<button name="_eventId"
 								class="link-scroll btn btn-success btn-outline-inverse btn-lg"
 								value="completato"
@@ -81,10 +94,9 @@
 								i parametri di accesso SSH</a>
 						</p>
 						<p>
-							E' possibile utilizzare un proxy per la connessione SSH o per
-							l'accesso al server Consul. Questa funzionalità permette
-							l'utilizzo di questa interfaccia da reti che non accedono ad
-							Internet direttamente.
+							E' possibile utilizzare un proxy per la connessione SSH. Questa
+							funzionalità permette l'utilizzo di questa interfaccia da reti
+							che non accedono ad Internet direttamente.
 							<g:if test="${proxies}">Sono già configurate le connessioni a ${proxies}
 							</g:if>
 							<br /> <a href="${createLink(event: 'configuraProxy')}"
@@ -93,10 +105,17 @@
 						</p>
 						<p>
 							E' possibile accedere ad una installazione Consul in ascolto
-							sulla rete Onion o utilizzare Tor come un proxy.<br /> <a
-								href="${createLink(event: 'configuraOnion')}"
-								class="link-scroll btn btn-info btn-outline-inverse btn-lg">Configura
-								un accesso alla rete Onion</a>
+							sulla rete Onion o utilizzare Tor come proxy.<br />
+							<g:if test="${tor}">
+								<a href="${createLink(event: 'configuraOnion')}"
+									class="link-scroll btn btn-info btn-outline-inverse btn-lg">Cambia
+									circuito Onion</a>
+							</g:if>
+							<g:else>
+								<a href="${createLink(event: 'configuraOnion')}"
+									class="link-scroll btn btn-info btn-outline-inverse btn-lg">Attiva
+									Onion</a>
+							</g:else>
 						</p>
 						<p>
 							<a href="${createLink(event: 'configuraCodCommerciale')}"

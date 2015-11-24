@@ -144,7 +144,7 @@ log4j.main = {
 					info 'org.codehaus.groovy.grails.plugins'
 					info 'org.codehaus.groovy.grails.commons'
 					info 'org.ar4k'
-					//debug 'org.hibernate'
+					debug 'com.subgraph.orchid'
 				}
 	}
 }

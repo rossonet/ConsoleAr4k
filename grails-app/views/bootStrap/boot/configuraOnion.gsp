@@ -60,28 +60,40 @@
 							per garantire la connessione di ambienti poco raggiungibili per
 							via dell'architettura di rete o per motivi operativi. Per
 							connettersi ad una istallazione raggiungibile su rete Onion è
-							necessario installare un proxy Tor. Per scaricare il software
-							necessario utilizzare il link seguente: <a
+							necessario attivare il proxy Onion. Per maggiori dettagli
+							consultare la pagina del progetto: <a
 								href="https://www.torproject.org/download/download.html.en"
 								target="_tor">https://www.torproject.org/download/download.html.en</a>
+							Per attivare il proxy Onion utilizziamo <a
+								href="https://subgraph.com/orchid/index.en.html" target="_tor">l'API
+								Java Orchid</a>. La Java Virtual Machine su cui viene eseguita
+							l'applicazione deve avere l'estenzione <a
+								href="http://www.oracle.com/technetwork/java/javase/downloads/jce-7-download-432124.html"
+								target="_tor">JCE</a> installata.
 						</p>
-						<form class="col-xs-12 col-sm-12 col-md-12 col-lg-12 form-style validate-form clearfix" autocomplete='off'
-							action="${createLink(event: 'successo')}" name="configuraProxy"
-							method="post">
-							<div class="form-group">
-								<label for="proxyMaster">Indirizzo e porta proxy Tor</label> <input
-									type="text" name="proxyMaster"
-									class="text-field form-control validate-field required"
-									data-validation-type="string" id="proxyMaster"
-									placeholder="<macchina>:<porta>">
-							</div>
-							<div class="form-group">
-								<button name="_eventId"
-									class="link-scroll btn btn-success btn-outline-inverse btn-lg"
-									value="configuraProxyMaster"
-									onClick="document.forms['configuraProxy'].submit();">Configura
-									l'accesso TOR</button>
-							</div>
+						<form
+							class="col-xs-12 col-sm-12 col-md-12 col-lg-12 form-style validate-form clearfix"
+							autocomplete='off' action="${createLink(event: 'successo')}"
+							name="configuraOnion" method="post">
+							<input type="hidden" name="provenienza" value="${provenienza}">
+							<g:if test="${tor}">
+								<div class="form-group">
+									<button name="_eventId"
+										class="link-scroll btn btn-success btn-outline-inverse btn-lg"
+										value="configuraOnion"
+										onClick="document.forms['configuraOnion'].submit();">Resetta
+										Onion e cambia circuito</button>
+								</div>
+							</g:if>
+							<g:else>
+								<div class="form-group">
+									<button name="_eventId"
+										class="link-scroll btn btn-success btn-outline-inverse btn-lg"
+										value="configuraOnion"
+										onClick="document.forms['configuraOnion'].submit();">Attiva
+										TOR per connettersi al sistema AR4K</button>
+								</div>
+							</g:else>
 							<p>
 								<a
 									href="${createLink(event: 'indietro')}&provenienza=${provenienza}"
@@ -100,9 +112,8 @@
 
 							<p>
 								E' possibile utilizzare un normale proxy per accedere
-								all'installazione Ar4k. E' possibili utilizzare un proxy per
-								conettere il client Consul ad un server o per istanziare un
-								ulteriore tunnel con SSH.
+								all'installazione Ar4k. E' possibili utilizzare un proxy per la
+								connessione SSH.
 								<g:if test="${proxies}">Sono già configurate le connessioni a ${proxies}
 								</g:if>
 								<br /> <a

@@ -41,9 +41,9 @@ class BootStrapController {
 			}
 			on ("success"){
 				[verificaInternet:bootStrapService.verificaConnettivitaInterfaccia(),
-					vedrificaSSH:bootStrapService.verificaSSH(),
-					verificaProxy:bootStrapService.verificaProxy(),
-					verificaOnion:bootStrapService.verificaOnion()
+					ssh:bootStrapService.verificaSSH(),
+					proxies:bootStrapService.verificaProxy(),
+					tor:bootStrapService.verificaOnion()
 				]
 			}.to "showBenvenuto"
 			on (Exception).to "showBenvenuto"
@@ -52,16 +52,16 @@ class BootStrapController {
 		}
 
 		showBenvenuto {
-			on ("configuraConsul"){[ssh:bootStrapService.stato.listaGWSSH.join(", "),proxies:bootStrapService.stato.listaProxy.join(", ")]}.to "parametriConsul"
+			on ("configuraConsul").to "parametriConsul"
 			on ("configuraCodCommerciale").to "configuraCodCommerciale"
-			on ("configuraNuovoConsul"){[ssh:bootStrapService.stato.listaGWSSH.join(", "),proxies:bootStrapService.stato.listaProxy.join(", ")]}.to "nuovoConsul"
-			on ("fallita"){ [messaggioOlark:"Salve..."] }.to("fallita")
+			on ("configuraNuovoConsul").to "nuovoConsul"
+			on ("fallita"){ [messaggioOlark:"Salve. Posso aiutare?"] }.to("fallita")
 		}
 
 		configuraCodCommerciale {
 			on ("indietro").to "entrata"
 			on ("completata").to("provaCodiceCommerciale")
-			on ("fallita"){ [messaggioOlark:"Salve. Serve aiuto per configurare la piattaforma?"] }.to("fallita")
+			on ("fallita"){ [messaggioOlark:"Salve. Come posso aiutare?"] }.to("fallita")
 		}
 
 		provaCodiceCommerciale {
@@ -109,8 +109,8 @@ class BootStrapController {
 				Boolean errore = false
 				String macchina = '127.0.0.1'
 				Integer porta = 3128
-				String utente = ''
-				String password = ''
+				String utente = null
+				String password = null
 				String protocollo = 'http'
 				try{
 					URL targetProxy = new URL(params.proxyMaster)
@@ -136,7 +136,7 @@ class BootStrapController {
 					return errore()
 				}
 			}
-			on ("successo"){[proxies:bootStrapService.stato.listaProxy.join(", ")]}.to {params.provenienza?:"entrata"}
+			on ("successo"){[proxies:bootStrapService.verificaProxy()]}.to {params.provenienza?:"entrata"}
 			on ("errore").to "configuraProxyMaster"
 			on (Exception).to "configuraProxyMaster"
 		}
@@ -164,9 +164,9 @@ class BootStrapController {
 						macchina:params.indirizzoMaster?:'127.0.0.1',
 						porta:porta,
 						utente:params.utenteMaster?:'root',
-						key:params.chiaveMaster?:null
+						key:params.chiaveMaster?:null,
+						proxyMaster:params.proxyMaster!='nessuno'?params.proxyMaster:null
 						)
-				log.error("Stato connessioni: "+bootStrapService.stato.listaGWSSH)
 
 				if (provaSSH.provaConnessione()) {
 					bootStrapService.stato.listaGWSSH.add(provaSSH)
@@ -178,13 +178,13 @@ class BootStrapController {
 					return errore()
 				}
 			}
-			on ("successo"){[ssh:bootStrapService.stato.listaGWSSH.join(", ")]}.to {params.provenienza?:"entrata"}
+			on ("successo"){[ssh:bootStrapService.verificaSSH()]}.to {params.provenienza?:"entrata"}
 			on ("errore").to "configuraMaster"
 			on (Exception).to "configuraMaster"
 		}
 
 		configuraOnion {
-			on ("success").to "testOnion"
+			on ("successo").to "testOnion"
 			on ("indietro").to {params.provenienza?:"entrata"}
 			on ("configuraCodCommerciale").to "configuraCodCommerciale"
 			on ("configuraSSH").to "configuraMaster"
@@ -193,10 +193,10 @@ class BootStrapController {
 
 		testOnion {
 			action {
-				bootStrapService.proxyMasterInternet=params.proxyMaster?:bootStrapService.proxyMasterInternet
-				bootStrapService.passwordProxyMasterInternet=params.passwordProxyMaster?:bootStrapService.passwordProxyMasterInternet
+				String risultato = bootStrapService.stato.attivaProxyTOR()
+				return risultato?successo():errore()
 			}
-			on ("success").to {params.provenienza?:"entrata"}
+			on ("successo"){[tor:bootStrapService.verificaOnion()]}.to {params.provenienza?:"entrata"}
 			on ("errore").to "configuraOnion"
 		}
 
@@ -207,7 +207,14 @@ class BootStrapController {
 		}
 
 		verifica {
-			action { return successo() }
+			action {
+				if ( params.sshTunnel != 'nessuno' ) {
+					bootStrapService.stato.tunnelSSH = params.sshTunnel
+				} else {
+					bootStrapService.stato.tunnelSSH = null
+				}
+				return bootStrapService.stato.connetti()?successo():errore()
+			}
 			on ("successo").to "scegliContesto"
 			on ("errore").to "parametriConsul"
 		}

@@ -49,7 +49,7 @@ class BootStrapService {
 
 	/** stringhe di errore per interfaccia */
 	List<String> errori = []
-	
+
 	/** lanciato dalla procedura di boot di Grails. 
 	 * Grails si preoccupa di popolare il servizio BootStrap (scope singleton)
 	 * con i parametri trovati nel file di configurazione
@@ -152,18 +152,24 @@ class BootStrapService {
 
 	/** verifica la presenza di una connessione funzionante via ssh.
 	 * Se è presente un proxy o una connesione Onion verrano utilizzate nel test*/
-	Boolean verificaSSH() {
-		return true
+	String verificaSSH() {
+		if (stato.listaGWSSH?.size() > 1) return stato.listaGWSSH.join(", ")
+		if (stato.listaGWSSH?.size() < 1) return null
+		if (stato.listaGWSSH?.size() == 1) return stato.listaGWSSH[0]
+		if (stato.listaGWSSH == null) return null
 	}
 
 	/** verifica la presenza di un proxy funzionante per connettersi via ssh */
-	Boolean verificaProxy() {
-		return true
+	String verificaProxy() {
+		if (stato.listaProxy?.size() > 1) return stato.listaProxy.join(", ")
+		if (stato.listaProxy?.size() < 1) return null
+		if (stato.listaProxy?.size() == 1) return stato.listaProxy[0]
+		if (stato.listaProxy == null) return null
 	}
 
 	/** verifica la raggiungibilità di un gateway Onion funzionate */
 	Boolean verificaOnion() {
-		return true
+		return stato.torAttivo
 	}
 
 	/** utilizza un codice di attivazione Ark4*/

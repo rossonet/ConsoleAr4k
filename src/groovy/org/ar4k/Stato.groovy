@@ -16,7 +16,10 @@
 package org.ar4k
 
 import com.ecwid.consul.v1.ConsulClient
-import com.jcraft.jsch.*;
+import com.jcraft.jsch.*
+
+import com.subgraph.orchid.TorClient
+import com.subgraph.orchid.TorInitializationListener
 
 class Stato {
 	/** server bootsrap iniettato */
@@ -32,12 +35,23 @@ class Stato {
 	/** necessario bridge ssh a un Vaso per effettuare la connessione a Consul? */
 	Boolean connessioneSSH = false
 	/** lista connessioni SSH per accedere a Consul disponibili */
-	List<ConnessioneSSH> listaGWSSH = []/** necessario ssh over proxy Socks */
+	List<ConnessioneSSH> listaGWSSH = []
+	/** tunnel ssh utilizzato */
+	String tunnelSSH = null
+	/** necessario ssh over proxy Socks */
 	Boolean connessioneProxy = false
 	/** lista proxy disponibili */
 	List<Proxy> listaProxy = []
 	/** connessione Onion (Tor) */
 	Boolean connessioneOnion = false
+	/** client tor */
+	TorClient client
+	/** tor avviato? */
+	Boolean torAttivo = false
+
+	//Integer torDashPort = 9666
+	/** porta proxy tor */
+	Integer portaProxyTOR = 9050
 
 	/** codice accesso commerciale Ar4k */
 	String codiceAttivazione = null
@@ -63,26 +77,86 @@ class Stato {
 	private Boolean connettiSSH() {
 	}
 
+	/** attiva tor */
+	Boolean attivaProxyTOR() {
+		Boolean errore = false
+		/*
+		 try{
+		 ServerSocket s = new ServerSocket(0) // dovrebbe ritornare una porta libera casuale
+		 portaProxyTOR = s.getLocalPort()
+		 s.close()
+		 } catch (IOException e) {
+		 errore =true
+		 log.warn("non trovo una porta tcp libera...")
+		 }
+		 */
+
+		try {
+			if (client==null) {
+				client = new TorClient()
+			}else{
+				client.stop()
+				client = new TorClient()
+			}
+			client.addInitializationListener(new TorInitializationListener() {
+						@Override
+						public void initializationProgress(String string, int i) {
+							log.info("Avvio tor al "+i+"% - "+string)
+							// throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+						}
+						@Override
+						public void initializationCompleted() {
+							try {
+								log.info("Tor pronto!")
+								torAttivo=true
+							} catch (Exception e) {
+								log.warn('Errore avvio TOR in listener: '+e.printStackTrace())
+							}
+						}
+					})
+			client.start()
+			client.enableSocksListener(9050)
+			//client.enableSocksListener(portaProxyTOR)
+			//client.waitUntilReady(29000)
+			//client.enableDashboard()
+		} catch (Exception eee) {
+			errore=true
+			log.warn('Errore avvio TOR '+eee.printStackTrace())
+		}
+		return !errore
+	}
+
 	/** connette permanentemente Consul */
 	Boolean connetti() {
 		Boolean ritorno = false
+		Integer portaTunnelSSH = 0
 
-		if(connessioneOnion) {
-			// Avvia il client Tor - Onion
-		}
+
+		if(connessioneOnion) attivaProxyTOR()
 
 		if(connessioneProxy) {
 			// configura i parametri per il proxy
 		}
-		if(connessioneSSH) {
-			listaGWSSH*.verificaAvvia(8569,macchinaConsul,portaConsul)
-			// connette attraverso un tunnel SSH
-			// da gestire l'allocazione delle porte
+
+		// configura il tunnel ssh
+		if(connessioneSSH && tunnelSSH) {
+			try{
+				ServerSocket s = new ServerSocket(0) // dovrebbe ritornare una porta libera casuale
+				portaTunnelSSH = s.getLocalPort()
+				s.close()
+				log.warn("userò la porta "+portaTunnelSSH+" per il tunnel ssh")
+			} catch (IOException e) {
+				log.warn("non trovo una porta tcp libera...")
+			}
+
+			listaGWSSH.find{
+				it.toString() == tunnelSSH
+			}?.verificaAvvia(portaTunnelSSH,macchinaConsul,portaConsul)
 		}
 
 		try {
-			if (connessioneSSH) {
-				consul = new ConsulClient('127.0.0.1',8569)
+			if (connessioneSSH && portaTunnelSSH != 0) {
+				consul = new ConsulClient('127.0.0.1',portaTunnelSSH)
 			} else {
 				if (macchinaConsul && macchinaConsul) consul = new ConsulClient(macchinaConsul,portaConsul)
 			}
@@ -126,6 +200,14 @@ class Stato {
 	}
 }
 
+/**
+ *  Rappresentazione proxy di rete
+ * 
+ * 
+ * 
+ * @author andrea ambrosini
+ *
+ */
 class Proxy {
 	/** id univoco proxy */
 	String idProxy = UUID.randomUUID()
@@ -134,18 +216,29 @@ class Proxy {
 	/** porta connessione ssh */
 	Integer porta = 3128
 	/** utente proxy */
-	String utente = ''
+	String utente = null
 	/** password proxy */
-	String password = ''
+	String password = null
 	/** tipologia proxy */
 	String protocollo = 'http'
 
 	String toString() {
-		return protocollo+'://'+utente+'@'+macchina+':'+porta
+		String utenza = ''
+		if (utente != null) utenza = utente+'@'
+		return protocollo+'://'+utenza+macchina+':'+porta
 	}
 }
 
+/**
+ *  Rappresentazione connessione ssh
+ *  con gestione proxy
+ * 
+ * 
+ * @author andrea
+ *
+ */
 class ConnessioneSSH {
+
 	/** id univoco connessione SSH */
 	String idConnessioneSSH = UUID.randomUUID()
 	/** indirizzo ip o dns host connessione ssh */
@@ -156,20 +249,31 @@ class ConnessioneSSH {
 	String utente = 'root'
 	/** chiave privata ssh */
 	String key = null
+	/** proxy per la connesione se 'tor' utilizza localhost 9050 */
+	String proxyMaster = null
 	/** bind SSH */
 	JSch connessione = new JSch()
 
+	/** attiva il tunnel senza proxy */
 	Boolean verificaAvvia(Integer gwPort,String targetHost,Integer targetPort) {
 		if (!connessione) {
 			connessione = new JSch()
 		}
-		addLTunnel(gwPort,targetHost,targetPort)
+		try {
+			addLTunnel(gwPort,targetHost,targetPort)
+			return true
+		} catch (ee) {
+			return false
+		}
 
-		return true
 	}
 
 	String toString() {
-		return utente+'@'+macchina+':'+porta
+		if (proxyMaster == null){
+			return utente+'@'+macchina+':'+porta
+		} else {
+			return utente+'@'+macchina+':'+porta+' ('+proxyMaster+')'
+		}
 	}
 
 
@@ -178,11 +282,28 @@ class ConnessioneSSH {
 		String risultato = ''
 		//comando = 'export PATH='+path+' ; '+comando
 		InputStream input = null
+		Integer portaProxyT = null
+		String macchinaProxyT = null
 		try {
 			Channel canale
 			// Aggiunge la chiave privata
 			connessione.addIdentity(utente,key.getBytes(),null,null)
 			Session sessione=connessione.getSession(utente, macchina, porta)
+			if (proxyMaster=='tor') {
+				portaProxyT = 9050
+				macchinaProxyT = '127.0.0.1'
+			} else if (proxyMaster) {
+				try{
+					URL targetProxy = new URL(proxyMaster)
+					portaProxyT = targetProxy.getPort()
+					macchinaProxyT = targetProxy.getHost()
+				} catch(Exception ee) {
+					log.warn("Non riesco ad utilizzare il proxy "+proxyMaster)
+				}
+			}
+			if (portaProxyT?.toInteger() != null && macchinaProxyT != null) {
+				sessione.setProxy(new ProxySOCKS5(macchinaProxyT, portaProxyT.toInteger()))
+			}
 			sessione.setConfig("StrictHostKeyChecking","no")
 			sessione.setConfig("UserKnownHostsFile","/dev/null")
 			try{
@@ -193,7 +314,9 @@ class ConnessioneSSH {
 				((ChannelExec)canale).setErrStream(System.err)
 				input=canale.getInputStream()
 				canale.connect()
-			}catch(Exception ee){}
+			}catch(Exception ee){
+				log.error("Errore apertura SSH: "+comando+" ERRORE: "+ee.printStackTrace())
+			}
 			byte[] tmp=new byte[1024]
 			if(input){
 				while(true){
@@ -213,7 +336,7 @@ class ConnessioneSSH {
 			canale.disconnect()
 			sessione.disconnect()
 		}catch(Exception e) {
-			log.warn("Errore connesione SSH nell'esecuzione del comando: "+comando+" ERRORE: "+e.toString())
+			log.error("Errore connesione SSH nell'esecuzione del comando: "+comando+" ERRORE: "+e.printStackTrace())
 		}
 		return risultato
 	}
@@ -229,13 +352,29 @@ class ConnessioneSSH {
 
 	/** Aggiunge un tunnel SSH Left*/
 	private void addLTunnel(int lport, String rhost, int rport) {
+		Integer portaProxyT = null
+		String macchinaProxyT = null
 		try {
 			Channel canale
 			// Aggiunge la chiave privata
 			connessione.addIdentity(utente,key.getBytes(),null,null)
 			Session sessione=connessione.getSession(utente, macchina, porta)
 			sessione.setConfig("StrictHostKeyChecking","no")
-			sessione.setConfig("UserKnownHostsFile","/dev/null")
+			if (proxyMaster=='tor') {
+				portaProxyT = 9050
+				macchinaProxyT = '127.0.0.1'
+			} else if (proxyMaster) {
+				try{
+					URL targetProxy = new URL(proxyMaster)
+					portaProxyT = targetProxy.getPort()
+					macchinaProxyT = targetProxy.getHost()
+				} catch(Exception ee) {
+					log.warn("Non riesco ad utilizzare il proxy "+proxyMaster)
+				}
+			}
+			if (portaProxyT?.toInteger() != null && macchinaProxyT != null) {
+				sessione.setProxy(new ProxySOCKS5(macchinaProxyT, portaProxyT.toInteger()))
+			}
 			sessione.connect()
 			try {sessione.setPortForwardingL(lport, rhost, rport)} catch(Exception e){log.warn("Errore nel tunnel ssh per nodo "+macchina+" tunnel "+lport+":"+rhost+":"+rport+". Probabilmente la porta è già in uso")}
 		}	catch(JSchException e){

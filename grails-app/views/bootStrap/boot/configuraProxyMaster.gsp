@@ -73,7 +73,7 @@
 								class="link-scroll btn btn-success btn-outline-inverse btn-lg"
 								value="configuraProxyMaster"
 								onClick="document.forms['configuraProxy'].submit();">Configura
-								i parametri del proxy sul vaso</button>
+								i parametri del proxy</button>
 						</div>
 						<p>
 							<a
@@ -90,13 +90,19 @@
 								class="link-scroll btn btn-warning btn-outline-inverse btn-lg">Configura
 								i parametri di accesso SSH</a>
 						</p>
-
 						<p>
 							E' possibile accedere ad una installazione Consul in ascolto
-							sulla rete Onion.<br /> <a
-								href="${createLink(event: 'configuraOnion')}&provenienza=${provenienza}"
-								class="link-scroll btn btn-info btn-outline-inverse btn-lg">Configura
-								un accesso alla rete Onion</a>
+							sulla rete Onion o utilizzare Tor come proxy.<br />
+							<g:if test="${tor}">
+								<a href="${createLink(event: 'configuraOnion')}"
+									class="link-scroll btn btn-info btn-outline-inverse btn-lg">Cambia
+									circuito Onion</a>
+							</g:if>
+							<g:else>
+								<a href="${createLink(event: 'configuraOnion')}"
+									class="link-scroll btn btn-info btn-outline-inverse btn-lg">Attiva
+									Onion</a>
+							</g:else>
 						</p>
 						<p>
 							<a href="${createLink(event: 'configuraCodCommerciale')}"
