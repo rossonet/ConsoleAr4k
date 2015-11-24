@@ -4,7 +4,7 @@
 
 <meta name="layout" content="atterraggio" />
 
-<title>Nuova Console Ar4k in fa bootstrap</title>
+<title>Nuova istanza Consul</title>
 
 
 <style type="text/css">
@@ -36,11 +36,7 @@
 		id="benvenutoModal">
 		<div class="modal-dialog modal-lg" style="width: 90%;">
 			<div class="modal-content" uib-modal-transclude="">
-
-
-
 				<div class="col-md-10 col-xs-12 col-sm-12 pull-right">
-
 					<h2>Crea una nuova installazione Ar4k</h2>
 					<p class="text-justify" style="text-align: justify;">
 						I dati di un <strong>contesto</strong> Ar4k sono mantenuti dal suo
@@ -53,42 +49,63 @@
 						<div class="form-group">
 							<label for="etichetta">Nome Contesto Ar4k</label> <input
 								type="text" name="etichetta"
-								class="text-field form-control validate-field required"
-								data-validation-type="string" id="macchina"
+								class="text-field form-control required"
+								data-validation-type="string" id="etichetta"
 								placeholder="etichetta">
 						</div>
 						<div class="form-group">
 							<label for="descrizione">Descrizione contesto.</label>
 							<textarea name="descrizione"
-								class="text-area form-control validate-field"
-								data-validation-type="required" id="chiaveMaster"
+								class="text-area form-control"
+								data-validation-type="required" id="descrizione"
 								placeholder='Contesto Ar4k generato automaticamente'></textarea>
 						</div>
 						<div class="form-group">
 							<label for="progetto">Riferimento progetto</label> <input
 								type="text" name="progetto"
-								class="text-field form-control validate-field"
-								data-validation-type="string" id="porta"
+								class="text-field form-control"
+								data-validation-type="string" id="progetto"
 								placeholder="id progetto">
+						</div>
+						<div class="form-group">
+							<label for="sshTunnel">Connessione SSH per avvio Consul</label> <select
+								name="sshTunnel" class="selectpicker text-field form-control"
+								style="background-color: black; height: 54px; font-size: 0.97em; color: white;"
+								id="sshTunnel">
+								<g:each in="${ssh?.split(', ')}">
+									<option value="${it}">
+										${it}
+									</option>
+								</g:each>
+							</select>
+						</div>
+						<div class="form-group">
+							<label for="datacenter">etichetta datacenter</label> <input
+								type="text" name="datacenter"
+								class="text-field form-control"
+								data-validation-type="string" id="datacenter"
+								placeholder="datacenter">
 						</div>
 						<div class="form-group">
 							<label for="keyConsul">Chiave crittografica Consul</label> <input
 								type="text" name="keyConsul"
-								class="text-field form-control validate-field"
-								data-validation-type="string" id="macchina"
+								class="text-field form-control"
+								data-validation-type="string" id="keyConsul"
 								placeholder="yIetiZno0c7464rOCaIThQ==">
 						</div>
 						<div class="form-group">
-							<label for="porta">Porta TCP installazione Consul</label> <input
-								type="text" name="porta"
-								class="text-field form-control validate-field required"
-								data-validation-type="string" id="porta" placeholder="8500">
+							<label for="portaConsul">Porta TCP installazione Consul</label> <input
+								type="text" name="portaConsul"
+								class="text-field form-control"
+								data-validation-type="string" id="portaConsul"
+								placeholder="8500">
 						</div>
 						<div class="form-group">
 							<label for="dnsConsul">Dominio DNS Consul</label> <input
 								type="text" name="dnsConsul"
-								class="text-field form-control validate-field required"
-								data-validation-type="string" id="porta" placeholder="ar4k.net">
+								class="text-field form-control"
+								data-validation-type="string" id="dnsConsul"
+								placeholder="ar4k.net">
 						</div>
 						<div class="form-group">
 							<button name="_eventId"
@@ -124,11 +141,13 @@
 							sulla rete Onion o utilizzare Tor come proxy.<br />
 							<g:if test="${tor}">
 								<a href="${createLink(event: 'configuraOnion')}"
-									class="link-scroll btn btn-info btn-outline-inverse btn-lg">Cambia circuito Onion</a>
+									class="link-scroll btn btn-info btn-outline-inverse btn-lg">Cambia
+									circuito Onion</a>
 							</g:if>
 							<g:else>
 								<a href="${createLink(event: 'configuraOnion')}"
-									class="link-scroll btn btn-info btn-outline-inverse btn-lg">Attiva Onion</a>
+									class="link-scroll btn btn-info btn-outline-inverse btn-lg">Attiva
+									Onion</a>
 							</g:else>
 						</p>
 						<p>

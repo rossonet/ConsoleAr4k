@@ -4,7 +4,7 @@
 
 <meta name="layout" content="atterraggio" />
 
-<title>Nuova Console Ar4k in fa bootstrap</title>
+<title>Configurazione accesso ssh</title>
 
 
 <style type="text/css">
@@ -84,7 +84,7 @@
 										${it}
 									</option>
 								</g:each>
-								<g:if test="${tor==true} || true">
+								<g:if test="${tor==true}">
 									<option value="tor">Proxy TOR su rete Onion</option>
 								</g:if>
 							</select>

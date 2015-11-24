@@ -384,8 +384,6 @@ if (location.href.indexOf('is-external=true') == -1) {
 </dt><dd> <div class="block">client Consul collegato allo Stato</div></dd>
 <dt><span class="strong"><a href="org/ar4k/Vaso.html#consul" title="Property in Vaso">consul</a></span> - Property in <a href="org/ar4k/Vaso.html">Vaso</a>
 </dt><dd> <div class="block">il vaso ospita una istanza Consul</div></dd>
-<dt><span class="strong"><a href="org/ar4k/Contesto.html#consulKey" title="Property in Contesto">consulKey</a></span> - Property in <a href="org/ar4k/Contesto.html">Contesto</a>
-</dt><dd> <div class="block">chiave criptografia Consul per il protocollo gossip. </div></dd>
 <dt><span class="strong"><a href="org/ar4k/Contesto.html" title="Class in org.ar4k">Contesto</a></span> - Class in <a href="./org/ar4k/package-summary.html">org.ar4k</a>
 </dt><dd><div class="block">Contesto</div></dd>
 <dt><span class="strong"><a href="org/ar4k/BootStrapService.html#contesto" title="Property in BootStrapService">contesto</a></span> - Property in <a href="org/ar4k/BootStrapService.html">BootStrapService</a>
@@ -394,14 +392,16 @@ if (location.href.indexOf('is-external=true') == -1) {
 </dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="org/ar4k/InterfacciaContestoService.html#contesto" title="Property in InterfacciaContestoService">contesto</a></span> - Property in <a href="org/ar4k/InterfacciaContestoService.html">InterfacciaContestoService</a>
 </dt><dd> <div class="block">Contesto in esecuzione</div></dd>
+<dt><span class="strong"><a href="org/ar4k/BootStrapService.html#contestoCreato" title="Property in BootStrapService">contestoCreato</a></span> - Property in <a href="org/ar4k/BootStrapService.html">BootStrapService</a>
+</dt><dd> <div class="block">contesto creato durante il boot</div></dd>
 <dt><span class="strong"><a href="grails/plugin/standalone/Launcher.html#context" title="Field in Launcher">context</a></span> - Field in <a href="grails/plugin/standalone/Launcher.html">Launcher</a>
 </dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="org/ar4k/Stato.html#controlloConsul" title="Property in Stato">controlloConsul</a></span> - Property in <a href="org/ar4k/Stato.html">Stato</a>
 </dt><dd> <div class="block">l'installazione Consul è governata da questo contesto</div></dd>
 <dt><span class="strong"><a href="org/ar4k/AdminController.html#creaMeme()" title="Method in AdminController">creaMeme()</a></span> - Method in <a href="org/ar4k/AdminController.html">AdminController</a>
 </dt><dd> <div class="block">@return Chiamata JSON per creare un meme da un seme.</div></dd>
-<dt><span class="strong"><a href="org/ar4k/BootStrapService.html#creaNuovoContestoVergine(java.lang.String, java.lang.String)" title="Method in BootStrapService">creaNuovoContestoVergine(String, String)</a></span> - Method in <a href="org/ar4k/BootStrapService.html">BootStrapService</a>
-</dt><dd> <div class="block">crea un contesto sullo Stato corrente</div></dd>
+<dt><span class="strong"><a href="org/ar4k/BootStrapService.html#creaNuovoConsulVergine(org.ar4k.IstanzaConsul, org.ar4k.Contesto)" title="Method in BootStrapService">creaNuovoConsulVergine(IstanzaConsul, Contesto)</a></span> - Method in <a href="org/ar4k/BootStrapService.html">BootStrapService</a>
+</dt><dd> <div class="block">crea un consul sullo Stato corrente</div></dd>
 <dt><span class="strong"><a href="org/ar4k/UtenteRuolo.html#create(org.ar4k.Utente, org.ar4k.Ruolo, boolean)" title="Method in UtenteRuolo">create(Utente, Ruolo, boolean)</a></span> - Method in <a href="org/ar4k/UtenteRuolo.html">UtenteRuolo</a>
 </dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="org/ar4k/secure/SpringSecurityOAuthController.html#createAccount" title="Property in SpringSecurityOAuthController">createAccount</a></span> - Property in <a href="org/ar4k/secure/SpringSecurityOAuthController.html">SpringSecurityOAuthController</a>
@@ -425,6 +425,8 @@ if (location.href.indexOf('is-external=true') == -1) {
 </dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="org/ar4k/AdminController.html#dashrossonetCtrl()" title="Method in AdminController">dashrossonetCtrl()</a></span> - Method in <a href="org/ar4k/AdminController.html">AdminController</a>
 </dt><dd> <div class="block"></div></dd>
+<dt><span class="strong"><a href="org/ar4k/IstanzaConsul.html#datacenter" title="Property in IstanzaConsul">datacenter</a></span> - Property in <a href="org/ar4k/IstanzaConsul.html">IstanzaConsul</a>
+</dt><dd> <div class="block">stringa datacenter</div></dd>
 <dt><span class="strong"><a href="org/ar4k/Contesto.html#datacenterConsul" title="Property in Contesto">datacenterConsul</a></span> - Property in <a href="org/ar4k/Contesto.html">Contesto</a>
 </dt><dd> <div class="block">Datacenter vasi contesto - condivisibile tra più contesti -</div></dd>
 <dt><span class="strong"><a href="org/ar4k/OAuthID.html#dateCreated" title="Property in OAuthID">dateCreated</a></span> - Property in <a href="org/ar4k/OAuthID.html">OAuthID</a>
@@ -471,8 +473,8 @@ if (location.href.indexOf('is-external=true') == -1) {
 </dt><dd> <div class="block">collega un hypervisor Docker *</div></dd>
 <dt><span class="strong"><a href="org/ar4k/DefaultMeteorHandler.html#doGet(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)" title="Method in DefaultMeteorHandler">doGet(HttpServletRequest, HttpServletResponse)</a></span> - Method in <a href="org/ar4k/DefaultMeteorHandler.html">DefaultMeteorHandler</a>
 </dt><dd> <div class="block"></div></dd>
-<dt><span class="strong"><a href="org/ar4k/Contesto.html#dominioConsul" title="Property in Contesto">dominioConsul</a></span> - Property in <a href="org/ar4k/Contesto.html">Contesto</a>
-</dt><dd> <div class="block">dominio consul - inserire il punto finale come nella configurazione di Bind -</div></dd>
+<dt><span class="strong"><a href="org/ar4k/IstanzaConsul.html#dominio" title="Property in IstanzaConsul">dominio</a></span> - Property in <a href="org/ar4k/IstanzaConsul.html">IstanzaConsul</a>
+</dt><dd> <div class="block">dominio per dns</div></dd>
 <dt><span class="strong"><a href="org/ar4k/DefaultMeteorHandler.html#doPost(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)" title="Method in DefaultMeteorHandler">doPost(HttpServletRequest, HttpServletResponse)</a></span> - Method in <a href="org/ar4k/DefaultMeteorHandler.html">DefaultMeteorHandler</a>
 </dt><dd> <div class="block"></div></dd>
 </dl>
@@ -775,6 +777,8 @@ if (location.href.indexOf('is-external=true') == -1) {
 </dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="org/ar4k/PingJob.html#interfacciaContestoService" title="Property in PingJob">interfacciaContestoService</a></span> - Property in <a href="org/ar4k/PingJob.html">PingJob</a>
 </dt><dd> <div class="block"></div></dd>
+<dt><span class="strong"><a href="org/ar4k/BootStrapService.html#interfacciaCreata" title="Property in BootStrapService">interfacciaCreata</a></span> - Property in <a href="org/ar4k/BootStrapService.html">BootStrapService</a>
+</dt><dd> <div class="block">interfaccia creata durante il boot</div></dd>
 <dt><span class="strong"><a href="org/ar4k/Utente.html#isPictureSet()" title="Method in Utente">isPictureSet()</a></span> - Method in <a href="org/ar4k/Utente.html">Utente</a>
 </dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="org/ar4k/IstanzaConsul.html" title="Class in org.ar4k">IstanzaConsul</a></span> - Class in <a href="./org/ar4k/package-summary.html">org.ar4k</a>
@@ -845,7 +849,7 @@ if (location.href.indexOf('is-external=true') == -1) {
 <dt><span class="strong"><a href="org/ar4k/Stato.html#listaIdContesti()" title="Method in Stato">listaIdContesti()</a></span> - Method in <a href="org/ar4k/Stato.html">Stato</a>
 </dt><dd> <div class="block">Ritorna l'elenco degli id contesti per il bootstrap</div></dd>
 <dt><span class="strong"><a href="org/ar4k/IstanzaConsul.html#listaJoin" title="Property in IstanzaConsul">listaJoin</a></span> - Property in <a href="org/ar4k/IstanzaConsul.html">IstanzaConsul</a>
-</dt><dd> <div class="block">nodi Consul su cui tentare la connessione durante il bootstrap 
+</dt><dd> <div class="block">nodi Consul su cui tentare la connessione durante il bootstrap
  verrà usato il comando "-retry-join"</div></dd>
 <dt><span class="strong"><a href="org/ar4k/IstanzaConsul.html#listaJoinWan" title="Property in IstanzaConsul">listaJoinWan</a></span> - Property in <a href="org/ar4k/IstanzaConsul.html">IstanzaConsul</a>
 </dt><dd> <div class="block">lista nodi per il join wan in bootstrap</div></dd>
@@ -959,6 +963,8 @@ if (location.href.indexOf('is-external=true') == -1) {
 </dt><dd> <div class="block">nodo contenitore del vaso. </div></dd>
 <dt><span class="strong"><a href="org/ar4k/RepositoryGit.html#nomeCartella" title="Property in RepositoryGit">nomeCartella</a></span> - Property in <a href="org/ar4k/RepositoryGit.html">RepositoryGit</a>
 </dt><dd> <div class="block">directory ricettario in vaso</div></dd>
+<dt><span class="strong"><a href="org/ar4k/BootStrapService.html#nuovaIstanzaConsul" title="Property in BootStrapService">nuovaIstanzaConsul</a></span> - Property in <a href="org/ar4k/BootStrapService.html">BootStrapService</a>
+</dt><dd> <div class="block">istanza Consul creata</div></dd>
 </dl>
 
     
@@ -1044,6 +1050,8 @@ if (location.href.indexOf('is-external=true') == -1) {
 </dt><dd> <div class="block">serf_wan - The Serf WAN port. </div></dd>
 <dt><span class="strong"><a href="org/ar4k/IstanzaConsul.html#portaServer" title="Property in IstanzaConsul">portaServer</a></span> - Property in <a href="org/ar4k/IstanzaConsul.html">IstanzaConsul</a>
 </dt><dd> <div class="block">server - Server RPC address. </div></dd>
+<dt><span class="strong"><a href="org/ar4k/Stato.html#portaTunnelSSH" title="Property in Stato">portaTunnelSSH</a></span> - Property in <a href="org/ar4k/Stato.html">Stato</a>
+</dt><dd> <div class="block">porta tunnel ssh</div></dd>
 <dt><span class="strong"><a href="org/ar4k/AdminController.html#processi()" title="Method in AdminController">processi()</a></span> - Method in <a href="org/ar4k/AdminController.html">AdminController</a>
 </dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="org/ar4k/AdminController.html#processiCtrl()" title="Method in AdminController">processiCtrl()</a></span> - Method in <a href="org/ar4k/AdminController.html">AdminController</a>

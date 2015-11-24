@@ -34,16 +34,12 @@ import grails.util.Holders
 class Contesto {
 	/** id univoco contesto */
 	String idContesto = UUID.randomUUID()
-	/** chiave criptografia Consul per il protocollo gossip. Si può ottenere con #consul genkey */
-	String consulKey = 'yIetiZno0c7464rOCaIThQ=='
 	/** etichetta contesto */
 	String etichetta = null
 	/** descrizione contesto */
 	String descrizione = null
 	/** campo per link a CRM (progetto)*/
 	String idProgetto = null
-	/** dominio consul - inserire il punto finale come nella configurazione di Bind -*/
-	String dominioConsul = null
 	/** ricettari a disposizione del contesto*/
 	List<Ricettario> ricettari= []
 	/** interfacce collegate al contesto*/
@@ -60,8 +56,9 @@ class Contesto {
 	List<Fabbrica> fabbriche = []
 	/** utenti del contesto da importare in configurazione */
 	List<UtenteRuolo> utentiRuoli = []
-	
-	
+	/** Datacenter vasi contesto - condivisibile tra più contesti - */
+	String datacenterConsul = null
+
 	/** dump oggetto per funzioni di salvataggio*/
 	def esporta() {
 		log.info("esporta() il contesto: "+idContesto)
@@ -72,71 +69,36 @@ class Contesto {
 			idProgetto:idProgetto,
 			interfacce:interfacce*.idInterfaccia,
 			memi:memi*.idMeme,
+			datacenterConsul:datacenterConsul,
 			nodi:nodi*.idNodo,
 			regioni:regioni*.idRegione,
 			fabbriche:fabbriche*.idFabbrica,
 			vasi:vasi*.idVaso,
 			ricettari:ricettari*.idRicettario,
-			consulKey:consulKey,
-			dominioConsul:dominioConsul,
-			utentiRuoli:utentiRuoli.each{it.ruolo+'/'+it.utente}
+			utentiRuoli:utentiRuoli.each{
+				it.ruolo+'/'+it.utente
+			}
 		]
 	}
-	
+
 	/** salva il contesto sul nodo master */
 	Boolean salva(Stato stato) {
-		stato.salvaValore(idContesto,'org-ar4k-Contesto',(esporta() as JSON).toString())
+		stato.salvaValore(idContesto,'org-ar4k-contesto',(esporta() as JSON).toString())
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-		/** campo per l'avanzamanto del bootstrap (nascita,vita,virus,morte)*/
+
+	/** campo per l'avanzamanto del bootstrap (nascita,vita,virus,morte)*/
 	private String statoBootStrap = 'nascita'
 	/** se vero, salva il contesto su tutti i vasi connessi  */
 	Boolean clonaOvunque = false
-
-
-	/** Datacenter vasi contesto - condivisibile tra più contesti - */
-	String datacenterConsul = 'caverna'
-
 
 
 	/** lista provider Cloud - da verificare - */
 	List<CloudProvider> cloudProviders= []
 	/** short link e qr */
 	List<Puntatore> puntatori = []
-	
+
 	/** vaso principale del contesto con demone Consul */
 	Vaso vasoMaster
-
 
 	/** ditruttore di classe (utile per la gestione della pulizia dei vasi)*/
 	def destroy() {
@@ -163,11 +125,11 @@ class Contesto {
 		for (Meme meme in memi) {
 			if (!meme.verificaAvvia()) risultato = false
 		}
-		
+
 		if (!risultato) log.warn("Problemi nel caricamento dei memi")
-		
+
 		log.debug("Importa "+utentiRuoli.size()+" utenti/ruoli")
-		
+
 		utentiRuoli.each{
 			Holders.applicationContext.getBean("bootStrapService").aggiungiUtenteRuolo(it)
 		}
@@ -182,10 +144,6 @@ class Contesto {
 		return risultato
 	}
 
-
-
-
-
 	Contesto importa(Map json){
 		log.info("importa() il contesto: "+json.idContesto)
 		Contesto contestoCreato = new Contesto(
@@ -193,8 +151,6 @@ class Contesto {
 				etichetta:json.etichetta,
 				descrizione:json.descrizione,
 				idProgetto:json.idProgetto,
-				consulKey:json.consulKey,
-				dominioConsul:json.dominioConsul,
 				clonaOvunque:json.clonaOvunque,
 				vasoMaster:new Vaso().importa(json.vasoMaster)
 				)
@@ -219,8 +175,6 @@ class Contesto {
 		return etichetta + " su "+vasoMaster+" ("+statoBootStrap+")"
 	}
 }
-
-
 
 class CloudProvider {
 	/** id univoco metodo */

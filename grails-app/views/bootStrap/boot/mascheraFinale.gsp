@@ -4,7 +4,7 @@
 
 <meta name="layout" content="atterraggio" />
 
-<title>Nuova Console Ar4k in fa bootstrap</title>
+<title>Configurazione terminata</title>
 
 
 <style type="text/css">
@@ -72,9 +72,7 @@
 		function fine() {
 			var d = document.getElementById("benvenutoModal");
 			d.className = "modal fade ng-isolate-scope";
-			setTimeout(function(){ window.location = "${createLink(event: 'completata')}
-		";
-			}, 6000);
+			setTimeout(function(){ window.location = "${createLink(controller: 'admin')}"}, 6000);
 		}
 	</script>
 </body>

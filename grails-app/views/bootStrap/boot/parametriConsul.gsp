@@ -4,7 +4,7 @@
 
 <meta name="layout" content="atterraggio" />
 
-<title>Nuova Console Ar4k in fa bootstrap</title>
+<title>Connessione a istanza Consul esistente</title>
 
 
 <style type="text/css">
@@ -67,7 +67,7 @@
 								style="background-color: black; height: 54px; font-size: 0.97em; color: white;"
 								id="sshTunnel">
 								<option value="nessuno">Nessun tunnel ssh</option>
-								<g:each in="${ssh}">
+								<g:each in="${ssh?.split(', ')}">
 									<option value="${it}">
 										${it}
 									</option>

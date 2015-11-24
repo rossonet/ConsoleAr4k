@@ -46,9 +46,14 @@ class BootStrapService {
 	String indirizzoTestOnion='http://mvgf7rnxqeczjb4i.onion'
 	/** identificativo di boot */
 	String valoreCasuale=org.apache.commons.lang.RandomStringUtils.random(5, true, true).toString()
-
+	/** contesto creato durante il boot */
+	Contesto contestoCreato = null
+	/** interfaccia creata durante il boot */
+	Interfaccia interfacciaCreata = null
 	/** stringhe di errore per interfaccia */
 	List<String> errori = []
+	/** istanza Consul creata */
+	IstanzaConsul nuovaIstanzaConsul = null
 
 	/** lanciato dalla procedura di boot di Grails. 
 	 * Grails si preoccupa di popolare il servizio BootStrap (scope singleton)
@@ -74,34 +79,87 @@ class BootStrapService {
 					// inAvvio = false
 					// inReset = false
 				} else {
-					log.info("Non trovato il "+contesto+" Consul sul nodo creo il contesto vergine e lo salvo in Consul")
-					Contesto nuovoContesto = creaNuovoContestoVergine(contesto,interfaccia)
+					log.warn("Non trovato il "+contesto+" Consul sul nodo creo il contesto vergine e lo salvo in Consul")
 					// crea il nuovo contesto vergine
-					if (nuovoContesto.salva(stato)) {
+					if (contestoCreato.salva(stato) && interfacciaCreata.salva(stato) ) {
 						interfacciaContestoService.stato = stato
-						interfacciaContestoService.contesto = nuovoContesto
-						interfacciaContestoService.interfaccia = nuovoContesto.interfacce.find{it.idInterfaccia==interfaccia}
+						interfacciaContestoService.contesto = contestoCreato
+						interfacciaContestoService.contesto.datacenterConsul = nuovaIstanzaConsul.datacenter
+						interfacciaContestoService.interfaccia = contestoCreato.interfacce.find{it.idInterfaccia==interfaccia}
 						inAvvio = false
 						inReset = false
-					}
+					} else { risultato = false }
 				}
+
 			}
 		}
+
 		return risultato
 	}
 
-	/** crea un contesto sullo Stato corrente */
-	Contesto creaNuovoContestoVergine(String idContestoTarget,String idInterfaccia) {
-		Contesto nuovoContesto = new Contesto()
-		nuovoContesto.idContesto = idContestoTarget
-		nuovoContesto.etichetta = 'Contesto '+new Date().format("yyyyMMddHHmmss", TimeZone.getTimeZone("UTC")).toString()+' ('+valoreCasuale+')'
-		nuovoContesto.descrizione = "Contesto generato automaticamente "+new Date().format("yyyyMMddHHmmss", TimeZone.getTimeZone("UTC")).toString()
+	/** crea un consul sullo Stato corrente */
+	Boolean creaNuovoConsulVergine(IstanzaConsul consulClient, Contesto nuovoContesto) {
+		Boolean ritorno = true
+		// identifica la connessione ssh
+		ConnessioneSSH connessioneLocale = stato.listaGWSSH.find{it.toString() == stato.tunnelSSH}
+		log.info("Avvio consul sulla connessione "+connessioneLocale)
 		Interfaccia nuovaInterfaccia = new Interfaccia()
-		if (interfaccia) nuovaInterfaccia.idInterfaccia = idInterfaccia
+		nuovaInterfaccia.idInterfaccia = 'InterfacciaBootstrap'
 		nuovaInterfaccia.etichetta = "Interfaccia generata automaticamente "+new Date().format("yyyyMMddHHmmss", TimeZone.getTimeZone("UTC")).toString()
-		nuovaInterfaccia.salva(stato)
+		//nuovaInterfaccia.salva(stato)
 		nuovoContesto.interfacce.add(nuovaInterfaccia)
-		return nuovoContesto
+		// kill eventuali processi esistenti
+		String killAll = """
+		killall consul
+		killall consul_i386
+		killall consul_amd64
+		"""
+		// rileva l'architettura
+		String architettura = 'i386'
+		String architetturaDesc = connessioneLocale.esegui('uname -a')
+		if (architetturaDesc =~ /x86_64/) architettura = 'amd64'
+		log.info("architettura rilevata: "+architettura)
+		// crea la struttura delle directory
+		String creaDirectory = """
+		cd ~
+		mkdir -p .ar4k
+		mkdir -p .ar4k/contesti
+		mkdir -p .ar4k/ricettari
+		mkdir -p .ar4k/dati
+		mkdir -p .ar4k/dati/consul
+		"""
+
+		// configura il proxy per il nodo ssh se necessario e
+		// scarica o aggiorna il repository base
+		String scaricamentoGit = ''
+		if (false) scaricamentoGit += 'export http_proxy= ...'
+		String comandoGit = "cd ~/.ar4k/ricettari ; if [ -e ar4k_open ] ; then cd ar4k_open; git pull; else git clone https://github.com/rossonet/templateAr4k.git ar4k_open; fi"
+		// lancia il binario
+		String comandoAvvio = '~/.ar4k/ricettari/ar4k_open/'+architettura+'/consul_'+architettura+' agent -data-dir ~/.ar4k/dati/consul -bootstrap -server -dc '+consulClient.datacenter
+		comandoAvvio += consulClient.chiave?' -encrypt "'+consulClient.chiave+'"':''
+		comandoAvvio += consulClient.dominio?' -domain '+consulClient.dominio:''
+		comandoAvvio += ' </dev/null &>/dev/null &'
+		try {
+			connessioneLocale.esegui(killAll)
+			connessioneLocale.esegui(creaDirectory)
+			connessioneLocale.esegui(comandoGit)
+			connessioneLocale.esegui(comandoAvvio)
+			// connetti consul
+			stato.connetti()
+			// crea la struttura dati
+			contesto = nuovoContesto.idContesto
+			interfaccia = nuovaInterfaccia.idInterfaccia
+			//nuovaInterfaccia.salva(stato)
+			//nuovoContesto.salva(stato)
+			contestoCreato = nuovoContesto
+			interfacciaCreata = nuovaInterfaccia
+			nuovaIstanzaConsul = consulClient
+		} catch (Exception fff) {
+			log.warn("Errore nell'istanziazione dell'istanza Consul "+fff.printStackTrace())
+			ritorno = false
+			log.warn("contesto NON creato: "+nuovoContesto.esporta())
+		}
+		return ritorno
 	}
 
 	/** Aggiunge un utente amministratore */
@@ -153,7 +211,8 @@ class BootStrapService {
 	/** verifica la presenza di una connessione funzionante via ssh.
 	 * Se è presente un proxy o una connesione Onion verrano utilizzate nel test*/
 	String verificaSSH() {
-		if (stato.listaGWSSH?.size() > 1) return stato.listaGWSSH.join(", ")
+		log.info("Elenco connessioni SSH: "+stato.listaGWSSH)
+		if (stato.listaGWSSH?.size() > 1) return stato.listaGWSSH.unique().join(", ")
 		if (stato.listaGWSSH?.size() < 1) return null
 		if (stato.listaGWSSH?.size() == 1) return stato.listaGWSSH[0]
 		if (stato.listaGWSSH == null) return null
@@ -161,7 +220,8 @@ class BootStrapService {
 
 	/** verifica la presenza di un proxy funzionante per connettersi via ssh */
 	String verificaProxy() {
-		if (stato.listaProxy?.size() > 1) return stato.listaProxy.join(", ")
+		log.info("Elenco proxy: "+stato.listaProxy)
+		if (stato.listaProxy?.size() > 1) return stato.listaProxy.unique().join(", ")
 		if (stato.listaProxy?.size() < 1) return null
 		if (stato.listaProxy?.size() == 1) return stato.listaProxy[0]
 		if (stato.listaProxy == null) return null

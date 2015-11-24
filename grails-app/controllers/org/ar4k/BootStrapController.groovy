@@ -48,7 +48,7 @@ class BootStrapController {
 			}.to "showBenvenuto"
 			on (Exception).to "showBenvenuto"
 			on ("completata").to("completata")
-			on ("reset"){[inReset:true]}.to("showBenvenuto")
+			on ("reset"){ [inReset:true] }.to("showBenvenuto")
 		}
 
 		showBenvenuto {
@@ -80,9 +80,11 @@ class BootStrapController {
 			on ("completato").to "creaConsul"
 			on ("indietro").to "entrata"
 			on ("configuraCodCommerciale").to "configuraCodCommerciale"
-			on ("configuraProxy"){[provenienza:'nuovoConsul']}.to "configuraProxyMaster"
-			on ("configuraSSH"){[provenienza:'nuovoConsul']}.to "configuraMaster"
-			on ("configuraOnion"){[provenienza:'nuovoConsul']}.to "configuraOnion"
+			on ("configuraProxy"){ [provenienza:'nuovoConsul'] }.to "configuraProxyMaster"
+			on ("configuraSSH"){
+				[tor:bootStrapService.verificaOnion(),provenienza:'nuovoConsul']
+			}.to "configuraMaster"
+			on ("configuraOnion"){ [provenienza:'nuovoConsul'] }.to "configuraOnion"
 			on ("fallita"){ [messaggioOlark:"Salve. Serve aiuto per configurare la piattaforma?"] }.to("fallita")
 		}
 
@@ -90,17 +92,21 @@ class BootStrapController {
 			on ("completato").to "verifica"
 			on ("indietro").to "entrata"
 			on ("configuraCodCommerciale").to "configuraCodCommerciale"
-			on ("configuraProxy"){[provenienza:'parametriConsul']}.to "configuraProxyMaster"
-			on ("configuraSSH"){[provenienza:'parametriConsul']}.to "configuraMaster"
-			on ("configuraOnion"){[provenienza:'parametriConsul']}.to "configuraOnion"
+			on ("configuraProxy"){ [provenienza:'parametriConsul'] }.to "configuraProxyMaster"
+			on ("configuraSSH"){
+				[tor:bootStrapService.verificaOnion(),provenienza:'parametriConsul']
+			}.to "configuraMaster"
+			on ("configuraOnion"){ [provenienza:'parametriConsul'] }.to "configuraOnion"
 			on ("fallita"){ [messaggioOlark:"Salve. Serve aiuto per configurare la piattaforma?"] }.to("fallita")
 		}
 
 		configuraProxyMaster {
 			on ("successo").to "testProxyMaster"
 			on ("configuraCodCommerciale").to "configuraCodCommerciale"
-			on ("indietro").to {params.provenienza?:"entrata"}
-			on ("configuraSSH").to "configuraMaster"
+			on ("indietro").to { params.provenienza?:"entrata" }
+			on ("configuraSSH"){
+				[tor:bootStrapService.verificaOnion()]
+			}.to "configuraMaster"
 			on ("configuraOnion").to "configuraOnion"
 		}
 
@@ -136,13 +142,15 @@ class BootStrapController {
 					return errore()
 				}
 			}
-			on ("successo"){[proxies:bootStrapService.verificaProxy()]}.to {params.provenienza?:"entrata"}
+			on ("successo"){
+				[proxies:bootStrapService.verificaProxy()]
+			}.to { params.provenienza?:"entrata" }
 			on ("errore").to "configuraProxyMaster"
 			on (Exception).to "configuraProxyMaster"
 		}
 
 		configuraMaster {
-			on ("indietro").to {params.provenienza?:"entrata"}
+			on ("indietro").to { params.provenienza?:"entrata" }
 			on ("configuraCodCommerciale").to "configuraCodCommerciale"
 			on ("successo").to "verificaMaster"
 			on ("configuraProxy").to "configuraProxyMaster"
@@ -187,7 +195,7 @@ class BootStrapController {
 			on ("successo").to "testOnion"
 			on ("indietro").to {params.provenienza?:"entrata"}
 			on ("configuraCodCommerciale").to "configuraCodCommerciale"
-			on ("configuraSSH").to "configuraMaster"
+			on ("configuraSSH"){[tor:bootStrapService.verificaOnion()]}.to "configuraMaster"
 			on ("configuraProxy").to "configuraProxyMaster"
 		}
 
@@ -201,14 +209,36 @@ class BootStrapController {
 		}
 
 		creaConsul {
-			action { return successo() }
+			action {
+				String valoreCasuale=org.apache.commons.lang.RandomStringUtils.random(5, true, true).toString()
+				Contesto nuovoContesto = new Contesto(
+						idContesto:bootStrapService.contesto?:'contestoBootStrap',
+						etichetta:params.etichetta?:'Contesto '+new Date().format("yyyyMMddHHmmss", TimeZone.getTimeZone("UTC")).toString()+' ('+valoreCasuale+')',
+						descrizione:params.descrizione?:"Contesto generato automaticamente "+new Date().format("yyyyMMddHHmmss", TimeZone.getTimeZone("UTC")).toString(),
+						)
+				IstanzaConsul nuovaIstanzaConsul = new IstanzaConsul(
+						portaDNS:8600,
+						portaHTTP:params.porta?.toInteger()?:8500,
+						portaHTTPS:-1,
+						portaRPC:8400,
+						portaSerfLAN:8301,
+						portaSerfWAN:8302,
+						portaServer:8300,
+						avvioInBootStrap:true,
+						chiave:params.keyConsul?:null,
+						dominio:params.dnsConsul?:'ar4k.net',
+						datacenter:params.datacenter?:'ar4k-test'
+						)
+				bootStrapService.stato.tunnelSSH = params.sshTunnel
+				return bootStrapService.creaNuovoConsulVergine(nuovaIstanzaConsul,nuovoContesto)?successo():errore()
+			}
 			on ("successo").to "verifica"
 			on ("errore").to "nuovoConsul"
 		}
 
 		verifica {
 			action {
-				if ( params.sshTunnel != 'nessuno' ) {
+				if ( params.sshTunnel != 'nessuno' && params.sshTunnel != null ) {
 					bootStrapService.stato.tunnelSSH = params.sshTunnel
 				} else {
 					bootStrapService.stato.tunnelSSH = null
@@ -271,9 +301,7 @@ class BootStrapController {
 			}
 			on ("completata").to("mascheraFinale")
 			on ("noConsul").to("verifica")
-			on ("fallita"){
-				[rapporto:bootStrapService.toString(),messaggioOlark:"Salve. Serve aiuto per configurare la piattaforma?"]
-			}.to("fallita")
+			on ("fallita").to("fallita")
 		}
 
 		mascheraFinale {
