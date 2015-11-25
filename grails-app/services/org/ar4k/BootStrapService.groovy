@@ -50,10 +50,12 @@ class BootStrapService {
 	Contesto contestoCreato = null
 	/** interfaccia creata durante il boot */
 	Interfaccia interfacciaCreata = null
-	/** stringhe di errore per interfaccia */
-	List<String> errori = []
 	/** istanza Consul creata */
 	IstanzaConsul nuovaIstanzaConsul = null
+	/** vaso creato per l'accesso al sistema */
+	Vaso nuovoVaso = null
+	/** stringhe di errore per interfaccia */
+	List<String> errori = []
 
 	/** lanciato dalla procedura di boot di Grails. 
 	 * Grails si preoccupa di popolare il servizio BootStrap (scope singleton)
@@ -81,7 +83,7 @@ class BootStrapService {
 				} else {
 					log.warn("Non trovato il "+contesto+" Consul sul nodo creo il contesto vergine e lo salvo in Consul")
 					// crea il nuovo contesto vergine
-					if (contestoCreato.salva(stato) && interfacciaCreata.salva(stato) ) {
+					if (contestoCreato.salva(stato) && interfacciaCreata.salva(stato) && nuovoVaso.salva(stato)) {
 						interfacciaContestoService.stato = stato
 						interfacciaContestoService.contesto = contestoCreato
 						interfacciaContestoService.contesto.datacenterConsul = nuovaIstanzaConsul.datacenter
@@ -107,7 +109,19 @@ class BootStrapService {
 		nuovaInterfaccia.idInterfaccia = 'InterfacciaBootstrap'
 		nuovaInterfaccia.etichetta = "Interfaccia generata automaticamente "+new Date().format("yyyyMMddHHmmss", TimeZone.getTimeZone("UTC")).toString()
 		//nuovaInterfaccia.salva(stato)
+		Vaso nuovoVaso = new Vaso(
+				etichetta: connessioneLocale.toString(),
+				descrizione: "Connessione generata in fase di bootstrap",
+				macchina: connessioneLocale.macchina,
+				porta: connessioneLocale.porta,
+				utente: connessioneLocale.utente,
+				key: connessioneLocale.key,
+				proxyAccesso: connessioneLocale.proxyMaster,
+				consul: consulClient
+				)
 		nuovoContesto.interfacce.add(nuovaInterfaccia)
+		nuovoContesto.vasi.add(nuovoVaso)
+		nuovoContesto.vasoMaster = nuovoVaso
 		// kill eventuali processi esistenti
 		String killAll = """
 		killall consul

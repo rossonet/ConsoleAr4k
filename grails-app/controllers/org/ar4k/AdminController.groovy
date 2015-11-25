@@ -175,11 +175,11 @@ class AdminController {
 	 */
 	def listaVasi() {
 		def risultato = []
-		interfacciaContestoService.contesto.vasi.each{ vaso ->
+		interfacciaContestoService.contesto.vasi?.each{ vaso ->
 			String macchina = vaso.macchina
 			Boolean eMaster = false;
 			def stato = interfacciaContestoService.stato.consul.getHealthChecksForNode(macchina,new QueryParams(interfacciaContestoService.contesto.datacenterConsul)).getValue()
-			if (interfacciaContestoService.contesto.vasoMaster.idVaso == vaso.idVaso ) {
+			if (interfacciaContestoService.contesto.vasoMaster?.idVaso == vaso.idVaso ) {
 				eMaster = true;
 			}
 			risultato.add([vaso:vaso,stato:stato,master:eMaster])

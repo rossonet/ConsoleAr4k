@@ -45,6 +45,8 @@ class Vaso {
 	String utente = 'root'
 	/** chiave privata ssh */
 	String key = null
+	/** proxy per connettere il vaso dall'interfaccia */
+	String proxyAccesso = null
 	/** variabile PATH sulla macchina */
 	String path = '/usr/local/bin:/usr/bin:/bin'
 	/** da definire: rappresenta le funzionalità del vaso root/user space, memoria, capacità computazionale, spazio store. */
@@ -64,6 +66,12 @@ class Vaso {
 	/** host pubblico per test di raggiungibilità */
 	String indirizzoTest='http://hc.rossonet.name'
 
+	
+	/** salva il contesto sul nodo master */
+	Boolean salva(Stato stato) {
+		stato.salvaValore(idVaso,'org-ar4k-vaso',(esporta() as JSON).toString())
+	}
+	
 	/** esporta il vaso */
 	def esporta() {
 		return [
