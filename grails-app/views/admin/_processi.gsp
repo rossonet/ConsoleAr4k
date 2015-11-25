@@ -34,12 +34,9 @@
 							<div class="col-xs-12 col-sm-4 col-md-2 col-lg-2 div4-padding"><h4>Id</h4></div>
 							<div class="col-xs-6 col-sm-4 col-md-2 col-lg-2 div4-padding"><h4>Indirizzo</h4></div>
 							<div class="col-xs-6 col-sm-4 col-md-2 col-lg-2 div4-padding"><h4>Porta</h4></div>
-							<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 div4-padding"><h4>Servizio</h4></div>
-							<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 div4-padding"><h4>Tags</h4></div>
+							<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 div4-padding"><h4>Servizio</h4></div>
 							<div
-								class="col-xs-6 col-sm-6 col-md-4 col-lg-4 div4-padding"><h4>Stato</h4></div>
-							<div
-								class="col-xs-6 col-sm-6 col-md-2 col-lg-2 text-right div4-padding"><h4>Azioni</h4></div>
+								class="col-xs-12 col-sm-8 col-md-2 col-lg-2 text-right div4-padding"><h4>Azioni</h4></div>
 						</div>
 						<div ng-repeat="processo in processi | filter:queryRicerca"
 							ng-class-odd="'col-xs-12 col-sm-12 col-md-12 col-lg-12 dispari'"

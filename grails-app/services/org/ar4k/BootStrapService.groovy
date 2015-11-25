@@ -139,6 +139,8 @@ class BootStrapService {
 		comandoAvvio += consulClient.chiave?' -encrypt "'+consulClient.chiave+'"':''
 		comandoAvvio += consulClient.dominio?' -domain '+consulClient.dominio:''
 		comandoAvvio += ' </dev/null &>/dev/null &'
+		stato.macchinaConsul = '127.0.0.1'
+		stato.portaConsul = consulClient.portaHTTP
 		try {
 			connessioneLocale.esegui(killAll)
 			connessioneLocale.esegui(creaDirectory)

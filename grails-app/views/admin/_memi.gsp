@@ -178,13 +178,6 @@
 							<div class="col-xs-6 col-sm-6 col-md-2 col-lg-2 div4-padding">
 								<h4>Dipendenze</h4>
 							</div>
-							<div class="col-xs-12 col-sm-8 col-md-9 col-lg-10 div4-padding">
-								<h4>Processi</h4>
-							</div>
-							<div
-								class="col-xs-12 col-sm-4 col-md-3 col-lg-2 text-right div4-padding">
-								<h4>Azioni</h4>
-							</div>
 						</div>
 
 

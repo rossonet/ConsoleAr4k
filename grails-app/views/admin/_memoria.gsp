@@ -79,7 +79,6 @@
 							<div class="col-xs-6 col-sm-6 col-md-2 col-lg-2 div4-padding"><h4>Progressivo ultima modifica</h4></div>
 							<div
 								class="col-xs-12 col-sm-12 col-md-4 col-lg-4 text-right div4-padding"><h4>Azioni</h4></div>
-							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 div4-padding"><h4>Valore</h4></div>
 						</div>
 
 

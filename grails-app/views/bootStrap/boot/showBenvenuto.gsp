@@ -71,7 +71,7 @@
 						class="link-scroll btn btn-success btn-outline-inverse btn-lg">Connetti
 						questa interfaccia a una istallazione esistente</a>
 					<p class="text-justify" style="text-align: justify;">Per creare
-						un nuovo ambiente Ar4k:</p>
+						un nuovo ambiente Ar4k</p>
 					<a href="${createLink(event: 'configuraNuovoConsul')}"
 						class="link-scroll btn btn-warning btn-outline-inverse btn-lg">Crea
 						un nuovo ambiente Ar4k</a>

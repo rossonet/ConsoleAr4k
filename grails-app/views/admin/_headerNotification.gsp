@@ -20,7 +20,7 @@
 				class="fa fa-hand-o-up fa-fw"></i> <i id="contatoreticket">{{numeroTasks}}</i>
 				<i class="fa fa-caret-down"></i>
 		</a>
-			<ul class="dropdown-menu dropdown-messages">
+			<ul class="dropdown-menu dropdown-message">
 				<li ng-repeat="task in tasks"><a href=""
 					ng-click="svolgiistanza(task.id)"> <i
 						class="fa {{task.icona}} fa-fw"></i> <strong>{{task.name}}</strong>
@@ -55,12 +55,11 @@
 			data-toggle="dropdown"> <i class="fa fa-user fa-fw"></i> <i
 				class="fa fa-caret-down"></i>
 		</a>
-			<ul class="dropdown-menu dropdown-user">
+			<ul class="dropdown-menu dropdown-alerts">
 				<li><a ui-sref="dashboard.utenti"><i
 						class="fa fa-users fa-fw"></i> Edita profili utenti</a></li>
 				<li><a href="" ng-click="salvaConfigurazioneInterfaccia()"><i
-						class="fa fa-save fa-fw"></i> Salva la configurazione
-						dell'interfaccia in locale</a></li>
+						class="fa fa-save fa-fw"></i> Salva configurazione in locale</a></li>
 				<g:if env="development">
 					<li><a href="" ng-click="scaricaConfigurazioneInterfaccia()"><i
 							class="fa fa-download fa-fw"></i> Esporta la configurazione dell'interfaccia</a></li>
