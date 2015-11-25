@@ -54,17 +54,22 @@ then
 	else
 		wget 'http://boot.ar4k.net/ar4k/jdk-7u79-linux-i586.rpm'
 	fi
+
+	# Scarica la crittografia full per Java
+	wget 'http://boot.ar4k.net/ar4k/UnlimitedJCEPolicyJDK7.zip'
+	unzip UnlimitedJCEPolicyJDK7.zip
 	
 
 	if [ "$(whoami)" = "root" ]
 	then
 		yum localinstall -y --nogpg jdk-7u79-linux-*
+		mv -f UnlimitedJCEPolicy/US_export_policy.jar UnlimitedJCEPolicy/local_policy.jar /usr/java/latest/jre/lib/security/
 	else	
 		echo "Sarà richiesta la password di root"
-		su -c "yum localinstall -y --nogpg jdk-7u79-linux-*"
+		su -c "yum localinstall -y --nogpg jdk-7u79-linux-* ; mv -f UnlimitedJCEPolicy/US_export_policy.jar UnlimitedJCEPolicy/local_policy.jar /usr/java/latest/jre/lib/security/"
 	fi
-	rm -rf .java_tmp
 	cd $dir_locale
+	rm -rf .java_tmp
 fi
 
 # Configura la variabile d'ambiente JAVA_HOME se non configurata
