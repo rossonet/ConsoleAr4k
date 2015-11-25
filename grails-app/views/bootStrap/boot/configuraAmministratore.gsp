@@ -69,10 +69,10 @@
 								placeholder="Password ripetuta">
 						</div>
 						<div class="form-group">
-							<button name="_eventId"
+							<button name="_eventId"  type="button"
 								class="btn btn-success btn-sm btn-outline-inverse"
 								value="completata"
-								onClick="document.forms['configuraUtenteDemo'].submit();">Aggiungi
+								onClick="document.forms['configuraUtenteDemo'].submit();hide(this);">Aggiungi
 								l'utente e avvia l'interfaccia</button>
 						</div>
 					</form>

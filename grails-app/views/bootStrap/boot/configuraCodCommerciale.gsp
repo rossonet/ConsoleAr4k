@@ -55,10 +55,10 @@
 								placeholder="Inserire il cod.ar4k ricevuto per email">
 						</div>
 						<div class="form-group">
-							<button name="_eventId"
+							<button name="_eventId" type="button"
 								class="link-scroll btn btn-success btn-outline-inverse btn-lg"
 								value="completata"
-								onClick="document.forms['configuraCodCommerciale'].submit();">Attiva
+								onClick="document.forms['configuraCodCommerciale'].submit();hide(this);">Attiva
 								l'interfaccia AR4K con questo codice</button>
 						</div>
 						<p>

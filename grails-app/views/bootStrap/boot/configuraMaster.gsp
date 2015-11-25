@@ -112,10 +112,10 @@
 						</div>
 						<input type="hidden" name="provenienza" value="${provenienza}">
 						<div class="form-group">
-							<button name="_eventId"
+							<button name="_eventId"  type="button"
 								class="btn btn-danger btn-sm btn-outline-inverse"
 								value="verificaMaster"
-								onClick="document.forms['vasoMaster'].submit();">Prova
+								onClick="document.forms['vasoMaster'].submit();hide(this);">Prova
 								la connessione SSH</button>
 						</div>
 						<p>

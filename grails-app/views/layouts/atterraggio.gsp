@@ -641,6 +641,11 @@
 		</g:if>		
 
 	</script>
+	<script>
+	function hide(element){
+   			element.style.display = 'none';
+	}
+	</script>
 	<noscript>
 		<a href="https://www.olark.com/${grailsApplication.config.olark.key}/contact"
 			title="Contact us" target="_blank">Questions? Feedback?</a> powered

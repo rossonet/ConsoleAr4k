@@ -75,10 +75,10 @@
 							</select>
 						</div>
 						<div class="form-group">
-							<button name="_eventId"
+							<button name="_eventId"  type="button"
 								class="link-scroll btn btn-success btn-outline-inverse btn-lg"
 								value="completato"
-								onClick="document.forms['configuraConsulEsistente'].submit();">Connetti
+								onClick="document.forms['configuraConsulEsistente'].submit();hide(this);">Connetti
 								Consul</button>
 						</div>
 						<a href="${createLink(event: 'indietro')}"

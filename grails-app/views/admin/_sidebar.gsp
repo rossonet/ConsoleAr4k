@@ -9,19 +9,20 @@
 					class="fa fa-linux fa-fw"></i> Vasi</a></li>
 
 			<li ui-sref-active="active"><a ui-sref="dashboard.reti"><i
-					class="fa fa-sitemap fa-fw"></i> Reti</a></li>
-
+					class="fa fa-sitemap fa-fw"></i> Nodi</a></li>
+					
+			<li ui-sref-active="active"><a ui-sref="dashboard.processi"><i
+					class="fa fa-gears fa-fw"></i> Servizi</a></li>
+					
 			<li ui-sref-active="active"><a ui-sref="dashboard.memi"><i
 					class="fa fa-flask fa-fw"></i> Memi</a></li>
 
-			<li ui-sref-active="active"><a ui-sref="dashboard.processi"><i
-					class="fa fa-gears fa-fw"></i> Servizi</a></li>
-
-			<li ui-sref-active="active"><a ui-sref="dashboard.memoria"><i
-					class="fa fa-database fa-fw"></i> Dati</a></li>
-
 			<li ui-sref-active="active"><a ui-sref="dashboard.ricettari"><i
 					class="fa fa-book fa-fw"></i> Ricettari</a></li>
+					
+			<li ui-sref-active="active"><a ui-sref="dashboard.memoria"><i
+					class="fa fa-database fa-fw"></i> KV Consul</a></li>
+					
 			<g:if test="${grafica.sviluppo==true}">
 				<li ui-sref-active="active"><a ui-sref="dashboard.api"><i
 						class="fa fa-file-text-o fa-fw"></i> Documentazione API Ar4k</a></li>

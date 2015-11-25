@@ -69,10 +69,10 @@
 						</div>
 						<input type="hidden" name="provenienza" value="${provenienza}">
 						<div class="form-group">
-							<button name="_eventId"
+							<button name="_eventId" type="button"
 								class="link-scroll btn btn-success btn-outline-inverse btn-lg"
 								value="configuraProxyMaster"
-								onClick="document.forms['configuraProxy'].submit();">Configura
+								onClick="document.forms['configuraProxy'].submit();hide(this);">Configura
 								i parametri del proxy</button>
 						</div>
 						<p>

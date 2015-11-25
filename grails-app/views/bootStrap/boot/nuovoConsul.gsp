@@ -55,15 +55,13 @@
 						</div>
 						<div class="form-group">
 							<label for="descrizione">Descrizione contesto.</label>
-							<textarea name="descrizione"
-								class="text-area form-control"
+							<textarea name="descrizione" class="text-area form-control"
 								data-validation-type="required" id="descrizione"
 								placeholder='Contesto Ar4k generato automaticamente'></textarea>
 						</div>
 						<div class="form-group">
 							<label for="progetto">Riferimento progetto</label> <input
-								type="text" name="progetto"
-								class="text-field form-control"
+								type="text" name="progetto" class="text-field form-control"
 								data-validation-type="string" id="progetto"
 								placeholder="id progetto">
 						</div>
@@ -81,37 +79,33 @@
 						</div>
 						<div class="form-group">
 							<label for="datacenter">etichetta datacenter</label> <input
-								type="text" name="datacenter"
-								class="text-field form-control"
+								type="text" name="datacenter" class="text-field form-control"
 								data-validation-type="string" id="datacenter"
 								placeholder="datacenter">
 						</div>
 						<div class="form-group">
 							<label for="keyConsul">Chiave crittografica Consul</label> <input
-								type="text" name="keyConsul"
-								class="text-field form-control"
+								type="text" name="keyConsul" class="text-field form-control"
 								data-validation-type="string" id="keyConsul"
 								placeholder="yIetiZno0c7464rOCaIThQ==">
 						</div>
 						<div class="form-group">
 							<label for="portaConsul">Porta TCP installazione Consul</label> <input
-								type="text" name="portaConsul"
-								class="text-field form-control"
+								type="text" name="portaConsul" class="text-field form-control"
 								data-validation-type="string" id="portaConsul"
 								placeholder="8500">
 						</div>
 						<div class="form-group">
 							<label for="dnsConsul">Dominio DNS Consul</label> <input
-								type="text" name="dnsConsul"
-								class="text-field form-control"
+								type="text" name="dnsConsul" class="text-field form-control"
 								data-validation-type="string" id="dnsConsul"
 								placeholder="ar4k.net">
 						</div>
 						<div class="form-group">
-							<button name="_eventId"
+							<button name="_eventId" type="button"
 								class="link-scroll btn btn-success btn-outline-inverse btn-lg"
 								value="completato"
-								onClick="document.forms['configuraConsul'].submit();">Crea
+								onClick="document.forms['configuraConsul'].submit();hide(this);">Crea
 								servizio Consul</button>
 						</div>
 						<a href="${createLink(event: 'indietro')}"

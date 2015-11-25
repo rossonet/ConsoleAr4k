@@ -78,19 +78,19 @@
 							<input type="hidden" name="provenienza" value="${provenienza}">
 							<g:if test="${tor}">
 								<div class="form-group">
-									<button name="_eventId"
+									<button name="_eventId"  type="button"
 										class="link-scroll btn btn-success btn-outline-inverse btn-lg"
 										value="configuraOnion"
-										onClick="document.forms['configuraOnion'].submit();">Resetta
+										onClick="document.forms['configuraOnion'].submit();hide(this);">Resetta
 										Onion e cambia circuito</button>
 								</div>
 							</g:if>
 							<g:else>
 								<div class="form-group">
-									<button name="_eventId"
+									<button name="_eventId" type="button"
 										class="link-scroll btn btn-success btn-outline-inverse btn-lg"
 										value="configuraOnion"
-										onClick="document.forms['configuraOnion'].submit();">Attiva
+										onClick="document.forms['configuraOnion'].submit();hide(this);">Attiva
 										TOR per connettersi al sistema AR4K</button>
 								</div>
 							</g:else>
