@@ -11,7 +11,8 @@
  * </p>
  *
  * <p style="text-justify">
- * Il Controller lavora insieme al relativo service
+ * Il Controller genera i file di configurazione
+ * che vengono recuperati dagli script di configurazione automatica
  * </p>
  *
  * @author Andrea Ambrosini (Rossonet s.c.a r.l)
@@ -24,5 +25,10 @@ package org.ar4k
 
 class BotConfigurazioniController {
 
-    def index() { }
+	def index() { }
+
+	def ping(String messaggio) {
+		log.warn("Ricevuto ping con codice: "+messaggio)
+		render "ok\nmessaggio: "+messaggio
+	}
 }

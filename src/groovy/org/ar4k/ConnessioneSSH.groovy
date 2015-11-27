@@ -6,6 +6,8 @@ import java.util.List;
 
 import javax.validation.OverridesAttribute;
 
+import org.codehaus.groovy.grails.commons.GrailsApplication;
+
 import com.ecwid.consul.v1.ConsulClient
 import com.jcraft.jsch.*
 import com.subgraph.orchid.TorClient
@@ -20,10 +22,13 @@ import com.subgraph.orchid.TorInitializationListener
  * @author andrea
  *
  */
+
+
+
+
 import grails.util.Holders
 
 class ConnessioneSSH {
-
 	/** id univoco connessione SSH */
 	String idConnessioneSSH = UUID.randomUUID()
 	/** indirizzo ip o dns host connessione ssh */
@@ -72,18 +77,24 @@ class ConnessioneSSH {
 		]
 	}
 
-	/** attiva il tunnel senza proxy */
-	Boolean verificaAvvia(Integer gwPort,String targetHost,Integer targetPort) {
+	/** attiva i tunnel */
+	Boolean verificaAvvia(Integer gwPort,String targetHost,Integer targetPort,Integer callBackPort) {
 		if (!connessione) {
 			connessione = new JSch()
 		}
 		try {
 			addLTunnel(gwPort,targetHost,targetPort)
+			addRTunnel(callBackPort,'127.0.0.1',6630)
 			return true
 		} catch (Exception ee) {
 			log.warn("Errore avvio tunnel: "+ee.printStackTrace())
 			return false
 		}
+	}
+
+	/** attiva i tunnel con porta di callback predefinita  */
+	Boolean verificaAvvia(Integer gwPort,String targetHost,Integer targetPort) {
+		return verificaAvvia(gwPort,targetHost,targetPort,3630)
 	}
 
 	String toString() {
@@ -168,7 +179,7 @@ class ConnessioneSSH {
 		return risultato == atteso?true:false
 	}
 
-	/** Aggiunge un tunnel SSH Left*/
+	/** Aggiunge un tunnel SSH Left */
 	private void addLTunnel(int lport, String rhost, int rport) {
 		Integer portaProxyT = null
 		String macchinaProxyT = null
@@ -194,10 +205,140 @@ class ConnessioneSSH {
 				sessione.setProxy(new ProxySOCKS5(macchinaProxyT, portaProxyT.toInteger()))
 			}
 			sessione.connect()
-			try {sessione.setPortForwardingL(lport, rhost, rport)} catch(Exception e){log.warn("Errore nel tunnel ssh per nodo "+macchina+" tunnel "+lport+":"+rhost+":"+rport+". Probabilmente la porta è già in uso")}
+			try {sessione.setPortForwardingL(lport, rhost, rport)} catch(Exception e){log.warn("Errore nel tunnel ssh per nodo "+macchina+" tunnel left "+lport+":"+rhost+":"+rport+". Probabilmente la porta è già in uso")}
 		}	catch(JSchException e){
-			log.warn("Errore nella creazione del tunnel SSH: "+e.printStackTrace())
+			log.warn("Errore nella creazione del tunnel left SSH: "+e.printStackTrace())
 		}
+	}
+
+	/** Aggiunge un tunnel SSH Right */
+	private void addRTunnel(int lport, String lhost, int rport) {
+		Integer portaProxyT = null
+		String macchinaProxyT = null
+		try {
+			Channel canale
+			// Aggiunge la chiave privata
+			connessione.addIdentity(utente,key.getBytes(),null,null)
+			Session sessione=connessione.getSession(utente, macchina, porta)
+			sessione.setConfig("StrictHostKeyChecking","no")
+			if (proxyMaster=='tor') {
+				portaProxyT = 9050
+				macchinaProxyT = '127.0.0.1'
+			} else if (proxyMaster) {
+				try{
+					URL targetProxy = new URL(proxyMaster)
+					portaProxyT = targetProxy.getPort()
+					macchinaProxyT = targetProxy.getHost()
+				} catch(Exception ee) {
+					log.warn("Non riesco ad utilizzare il proxy "+proxyMaster)
+				}
+			}
+			if (portaProxyT?.toInteger() != null && macchinaProxyT != null) {
+				sessione.setProxy(new ProxySOCKS5(macchinaProxyT, portaProxyT.toInteger()))
+			}
+			sessione.connect()
+			try {sessione.setPortForwardingR(lport, lhost, rport)} catch(Exception e){log.warn("Errore nel tunnel ssh per nodo "+macchina+" tunnel right "+lport+":"+lhost+":"+rport+". Probabilmente la porta è già in uso")}
+		}	catch(JSchException e){
+			log.warn("Errore nella creazione del tunnel right SSH: "+e.printStackTrace())
+		}
+	}
+
+	/** salva un file testuale su fs */
+	Boolean salvaFileTestuale(String percorsoAssoluto, String file) {
+		String interruzione = "EOF-"+UUID.randomUUID()+"-AR4K"
+		String fileElaborato = java.util.regex.Matcher.quoteReplacement(file.toString(true))
+		String comandoEsecuzione="cat > "+file+" << "+interruzione+"\n"+fileElaborato+"\n"+interruzione+"\n"
+		String comandoControllo="cat "+file
+		esegui(comandoEsecuzione)
+		String risultato=esegui(comandoControllo)
+		return risultato == file.toString(true)+"\n"?true:false
+	}
+
+	/** legge un target sul vaso con il comando cat e ritorna l'output */
+	String leggiConCat(String target){
+		return esegui('cat '+target)
+	}
+
+	/** crea la struttura di directory per ar4k */
+	Boolean creaStruttura() {
+		String creaDirectory = """
+		cd ~
+		mkdir -p .ar4k
+		mkdir -p .ar4k/contesti
+		mkdir -p .ar4k/ricettari
+		mkdir -p .ar4k/dati
+		mkdir -p .ar4k/dati/consul
+		mkdir -p .ar4k/dati/memi
+		mkdir -p .ar4k/dati/backup
+		mkdir -p .ar4k/esecuzioni
+		"""
+
+		String risultato=esegui(creaDirectory)
+		return risultato?true:false
+	}
+	
+	/** crea la struttura di directory per ar4k */
+	Boolean killConsul() {
+		String kill = """
+		killall consul
+		killall consul_i386
+		killall consul_amd64
+		"""
+
+		String risultato=esegui(kill)
+		return risultato?true:false
+	}
+
+	/** carica un file binario da ssh
+	 *
+	 * */
+	OutputStream leggiBinario(String percorso,String target,OutputStream ritornoStream) {
+		//comando = 'export PATH='+path+' ; '+comando
+		InputStream input = null
+		Integer portaProxyT = null
+		String macchinaProxyT = null
+		try {
+			Channel canale
+			ChannelSftp channelSftp
+			// Aggiunge la chiave privata
+			connessione.addIdentity(utente,key.getBytes(),null,null)
+			Session sessione=connessione.getSession(utente, macchina, porta)
+			if (proxyMaster=='tor') {
+				portaProxyT = 9050
+				macchinaProxyT = '127.0.0.1'
+			} else if (proxyMaster) {
+				try{
+					URL targetProxy = new URL(proxyMaster)
+					portaProxyT = targetProxy.getPort()
+					macchinaProxyT = targetProxy.getHost()
+				} catch(Exception ee) {
+					log.warn("Non riesco ad utilizzare il proxy "+proxyMaster)
+				}
+			}
+			if (portaProxyT?.toInteger() != null && macchinaProxyT != null) {
+				sessione.setProxy(new ProxySOCKS5(macchinaProxyT, portaProxyT.toInteger()))
+			}
+			sessione.setConfig("StrictHostKeyChecking","no")
+			sessione.setConfig("UserKnownHostsFile","/dev/null")
+			sessione.connect()
+			canale = sessione.openChannel("sftp")
+			canale.connect()
+			channelSftp = (ChannelSftp)canale
+			channelSftp.cd(percorso)
+			InputStream risultato = channelSftp.get(target)
+			int c
+			byte[] buffer=new byte[1024]
+			while ((c=risultato.read(buffer))!=-1 ) {
+				ritornoStream.write(buffer,0,c)
+			}
+			risultato.close()
+			ritornoStream.close()
+			canale.disconnect()
+			sessione.disconnect()
+		}catch(JSchException e) {
+			log.warn("Errore connesione SSH nella lettura del file .bar: "+e.printStackTrace())
+		}
+		return ritornoStream
 	}
 }
 
@@ -210,22 +351,25 @@ class ConnessioneSSH {
  *
  */
 class LavorazioniSSH {
-
 	String tipoOggetto = 'org-ar4k-lavorazioneSSH'
 
-	/** id univoco connessione SSH */
+	/** id univoco lavorazione */
 	String idLavorazione = new Date().format("yyyyMMddHHmmss", TimeZone.getTimeZone("UTC")).toString()+'_'+UUID.randomUUID()
 	/** etichetta */
 	String etichetta = null
 	/** descrizione */
 	String descrizione = null
-
+	/** stato lavorazione **/
+	String stato = 'init'
+	/** repository necessari sul nodo, verrano aggiornati prima dell'esecuzione */
+	List<Ricettario> ricettariNecessari = []
+	
 	/** salva in uno Stato specifico a catena per N profondità */
 	Boolean salva(Stato stato,Integer contatore) {
 		stato.salvaValore(idLavorazione,tipoOggetto,(esporta() as JSON).toString())
 		if (contatore > 0) {
 			contatore = contatore -1
-			// nessuna lista
+			ricettariNecessari*.salva(stato,contatore)
 		}
 	}
 	/** salva in uno Stato specifico solo l'oggetto */
@@ -275,6 +419,6 @@ class Servizio extends LavorazioniSSH {
  * @author andrea
  *
  */
-class EnvConsulSSH extends LavorazioniSSH {
+class EnvConsul extends LavorazioniSSH {
 	String tipoOggetto = 'EnvConsulSSH'
 }

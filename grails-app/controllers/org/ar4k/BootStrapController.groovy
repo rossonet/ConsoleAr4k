@@ -47,7 +47,7 @@ class BootStrapController {
 				]
 			}.to "showBenvenuto"
 			on (Exception).to "showBenvenuto"
-			on ("completata").to("completata")
+			on ("completata").to("redirezione")
 			on ("reset"){ [inReset:true] }.to("showBenvenuto")
 		}
 
@@ -303,7 +303,7 @@ class BootStrapController {
 			on ("completata").to("redirezione")
 		}
 
-		redirezione { redirect controller:'admin' }
+		redirezione { redirect uri:'#/dashboard/dashrossonet',absolute:'true'}
 
 		// Implementare pagina aiuto via Olark
 		fallita {

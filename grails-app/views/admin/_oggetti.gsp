@@ -226,7 +226,7 @@
 								<button style="margin: 0.1em;"
 									class="btn btn-circle btn-success btn-xs" type="button"
 									ng-click="$parent.assegnaMemeF(vaso.vaso.idVaso)"
-									uib-tooltip="installa servizio Consul sul vaso">
+									uib-tooltip="installa servizio Consul">
 									<i class="fa fa-bolt"></i>
 								</button>
 								<!--  button style="margin: 0.1em;"

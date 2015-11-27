@@ -72,7 +72,7 @@
 		function fine() {
 			var d = document.getElementById("benvenutoModal");
 			d.className = "modal fade ng-isolate-scope";
-			setTimeout(function(){ window.location = "${createLink(controller: 'admin')}"}, 6000);
+			setTimeout(function(){ window.location = "${createLink(uri:'#/dashboard/dashrossonet',absolute:'true')}";}, 6000);
 		}
 	</script>
 </body>

@@ -125,10 +125,10 @@ if (location.href.indexOf('is-external=true') == -1) {
 </dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="org/ar4k/ConnessioneSSH.html#addLTunnel(int, java.lang.String, int)" title="Method in ConnessioneSSH">addLTunnel(int, String, int)</a></span> - Method in <a href="org/ar4k/ConnessioneSSH.html">ConnessioneSSH</a>
 </dt><dd> <div class="block">Aggiunge un tunnel SSH Left</div></dd>
-<dt><span class="strong"><a href="org/ar4k/Vaso.html#addLTunnel(com.jcraft.jsch.JSch, int, java.lang.String, int)" title="Method in Vaso">addLTunnel(JSch, int, String, int)</a></span> - Method in <a href="org/ar4k/Vaso.html">Vaso</a>
-</dt><dd> <div class="block">Aggiunge un tunnel SSH Left</div></dd>
 <dt><span class="strong"><a href="grails/plugin/standalone/Launcher.html#addNioConnector(int)" title="Method in Launcher">addNioConnector(int)</a></span> - Method in <a href="grails/plugin/standalone/Launcher.html">Launcher</a>
 </dt><dd> <div class="block"></div></dd>
+<dt><span class="strong"><a href="org/ar4k/ConnessioneSSH.html#addRTunnel(int, java.lang.String, int)" title="Method in ConnessioneSSH">addRTunnel(int, String, int)</a></span> - Method in <a href="org/ar4k/ConnessioneSSH.html">ConnessioneSSH</a>
+</dt><dd> <div class="block">Aggiunge un tunnel SSH Right</div></dd>
 <dt><span class="strong"><a href="grails/plugin/standalone/Launcher.html#addShutdownHook()" title="Method in Launcher">addShutdownHook()</a></span> - Method in <a href="grails/plugin/standalone/Launcher.html">Launcher</a>
 </dt><dd> <div class="block">Stops the embedded Tomcat server.</div></dd>
 <dt><span class="strong"><a href="org/ar4k/AdminController.html" title="Class in org.ar4k">AdminController</a></span> - Class in <a href="./org/ar4k/package-summary.html">org.ar4k</a>
@@ -197,12 +197,8 @@ if (location.href.indexOf('is-external=true') == -1) {
 </dt><dd> <div class="block">processo lanciato alla creazione del meme</div></dd>
 <dt><span class="strong"><a href="org/ar4k/Utente.html#avatar" title="Property in Utente">avatar</a></span> - Property in <a href="org/ar4k/Utente.html">Utente</a>
 </dt><dd> <div class="block">Immagine avatar utente -da valutare l'autogenerazione algoritmica-</div></dd>
-<dt><span class="strong"><a href="org/ar4k/Vaso.html#avviaActiveMQ(com.jcraft.jsch.JSch)" title="Method in Vaso">avviaActiveMQ(JSch)</a></span> - Method in <a href="org/ar4k/Vaso.html">Vaso</a>
-</dt><dd> <div class="block">Avvia broker ActiveMQ sul nodo Master, configura una sessione ssh permanente per connettere l'Apache Camel integrato nell'Interfaccia</div></dd>
-<dt><span class="strong"><a href="org/ar4k/Vaso.html#avviaConsul(com.jcraft.jsch.JSch)" title="Method in Vaso">avviaConsul(JSch)</a></span> - Method in <a href="org/ar4k/Vaso.html">Vaso</a>
-</dt><dd> <div class="block">Avvia il demone consul sul vaso e configura una sessione ssh permanente per accedere tramite le API JAVA al demone Consul creato</div></dd>
-<dt><span class="strong"><a href="org/ar4k/Vaso.html#avviaConsulClient(java.lang.String)" title="Method in Vaso">avviaConsulClient(String)</a></span> - Method in <a href="org/ar4k/Vaso.html">Vaso</a>
-</dt><dd> <div class="block">Avvia consul in modalità client</div></dd>
+<dt><span class="strong"><a href="org/ar4k/Vaso.html#avviaConsulClient(org.ar4k.IstanzaConsul, java.lang.Boolean)" title="Method in Vaso">avviaConsulClient(IstanzaConsul, Boolean)</a></span> - Method in <a href="org/ar4k/Vaso.html">Vaso</a>
+</dt><dd> <div class="block">avvia agente consul in modalità client</div></dd>
 <dt><span class="strong"><a href="org/ar4k/Vaso.html#avviaConsulServer(org.ar4k.IstanzaConsul, java.lang.Boolean)" title="Method in Vaso">avviaConsulServer(IstanzaConsul, Boolean)</a></span> - Method in <a href="org/ar4k/Vaso.html">Vaso</a>
 </dt><dd> <div class="block">avvia agente consul in modalità client</div></dd>
 <dt><span class="strong"><a href="org/ar4k/Contesto.html#avviaContesto()" title="Method in Contesto">avviaContesto()</a></span> - Method in <a href="org/ar4k/Contesto.html">Contesto</a>
@@ -213,8 +209,6 @@ if (location.href.indexOf('is-external=true') == -1) {
 </dt><dd> <div class="block">avvia interfaccia ar4k</div></dd>
 <dt><span class="strong"><a href="org/ar4k/Vaso.html#avviaInterfacciaSSHWeb(java.lang.Boolean)" title="Method in Vaso">avviaInterfacciaSSHWeb(Boolean)</a></span> - Method in <a href="org/ar4k/Vaso.html">Vaso</a>
 </dt><dd> <div class="block">avvia interfaccia web ssh in node</div></dd>
-<dt><span class="strong"><a href="org/ar4k/Vaso.html#avviaRicettario(org.ar4k.Ricettario)" title="Method in Vaso">avviaRicettario(Ricettario)</a></span> - Method in <a href="org/ar4k/Vaso.html">Vaso</a>
-</dt><dd> <div class="block">scarica un ricettario sul nodo se attivo</div></dd>
 <dt><span class="strong"><a href="org/ar4k/IstanzaConsul.html#avvioInBootStrap" title="Property in IstanzaConsul">avvioInBootStrap</a></span> - Property in <a href="org/ar4k/IstanzaConsul.html">IstanzaConsul</a>
 </dt><dd> <div class="block">avviare Consul in modalità bootstrap?</div></dd>
 </dl>
@@ -283,8 +277,6 @@ if (location.href.indexOf('is-external=true') == -1) {
 </dt><dd> <div class="block">Salva un valore in consul</div></dd>
 <dt><span class="strong"><a href="org/ar4k/Meme.html#caricaInBootstrap" title="Property in Meme">caricaInBootstrap</a></span> - Property in <a href="org/ar4k/Meme.html">Meme</a>
 </dt><dd> <div class="block">se vero, carica il meme in fase di bootstrap</div></dd>
-<dt><span class="strong"><a href="org/ar4k/Vaso.html#caricaSemi(org.ar4k.Ricettario)" title="Method in Vaso">caricaSemi(Ricettario)</a></span> - Method in <a href="org/ar4k/Vaso.html">Vaso</a>
-</dt><dd> <div class="block">legge i semi e popola i dati dal file JSON</div></dd>
 <dt><span class="strong"><a href="org/ar4k/IstanzaConsul.html#chiave" title="Property in IstanzaConsul">chiave</a></span> - Property in <a href="org/ar4k/IstanzaConsul.html">IstanzaConsul</a>
 </dt><dd> <div class="block">encript key per consul</div></dd>
 <dt><span class="strong"><a href="org/ar4k/CloudProvider.html#chiaveAccesso" title="Property in CloudProvider">chiaveAccesso</a></span> - Property in <a href="org/ar4k/CloudProvider.html">CloudProvider</a>
@@ -382,6 +374,8 @@ if (location.href.indexOf('is-external=true') == -1) {
 </dt><dd> <div class="block">@return Chiamata JSON per creare un meme da un seme.</div></dd>
 <dt><span class="strong"><a href="org/ar4k/BootStrapService.html#creaNuovoConsulVergine(org.ar4k.IstanzaConsul, org.ar4k.Contesto)" title="Method in BootStrapService">creaNuovoConsulVergine(IstanzaConsul, Contesto)</a></span> - Method in <a href="org/ar4k/BootStrapService.html">BootStrapService</a>
 </dt><dd> <div class="block">crea un consul sullo Stato corrente</div></dd>
+<dt><span class="strong"><a href="org/ar4k/ConnessioneSSH.html#creaStruttura()" title="Method in ConnessioneSSH">creaStruttura()</a></span> - Method in <a href="org/ar4k/ConnessioneSSH.html">ConnessioneSSH</a>
+</dt><dd> <div class="block">crea la struttura di directory per ar4k</div></dd>
 <dt><span class="strong"><a href="org/ar4k/Vaso.html#creaStruttura()" title="Method in Vaso">creaStruttura()</a></span> - Method in <a href="org/ar4k/Vaso.html">Vaso</a>
 </dt><dd> <div class="block">creazione directory per ar4k</div></dd>
 <dt><span class="strong"><a href="org/ar4k/UtenteRuolo.html#create(org.ar4k.Utente, org.ar4k.Ruolo, boolean)" title="Method in UtenteRuolo">create(Utente, Ruolo, boolean)</a></span> - Method in <a href="org/ar4k/UtenteRuolo.html">UtenteRuolo</a>
@@ -484,24 +478,16 @@ if (location.href.indexOf('is-external=true') == -1) {
 </dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="org/ar4k/Utente.html#encodePassword()" title="Method in Utente">encodePassword()</a></span> - Method in <a href="org/ar4k/Utente.html">Utente</a>
 </dt><dd> <div class="block"></div></dd>
-<dt><span class="strong"><a href="org/ar4k/EnvConsulSSH.html" title="Class in org.ar4k">EnvConsulSSH</a></span> - Class in <a href="./org/ar4k/package-summary.html">org.ar4k</a>
+<dt><span class="strong"><a href="org/ar4k/EnvConsul.html" title="Class in org.ar4k">EnvConsul</a></span> - Class in <a href="./org/ar4k/package-summary.html">org.ar4k</a>
 </dt><dd><div class="block">servizio permanente in userspace supportato con supporto env consul</div></dd>
-<dt><span class="strong"><a href="org/ar4k/EnvConsulSSH.html#EnvConsulSSH()" title="Constructor in EnvConsulSSH">EnvConsulSSH()</a></span> - Constructor in <a href="org/ar4k/EnvConsulSSH.html">EnvConsulSSH</a>
+<dt><span class="strong"><a href="org/ar4k/EnvConsul.html#EnvConsul()" title="Constructor in EnvConsul">EnvConsul()</a></span> - Constructor in <a href="org/ar4k/EnvConsul.html">EnvConsul</a>
 </dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="org/ar4k/UtenteRuolo.html#equals(def)" title="Method in UtenteRuolo">equals(def)</a></span> - Method in <a href="org/ar4k/UtenteRuolo.html">UtenteRuolo</a>
 </dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="org/ar4k/BootStrapService.html#errori" title="Property in BootStrapService">errori</a></span> - Property in <a href="org/ar4k/BootStrapService.html">BootStrapService</a>
 </dt><dd> <div class="block">stringhe di errore per interfaccia</div></dd>
-<dt><span class="strong"><a href="org/ar4k/EsecuzioneConsul.html" title="Class in org.ar4k">EsecuzioneConsul</a></span> - Class in <a href="./org/ar4k/package-summary.html">org.ar4k</a>
-</dt><dd><div class="block"></div></dd>
-<dt><span class="strong"><a href="org/ar4k/EsecuzioneConsul.html#EsecuzioneConsul()" title="Constructor in EsecuzioneConsul">EsecuzioneConsul()</a></span> - Constructor in <a href="org/ar4k/EsecuzioneConsul.html">EsecuzioneConsul</a>
-</dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="org/ar4k/ConnessioneSSH.html#esegui(java.lang.String)" title="Method in ConnessioneSSH">esegui(String)</a></span> - Method in <a href="org/ar4k/ConnessioneSSH.html">ConnessioneSSH</a>
 </dt><dd> <div class="block">esegui un comando ssh</div></dd>
-<dt><span class="strong"><a href="org/ar4k/Stato.html#esegui(java.lang.String, org.ar4k.Nodo, java.lang.String)" title="Method in Stato">esegui(String, Nodo, String)</a></span> - Method in <a href="org/ar4k/Stato.html">Stato</a>
-</dt><dd> <div class="block">esegui tramite consul</div></dd>
-<dt><span class="strong"><a href="org/ar4k/Vaso.html#esegui(java.lang.String)" title="Method in Vaso">esegui(String)</a></span> - Method in <a href="org/ar4k/Vaso.html">Vaso</a>
-</dt><dd> <div class="block">esegui un comando ssh sul vaso</div></dd>
 <dt><span class="strong"><a href="org/ar4k/CloudProvider.html#esporta()" title="Method in CloudProvider">esporta()</a></span> - Method in <a href="org/ar4k/CloudProvider.html">CloudProvider</a>
 </dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="org/ar4k/ConnessioneSSH.html#esporta()" title="Method in ConnessioneSSH">esporta()</a></span> - Method in <a href="org/ar4k/ConnessioneSSH.html">ConnessioneSSH</a>
@@ -630,8 +616,6 @@ if (location.href.indexOf('is-external=true') == -1) {
 </dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="org/ar4k/secure/SpringSecurityOAuthController.html#grailsApplication" title="Property in SpringSecurityOAuthController">grailsApplication</a></span> - Property in <a href="org/ar4k/secure/SpringSecurityOAuthController.html">SpringSecurityOAuthController</a>
 </dt><dd> <div class="block"></div></dd>
-<dt><span class="strong"><a href="org/ar4k/Vaso.html#gwRete" title="Property in Vaso">gwRete</a></span> - Property in <a href="org/ar4k/Vaso.html">Vaso</a>
-</dt><dd> <div class="block">funziona da gw ssh per altri vasi?</div></dd>
 </dl>
 
     
@@ -685,7 +669,7 @@ if (location.href.indexOf('is-external=true') == -1) {
 <dt><span class="strong"><a href="org/ar4k/IstanzaConsul.html#idIstanzaConsul" title="Property in IstanzaConsul">idIstanzaConsul</a></span> - Property in <a href="org/ar4k/IstanzaConsul.html">IstanzaConsul</a>
 </dt><dd> <div class="block">id univoco</div></dd>
 <dt><span class="strong"><a href="org/ar4k/LavorazioniSSH.html#idLavorazione" title="Property in LavorazioniSSH">idLavorazione</a></span> - Property in <a href="org/ar4k/LavorazioniSSH.html">LavorazioniSSH</a>
-</dt><dd> <div class="block">id univoco connessione SSH</div></dd>
+</dt><dd> <div class="block">id univoco lavorazione</div></dd>
 <dt><span class="strong"><a href="org/ar4k/Meme.html#idMeme" title="Property in Meme">idMeme</a></span> - Property in <a href="org/ar4k/Meme.html">Meme</a>
 </dt><dd> <div class="block">id univoco meme</div></dd>
 <dt><span class="strong"><a href="org/ar4k/Nodo.html#idNodo" title="Property in Nodo">idNodo</a></span> - Property in <a href="org/ar4k/Nodo.html">Nodo</a>
@@ -811,8 +795,6 @@ if (location.href.indexOf('is-external=true') == -1) {
 
 <dt><span class="strong"><a href="org/ar4k/Utente.html#jabber" title="Property in Utente">jabber</a></span> - Property in <a href="org/ar4k/Utente.html">Utente</a>
 </dt><dd> <div class="block"></div></dd>
-<dt><span class="strong"><a href="org/ar4k/Vaso.html#javaVersion" title="Property in Vaso">javaVersion</a></span> - Property in <a href="org/ar4k/Vaso.html">Vaso</a>
-</dt><dd> <div class="block">versione java -se installato- rilevata con #java -version</div></dd>
 </dl>
 
     
@@ -822,8 +804,8 @@ if (location.href.indexOf('is-external=true') == -1) {
 
 <dt><span class="strong"><a href="org/ar4k/ConnessioneSSH.html#key" title="Property in ConnessioneSSH">key</a></span> - Property in <a href="org/ar4k/ConnessioneSSH.html">ConnessioneSSH</a>
 </dt><dd> <div class="block">chiave privata ssh</div></dd>
-<dt><span class="strong"><a href="org/ar4k/Vaso.html#key" title="Property in Vaso">key</a></span> - Property in <a href="org/ar4k/Vaso.html">Vaso</a>
-</dt><dd> <div class="block">chiave privata ssh</div></dd>
+<dt><span class="strong"><a href="org/ar4k/ConnessioneSSH.html#killConsul()" title="Method in ConnessioneSSH">killConsul()</a></span> - Method in <a href="org/ar4k/ConnessioneSSH.html">ConnessioneSSH</a>
+</dt><dd> <div class="block">crea la struttura di directory per ar4k</div></dd>
 </dl>
 
     
@@ -848,10 +830,9 @@ if (location.href.indexOf('is-external=true') == -1) {
   di vita tramite Consule K/V</div></dd>
 <dt><span class="strong"><a href="org/ar4k/LavorazioniSSH.html#LavorazioniSSH()" title="Constructor in LavorazioniSSH">LavorazioniSSH()</a></span> - Constructor in <a href="org/ar4k/LavorazioniSSH.html">LavorazioniSSH</a>
 </dt><dd> <div class="block"></div></dd>
-<dt><span class="strong"><a href="org/ar4k/Vaso.html#leggiBinarioProcesso(java.lang.String, java.lang.String)" title="Method in Vaso">leggiBinarioProcesso(String, String)</a></span> - Method in <a href="org/ar4k/Vaso.html">Vaso</a>
-</dt><dd> <div class="block">carica un file .bar dal vaso all'interfaccia 
- @deprecated</div></dd>
-<dt><span class="strong"><a href="org/ar4k/Vaso.html#leggiConCat(java.lang.String)" title="Method in Vaso">leggiConCat(String)</a></span> - Method in <a href="org/ar4k/Vaso.html">Vaso</a>
+<dt><span class="strong"><a href="org/ar4k/ConnessioneSSH.html#leggiBinario(java.lang.String, java.lang.String, java.io.OutputStream)" title="Method in ConnessioneSSH">leggiBinario(String, String, OutputStream)</a></span> - Method in <a href="org/ar4k/ConnessioneSSH.html">ConnessioneSSH</a>
+</dt><dd> <div class="block">carica un file binario da ssh</div></dd>
+<dt><span class="strong"><a href="org/ar4k/ConnessioneSSH.html#leggiConCat(java.lang.String)" title="Method in ConnessioneSSH">leggiConCat(String)</a></span> - Method in <a href="org/ar4k/ConnessioneSSH.html">ConnessioneSSH</a>
 </dt><dd> <div class="block">legge un target sul vaso con il comando cat e ritorna l'output</div></dd>
 <dt><span class="strong"><a href="org/ar4k/Stato.html#leggiValore(java.lang.String, java.lang.String)" title="Method in Stato">leggiValore(String, String)</a></span> - Method in <a href="org/ar4k/Stato.html">Stato</a>
 </dt><dd> <div class="block">leggi un valore dal datastore Consul</div></dd>
@@ -859,16 +840,14 @@ if (location.href.indexOf('is-external=true') == -1) {
 </dt><dd> <div class="block">Associates an OAuthID with an existing account. </div></dd>
 <dt><span class="strong"><a href="org/ar4k/AdminController.html#listaBlobStoreJCloud()" title="Method in AdminController">listaBlobStoreJCloud()</a></span> - Method in <a href="org/ar4k/AdminController.html">AdminController</a>
 </dt><dd> <div class="block"></div></dd>
-<dt><span class="strong"><a href="org/ar4k/Vaso.html#listaContesti()" title="Method in Vaso">listaContesti()</a></span> - Method in <a href="org/ar4k/Vaso.html">Vaso</a>
-</dt><dd> <div class="block">recupera i contesti salvati sul vaso
-  @deprecated</div></dd>
+<dt><span class="strong"><a href="org/ar4k/Stato.html#listaContesti()" title="Method in Stato">listaContesti()</a></span> - Method in <a href="org/ar4k/Stato.html">Stato</a>
+</dt><dd> <div class="block">Ritorna l'elenco dei contesti presenti in consul per il bootstrap</div></dd>
 <dt><span class="strong"><a href="org/ar4k/AdminController.html#listaDataCenters()" title="Method in AdminController">listaDataCenters()</a></span> - Method in <a href="org/ar4k/AdminController.html">AdminController</a>
 </dt><dd> <div class="block">@return Datacenters e oggetti collegati in JSON</div></dd>
 <dt><span class="strong"><a href="org/ar4k/Stato.html#listaGWSSH" title="Property in Stato">listaGWSSH</a></span> - Property in <a href="org/ar4k/Stato.html">Stato</a>
 </dt><dd> <div class="block">lista connessioni SSH per accedere a Consul disponibili</div></dd>
-<dt><span class="strong"><a href="org/ar4k/Stato.html#listaIdContesti()" title="Method in Stato">listaIdContesti()</a></span> - Method in <a href="org/ar4k/Stato.html">Stato</a>
-</dt><dd> <div class="block">Ritorna l'elenco degli id contesti per il bootstrap 
- -- da verificare...</div></dd>
+<dt><span class="strong"><a href="org/ar4k/Stato.html#listaInterfacce()" title="Method in Stato">listaInterfacce()</a></span> - Method in <a href="org/ar4k/Stato.html">Stato</a>
+</dt><dd> <div class="block">Ritorna l'elenco delle interfacce presenti in consul per il bootstrap</div></dd>
 <dt><span class="strong"><a href="org/ar4k/IstanzaConsul.html#listaJoin" title="Property in IstanzaConsul">listaJoin</a></span> - Property in <a href="org/ar4k/IstanzaConsul.html">IstanzaConsul</a>
 </dt><dd> <div class="block">nodi Consul su cui tentare la connessione durante il bootstrap
  verrà usato il comando "-retry-join"</div></dd>
@@ -903,8 +882,6 @@ if (location.href.indexOf('is-external=true') == -1) {
 </dt><dd> <div class="block">indirizzo ip o dns host connessione ssh</div></dd>
 <dt><span class="strong"><a href="org/ar4k/Proxy.html#macchina" title="Property in Proxy">macchina</a></span> - Property in <a href="org/ar4k/Proxy.html">Proxy</a>
 </dt><dd> <div class="block">indirizzo ip o dns host connessione ssh</div></dd>
-<dt><span class="strong"><a href="org/ar4k/Vaso.html#macchina" title="Property in Vaso">macchina</a></span> - Property in <a href="org/ar4k/Vaso.html">Vaso</a>
-</dt><dd> <div class="block">host vaso</div></dd>
 <dt><span class="strong"><a href="org/ar4k/Stato.html#macchinaConsul" title="Property in Stato">macchinaConsul</a></span> - Property in <a href="org/ar4k/Stato.html">Stato</a>
 </dt><dd> <div class="block">Host connessione (ip o dns)</div></dd>
 <dt><span class="strong"><a href="org/ar4k/AdminController.html#main()" title="Method in AdminController">main()</a></span> - Method in <a href="org/ar4k/AdminController.html">AdminController</a>
@@ -1045,6 +1022,8 @@ if (location.href.indexOf('is-external=true') == -1) {
 </dt><dd> <div class="block">Riferimento sul filesytem per il ricettario</div></dd>
 <dt><span class="strong"><a href="org/ar4k/Seme.html#percorso" title="Property in Seme">percorso</a></span> - Property in <a href="org/ar4k/Seme.html">Seme</a>
 </dt><dd> <div class="block"></div></dd>
+<dt><span class="strong"><a href="org/ar4k/BotConfigurazioniController.html#ping(java.lang.String)" title="Method in BotConfigurazioniController">ping(String)</a></span> - Method in <a href="org/ar4k/BotConfigurazioniController.html">BotConfigurazioniController</a>
+</dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="org/ar4k/PingJob.html" title="Class in org.ar4k">PingJob</a></span> - Class in <a href="./org/ar4k/package-summary.html">org.ar4k</a>
 </dt><dd><div class="block">Job Quartz principale</div></dd>
 <dt><span class="strong"><a href="org/ar4k/PingJob.html#PingJob()" title="Constructor in PingJob">PingJob()</a></span> - Constructor in <a href="org/ar4k/PingJob.html">PingJob</a>
@@ -1053,8 +1032,6 @@ if (location.href.indexOf('is-external=true') == -1) {
 </dt><dd> <div class="block">porta connessione ssh</div></dd>
 <dt><span class="strong"><a href="org/ar4k/Proxy.html#porta" title="Property in Proxy">porta</a></span> - Property in <a href="org/ar4k/Proxy.html">Proxy</a>
 </dt><dd> <div class="block">porta connessione ssh</div></dd>
-<dt><span class="strong"><a href="org/ar4k/Vaso.html#porta" title="Property in Vaso">porta</a></span> - Property in <a href="org/ar4k/Vaso.html">Vaso</a>
-</dt><dd> <div class="block">porta vaso</div></dd>
 <dt><span class="strong"><a href="org/ar4k/Stato.html#portaConsul" title="Property in Stato">portaConsul</a></span> - Property in <a href="org/ar4k/Stato.html">Stato</a>
 </dt><dd> <div class="block">porta connessione Consul</div></dd>
 <dt><span class="strong"><a href="org/ar4k/IstanzaConsul.html#portaDNS" title="Property in IstanzaConsul">portaDNS</a></span> - Property in <a href="org/ar4k/IstanzaConsul.html">IstanzaConsul</a>
@@ -1085,10 +1062,6 @@ if (location.href.indexOf('is-external=true') == -1) {
 </dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="org/ar4k/ConnessioneSSH.html#provaConnessione()" title="Method in ConnessioneSSH">provaConnessione()</a></span> - Method in <a href="org/ar4k/ConnessioneSSH.html">ConnessioneSSH</a>
 </dt><dd> <div class="block">prova la connesione ssh</div></dd>
-<dt><span class="strong"><a href="org/ar4k/Vaso.html#provaConnessione()" title="Method in Vaso">provaConnessione()</a></span> - Method in <a href="org/ar4k/Vaso.html">Vaso</a>
-</dt><dd> <div class="block">prova la connesione ssh al vaso</div></dd>
-<dt><span class="strong"><a href="org/ar4k/Vaso.html#provaVaso()" title="Method in Vaso">provaVaso()</a></span> - Method in <a href="org/ar4k/Vaso.html">Vaso</a>
-</dt><dd> <div class="block">prova la funzionalità del vaso come nodo ar4k ed eventualmente configura il filesystem</div></dd>
 <dt><span class="strong"><a href="org/ar4k/OAuthID.html#provider" title="Property in OAuthID">provider</a></span> - Property in <a href="org/ar4k/OAuthID.html">OAuthID</a>
 </dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="org/ar4k/Proxy.html" title="Class in org.ar4k">Proxy</a></span> - Class in <a href="./org/ar4k/package-summary.html">org.ar4k</a>
@@ -1097,8 +1070,6 @@ if (location.href.indexOf('is-external=true') == -1) {
 </dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="org/ar4k/Vaso.html#proxy" title="Property in Vaso">proxy</a></span> - Property in <a href="org/ar4k/Vaso.html">Vaso</a>
 </dt><dd> <div class="block">Stringa proxy (esportata come http_proxy)</div></dd>
-<dt><span class="strong"><a href="org/ar4k/Vaso.html#proxyAccesso" title="Property in Vaso">proxyAccesso</a></span> - Property in <a href="org/ar4k/Vaso.html">Vaso</a>
-</dt><dd> <div class="block">proxy per connettere il vaso dall'interfaccia</div></dd>
 <dt><span class="strong"><a href="org/ar4k/ConnessioneSSH.html#proxyMaster" title="Property in ConnessioneSSH">proxyMaster</a></span> - Property in <a href="org/ar4k/ConnessioneSSH.html">ConnessioneSSH</a>
 </dt><dd> <div class="block">proxy per la connesione se 'tor' utilizza localhost 9050</div></dd>
 <dt><span class="strong"><a href="org/ar4k/Puntatore.html" title="Class in org.ar4k">Puntatore</a></span> - Class in <a href="./org/ar4k/package-summary.html">org.ar4k</a>
@@ -1167,6 +1138,8 @@ if (location.href.indexOf('is-external=true') == -1) {
 </dt><dd> <div class="block">ricettari necessari sul vaso</div></dd>
 <dt><span class="strong"><a href="org/ar4k/AdminController.html#ricettariCtrl()" title="Method in AdminController">ricettariCtrl()</a></span> - Method in <a href="org/ar4k/AdminController.html">AdminController</a>
 </dt><dd> <div class="block"></div></dd>
+<dt><span class="strong"><a href="org/ar4k/LavorazioniSSH.html#ricettariNecessari" title="Property in LavorazioniSSH">ricettariNecessari</a></span> - Property in <a href="org/ar4k/LavorazioniSSH.html">LavorazioniSSH</a>
+</dt><dd> <div class="block">repository necessari sul nodo, verrano aggiornati prima dell'esecuzione</div></dd>
 <dt><span class="strong"><a href="org/ar4k/Ricettario.html" title="Class in org.ar4k">Ricettario</a></span> - Class in <a href="./org/ar4k/package-summary.html">org.ar4k</a>
 </dt><dd><div class="block">Ricettario</div></dd>
 <dt><span class="strong"><a href="org/ar4k/Ricettario.html#Ricettario()" title="Constructor in Ricettario">Ricettario()</a></span> - Constructor in <a href="org/ar4k/Ricettario.html">Ricettario</a>
@@ -1235,14 +1208,14 @@ if (location.href.indexOf('is-external=true') == -1) {
 <dt><span class="strong"><a href="org/ar4k/AdminController.html#salvaConfigurazioneInterfaccia()" title="Method in AdminController">salvaConfigurazioneInterfaccia()</a></span> - Method in <a href="org/ar4k/AdminController.html">AdminController</a>
 </dt><dd> <div class="block">crea un file locale per il futuro avvio della console ar4K 
   il file verrà letto all'avvio</div></dd>
-<dt><span class="strong"><a href="org/ar4k/Vaso.html#salvaContesto(org.ar4k.Contesto)" title="Method in Vaso">salvaContesto(Contesto)</a></span> - Method in <a href="org/ar4k/Vaso.html">Vaso</a>
-</dt><dd> <div class="block">salva un contesto sul vaso</div></dd>
 <dt><span class="strong"><a href="org/ar4k/AdminController.html#salvaContestoDaKVsuMaster()" title="Method in AdminController">salvaContestoDaKVsuMaster()</a></span> - Method in <a href="org/ar4k/AdminController.html">AdminController</a>
 </dt><dd> <div class="block">copia il contesto da KV Consul ad un vaso</div></dd>
 <dt><span class="strong"><a href="org/ar4k/AdminController.html#salvaContestoinKV()" title="Method in AdminController">salvaContestoinKV()</a></span> - Method in <a href="org/ar4k/AdminController.html">AdminController</a>
 </dt><dd> <div class="block">Salva il contesto in consul KV</div></dd>
 <dt><span class="strong"><a href="org/ar4k/AdminController.html#salvaContestoSuVaso()" title="Method in AdminController">salvaContestoSuVaso()</a></span> - Method in <a href="org/ar4k/AdminController.html">AdminController</a>
 </dt><dd> <div class="block">Salva il contesto su un vaso</div></dd>
+<dt><span class="strong"><a href="org/ar4k/ConnessioneSSH.html#salvaFileTestuale(java.lang.String, java.lang.String)" title="Method in ConnessioneSSH">salvaFileTestuale(String, String)</a></span> - Method in <a href="org/ar4k/ConnessioneSSH.html">ConnessioneSSH</a>
+</dt><dd> <div class="block">salva un file testuale su fs</div></dd>
 <dt><span class="strong"><a href="org/ar4k/Stato.html#salvaValore(java.lang.String, java.lang.String, java.lang.String)" title="Method in Stato">salvaValore(String, String, String)</a></span> - Method in <a href="org/ar4k/Stato.html">Stato</a>
 </dt><dd> <div class="block">salva un valore sul datastore Consul</div></dd>
 <dt><span class="strong"><a href="org/ar4k/AdminController.html#salvaValoreKV()" title="Method in AdminController">salvaValoreKV()</a></span> - Method in <a href="org/ar4k/AdminController.html">AdminController</a>
@@ -1317,6 +1290,8 @@ if (location.href.indexOf('is-external=true') == -1) {
 </dt><dd> <div class="block">Stato in esecuzione -Consul-</div></dd>
 <dt><span class="strong"><a href="org/ar4k/IstanzaConsul.html#stato" title="Property in IstanzaConsul">stato</a></span> - Property in <a href="org/ar4k/IstanzaConsul.html">IstanzaConsul</a>
 </dt><dd> <div class="block">ciclo di vita nel vaso</div></dd>
+<dt><span class="strong"><a href="org/ar4k/LavorazioniSSH.html#stato" title="Property in LavorazioniSSH">stato</a></span> - Property in <a href="org/ar4k/LavorazioniSSH.html">LavorazioniSSH</a>
+</dt><dd> <div class="block">stato lavorazione *</div></dd>
 <dt><span class="strong"><a href="org/ar4k/Meme.html#stato" title="Property in Meme">stato</a></span> - Property in <a href="org/ar4k/Meme.html">Meme</a>
 </dt><dd> <div class="block">stato del meme</div></dd>
 <dt><span class="strong"><a href="org/ar4k/Stato.html#stato" title="Property in Stato">stato</a></span> - Property in <a href="org/ar4k/Stato.html">Stato</a>
@@ -1350,7 +1325,7 @@ if (location.href.indexOf('is-external=true') == -1) {
 </dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="org/ar4k/Puntatore.html#tipoFiltro" title="Property in Puntatore">tipoFiltro</a></span> - Property in <a href="org/ar4k/Puntatore.html">Puntatore</a>
 </dt><dd> <div class="block">tipo filtro: JSoup,Camel,Redirect,Risorsa su deploy Activiti,Risorsa Consul (da cat su nodo tramite consul)</div></dd>
-<dt><span class="strong"><a href="org/ar4k/EnvConsulSSH.html#tipoOggetto" title="Property in EnvConsulSSH">tipoOggetto</a></span> - Property in <a href="org/ar4k/EnvConsulSSH.html">EnvConsulSSH</a>
+<dt><span class="strong"><a href="org/ar4k/EnvConsul.html#tipoOggetto" title="Property in EnvConsul">tipoOggetto</a></span> - Property in <a href="org/ar4k/EnvConsul.html">EnvConsul</a>
 </dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="org/ar4k/LavorazioniSSH.html#tipoOggetto" title="Property in LavorazioniSSH">tipoOggetto</a></span> - Property in <a href="org/ar4k/LavorazioniSSH.html">LavorazioniSSH</a>
 </dt><dd> <div class="block"></div></dd>
@@ -1437,8 +1412,6 @@ if (location.href.indexOf('is-external=true') == -1) {
 </dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="org/ar4k/UtenteRuolo.html#utente" title="Property in UtenteRuolo">utente</a></span> - Property in <a href="org/ar4k/UtenteRuolo.html">UtenteRuolo</a>
 </dt><dd> <div class="block"></div></dd>
-<dt><span class="strong"><a href="org/ar4k/Vaso.html#utente" title="Property in Vaso">utente</a></span> - Property in <a href="org/ar4k/Vaso.html">Vaso</a>
-</dt><dd> <div class="block">utente vaso</div></dd>
 <dt><span class="strong"><a href="org/ar4k/UtenteRuolo.html" title="Class in org.ar4k">UtenteRuolo</a></span> - Class in <a href="./org/ar4k/package-summary.html">org.ar4k</a>
 </dt><dd><div class="block">UtenteRuolo Ar4k</div></dd>
 <dt><span class="strong"><a href="org/ar4k/UtenteRuolo.html#UtenteRuolo()" title="Constructor in UtenteRuolo">UtenteRuolo()</a></span> - Constructor in <a href="org/ar4k/UtenteRuolo.html">UtenteRuolo</a>
@@ -1477,9 +1450,7 @@ if (location.href.indexOf('is-external=true') == -1) {
 <dt><span class="strong"><a href="org/ar4k/Nodo.html#vasoMaster" title="Property in Nodo">vasoMaster</a></span> - Property in <a href="org/ar4k/Nodo.html">Nodo</a>
 </dt><dd> <div class="block">vaso per accesso amministrativo (in cui funziona #sudo)</div></dd>
 <dt><span class="strong"><a href="org/ar4k/ConnessioneSSH.html#verificaAvvia(java.lang.Integer, java.lang.String, java.lang.Integer)" title="Method in ConnessioneSSH">verificaAvvia(Integer, String, Integer)</a></span> - Method in <a href="org/ar4k/ConnessioneSSH.html">ConnessioneSSH</a>
-</dt><dd> <div class="block">attiva il tunnel senza proxy</div></dd>
-<dt><span class="strong"><a href="org/ar4k/Vaso.html#verificaConnettivita()" title="Method in Vaso">verificaConnettivita()</a></span> - Method in <a href="org/ar4k/Vaso.html">Vaso</a>
-</dt><dd> <div class="block">verifica la raggiungibilità di internet dal vaso</div></dd>
+</dt><dd> <div class="block">attiva i tunnel con porta di callback predefinita</div></dd>
 <dt><span class="strong"><a href="org/ar4k/BootStrapService.html#verificaConnettivitaInterfaccia()" title="Method in BootStrapService">verificaConnettivitaInterfaccia()</a></span> - Method in <a href="org/ar4k/BootStrapService.html">BootStrapService</a>
 </dt><dd> <div class="block">verifica la raggiungibilità di Internet -la variabile indirizzoTest è impostata staticamente. </div></dd>
 <dt><span class="strong"><a href="org/ar4k/BootStrapService.html#verificaOnion()" title="Method in BootStrapService">verificaOnion()</a></span> - Method in <a href="org/ar4k/BootStrapService.html">BootStrapService</a>

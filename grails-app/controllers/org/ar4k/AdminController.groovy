@@ -176,7 +176,7 @@ class AdminController {
 	def listaVasi() {
 		def risultato = []
 		interfacciaContestoService.contesto.vasi?.each{ vaso ->
-			String macchina = vaso.macchina
+			String macchina = vaso.ssh.macchina
 			Boolean eMaster = false;
 			def stato = interfacciaContestoService.stato.consul.getHealthChecksForNode(macchina,new QueryParams(interfacciaContestoService.contesto.datacenterConsul)).getValue()
 			if (interfacciaContestoService.contesto.vasoMaster?.idVaso == vaso.idVaso ) {
@@ -292,7 +292,7 @@ class AdminController {
 	 * Salva il contesto in consul KV
 	 */
 	def salvaContestoinKV() {
-		interfacciaContestoService.contesto.salva(interfacciaContestoService.stato)
+		interfacciaContestoService.contesto.salva(interfacciaContestoService.stato,50)
 		render "ok"
 	}
 

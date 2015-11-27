@@ -64,7 +64,7 @@ class BootStrap {
 				connessione.key = grailsApplication.config.hostSSH.key?:null
 				if (grailsApplication.config.connessioneProxy) {
 					log.info("Configuro i parametri di configurazione trovati su file per un proxy")
-					Proxy proxy = Proxy()
+					Proxy proxy = new Proxy()
 					proxy.macchina = grailsApplication.config.proxy.macchina?:null
 					proxy.porta = grailsApplication.config.proxy.porta?:3128
 					proxy.utente = grailsApplication.config.proxy.utente?:''

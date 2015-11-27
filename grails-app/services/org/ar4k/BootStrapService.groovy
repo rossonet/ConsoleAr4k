@@ -81,7 +81,7 @@ class BootStrapService {
 		Boolean risultato = true
 		if (stato.connetti()) {
 			if (contesto) {
-				def listaContesti = stato.listaIdContesti()
+				def listaContesti = stato.listaContesti()
 				def contestoTarget = null
 				if (listaContesti.size()>0) {
 					contestoTarget = listaContesti.find{it.key == contesto}?.value
@@ -170,7 +170,7 @@ class BootStrapService {
 
 		nuovoVaso.funzionalita.add('BOOTSTRAP')
 		nuovoVaso.funzionalita.add('BOOTSTRAP '+nuovoContesto.etichetta)
-		
+
 		nuovoContesto.ricettari.add(ricettarioBase)
 		nuovoContesto.ricettari.add(ricettarioConsole)
 
@@ -181,26 +181,11 @@ class BootStrapService {
 		nuovoContesto.nodi.add(nuovoNodo)
 		nuovoContesto.regioni.add(nuovaRegione)
 		nuovoContesto.vasoMaster = nuovoVaso
-		// kill eventuali processi esistenti
-		String killAll = """
-		killall consul
-		killall consul_i386
-		killall consul_amd64
-		"""
 		// rileva l'architettura
 		String architettura = 'i386'
 		String architetturaDesc = connessioneLocale.esegui('uname -a')
 		if (architetturaDesc =~ /x86_64/) architettura = 'amd64'
 		log.info("architettura rilevata: "+architettura)
-		// crea la struttura delle directory
-		String creaDirectory = """
-		cd ~
-		mkdir -p .ar4k
-		mkdir -p .ar4k/contesti
-		mkdir -p .ar4k/ricettari
-		mkdir -p .ar4k/dati
-		mkdir -p .ar4k/dati/consul
-		"""
 
 		// configura il proxy per il nodo ssh se necessario e
 		// scarica o aggiorna il repository base
@@ -215,8 +200,8 @@ class BootStrapService {
 		stato.macchinaConsul = '127.0.0.1'
 		stato.portaConsul = consulClient.portaHTTP
 		try {
-			connessioneLocale.esegui(killAll)
-			connessioneLocale.esegui(creaDirectory)
+			connessioneLocale.killConsul()
+			connessioneLocale.creaStruttura()
 			connessioneLocale.esegui(comandoGit)
 			connessioneLocale.esegui(comandoAvvio)
 			// connetti consul

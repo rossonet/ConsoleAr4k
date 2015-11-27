@@ -137,15 +137,15 @@ log4j.main = {
 	fatal	'org.hibernate.tool.hbm2ddl.SchemaExport' // bug grails 11198 work around by Ambrosini
 	fatal   'org.apache.camel.component.jms.DefaultJmsMessageListenerContainer'
 	environments {
-				development  {
-					info 'grails.app'
-					info 'org.codehaus.groovy.grails.web.servlet'
-					info 'org.codehaus.groovy.grails.web.sitemesh'
-					info 'org.codehaus.groovy.grails.plugins'
-					info 'org.codehaus.groovy.grails.commons'
-					info 'org.ar4k'
-					debug 'com.subgraph.orchid'
-				}
+		development  {
+			info 'grails.app'
+			info 'org.codehaus.groovy.grails.web.servlet'
+			info 'org.codehaus.groovy.grails.web.sitemesh'
+			info 'org.codehaus.groovy.grails.plugins'
+			info 'org.codehaus.groovy.grails.commons'
+			info 'org.ar4k'
+			debug 'com.subgraph.orchid'
+		}
 	}
 }
 
@@ -245,20 +245,25 @@ grails.plugin.springsecurity.controllerAnnotations.staticRules = [
 	// by Andrea Ambrosini
 	'/register/**':                   ['permitAll'],
 	'/bootStrap/**':                  ['permitAll'], // Ricordarsi di bloccare la sicurezza sul Controller!
-//	'/console/**':                    ['permitAll'], // Solo per debug della sicurezza!!! 
-//	'/plugins/console-1.5.4/**':      ['permitAll'], // Solo per debug della sicurezza!!!
-	'/login/**':    		  ['permitAll'],
+	//	'/console/**':                    ['permitAll'], // Solo per debug della sicurezza!!!
+	//	'/plugins/console-1.5.4/**':      ['permitAll'], // Solo per debug della sicurezza!!!
+	'/login/**':    		 		  ['permitAll'],
 	'/logout/**':                     ['permitAll'],
 	'/oauth/**':                      ['permitAll'],
-	'/oauth/authorize.dispatch':      ["isFullyAuthenticated() and (request.getMethod().equals('GET') or request.getMethod().equals('POST'))"],
-	'/oauth/token.dispatch':          ["isFullyAuthenticated() and request.getMethod().equals('POST')"],
+	'/oauth/authorize.dispatch':      [
+		"isFullyAuthenticated() and (request.getMethod().equals('GET') or request.getMethod().equals('POST'))"
+	],
+	'/oauth/token.dispatch':          [
+		"isFullyAuthenticated() and request.getMethod().equals('POST')"
+	],
 	'/atterraggio/**':                ['permitAll'],
-	'/springSecurityOAuth/**':	  ['permitAll'],
-	'/codeqr':			  ['permitAll'],
+	'/springSecurityOAuth/**':	 	  ['permitAll'],
+	'/codeqr':			              ['permitAll'],
+	'/botConfigurazioni/**':		  ['permitAll'],
 	// Accesso a Admin -per utente demo-
 	'/**':                            ['ROLE_ADMIN'],
 	//'/admin/**':                    ['ROLE_USER'],
-	'/admin/**':                      ['ROLE_ADMIN','ROLE_USER'],
+	'/admin/**':                      ['ROLE_ADMIN', 'ROLE_USER'],
 	// Accesso a tutti autenticati
 	//'/**':                          ['IS_AUTHENTICATED_REMEMBERED'],
 	// Accesso a tutti

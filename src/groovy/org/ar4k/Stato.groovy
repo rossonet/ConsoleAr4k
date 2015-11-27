@@ -1,10 +1,13 @@
 
 package org.ar4k
 import java.util.List
+
 import com.ecwid.consul.v1.ConsulClient
 import com.jcraft.jsch.*
 import com.subgraph.orchid.TorClient
 import com.subgraph.orchid.TorInitializationListener
+
+import grails.converters.JSON
 import grails.util.Holders
 
 /**
@@ -187,13 +190,10 @@ class Stato {
 		return false
 	}
 
-	/** Ritorna l'elenco degli id contesti per il bootstrap 
-	 * -- da verificare...
-	 * */
-	def listaIdContesti() {
+	/** Ritorna l'elenco dei contesti presenti in consul per il bootstrap  */
+	def listaContesti() {
 		def risultati = []
-		consul.getKVValues('').getValue().each{
-			log.info("trovato contesto "+new String(it.value.decodeBase64()))
+		consul.getKVValues('org-ar4k-contesto/').getValue().each{
 			risultati.add([
 				key:it.key,
 				createIndex:it.createIndex,
@@ -204,9 +204,18 @@ class Stato {
 		return risultati
 	}
 
-	/** esegui tramite consul */
-	EsecuzioneConsul esegui(String datacenter, Nodo nodo, String comando) {
-		return null
+	/** Ritorna l'elenco delle interfacce presenti in consul per il bootstrap  */
+	def listaInterfacce() {
+		def risultati = []
+		consul.getKVValues('org-ar4k-interfaccia/').getValue().each{
+			risultati.add([
+				key:it.key,
+				createIndex:it.createIndex,
+				modifyIndex:it.modifyIndex,
+				value:new String(it.value.decodeBase64())
+			])
+		}
+		return risultati
 	}
 
 	/** salva in uno Stato specifico a catena per N profondità */
@@ -229,9 +238,7 @@ class Stato {
 	}
 }
 
-class EsecuzioneConsul {
 
-}
 
 
 
