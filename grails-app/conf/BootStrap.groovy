@@ -2,10 +2,11 @@ import org.codehaus.groovy.grails.commons.GrailsApplication;
 
 import grails.util.Environment
 
-import org.ar4k.Vaso;
+import org.ar4k.Vaso
 import org.ar4k.secure.*
 import org.ar4k.ConnessioneSSH
 import org.ar4k.Proxy
+import org.ar4k.Contesto
 
 class BootStrap {
 
@@ -61,21 +62,24 @@ class BootStrap {
 				connessione.porta = grailsApplication.config.hostSSH.porta?:22
 				connessione.utente = grailsApplication.config.hostSSH.utente?:'root'
 				connessione.key = grailsApplication.config.hostSSH.key?:null
+				if (grailsApplication.config.connessioneProxy) {
+					log.info("Configuro i parametri di configurazione trovati su file per un proxy")
+					Proxy proxy = Proxy()
+					proxy.macchina = grailsApplication.config.proxy.macchina?:null
+					proxy.porta = grailsApplication.config.proxy.porta?:3128
+					proxy.utente = grailsApplication.config.proxy.utente?:''
+					proxy.password = grailsApplication.config.proxy.password?:null
+					proxy.protocollo = grailsApplication.config.proxy.tipologia?:'http'
+					bootStrapService.stato.listaProxy.add(proxy)
+					connessione.proxyMaster = proxy?.toString()
+				}
 				bootStrapService.stato.listaGWSSH.add(connessione)
-			}
-			if (grailsApplication.config.connessioneProxy) {
-				log.info("Configuro i parametri di configurazione trovati su file per un proxy")
-				Proxy proxy = Proxy()
-				proxy.macchina = grailsApplication.config.proxy.macchina?:null
-				proxy.porta = grailsApplication.config.proxy.porta?:3128
-				proxy.utente = grailsApplication.config.proxy.utente?:''
-				proxy.password = grailsApplication.config.proxy.password?:null
-				proxy.tipologia = grailsApplication.config.proxy.tipologia?:'SOCKS5'
-				bootStrapService.stato.listaProxy.add(proxy)
+				bootStrapService.stato.tunnelSSH = connessione?.toString()
 			}
 		}
 		if (grailsApplication.config.utente && grailsApplication.config.password) {
 			log.info("Configuro un utente sul sistema")
+			bootStrapService.contestoCreato = new Contesto()
 			bootStrapService.aggiungiUtente(grailsApplication.config.utente?:'',grailsApplication.config.password?:'')
 		}
 		return bootStrapService.inizio()

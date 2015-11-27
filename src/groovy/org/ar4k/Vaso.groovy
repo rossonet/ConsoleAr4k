@@ -4,30 +4,27 @@
  * <p>Un vaso rappresenta un account su un nodo Linux</p>
  *
  * <p style="text-justify">
- * Il vaso è l'unita base in cui operano i memi, garantisce l'esecuzione degli stessi.</br>
+ * Il vaso è l'unita base in cui opera Ar4k. Tramite il vaso si gesticono le installazioni Consul e della console stessa.
+ * E' possibile effettuare scansioni di rete e locali e connettersi ai vasi via ssh.
+ * Uno o più vasi appartengono a un nodo.</br>
  * </p>
  *
  * @author Andrea Ambrosini (Rossonet s.c.a r.l)
  * @version 0.1-alpha
- * @see org.ar4k.Meme
- * @see org.ar4k.Ricettario
- * @see org.ar4k.Interfaccia
+ * @see org.ar4k.ConnessioneSSH
+ * @see org.ar4k.Nodo
  * @see org.ar4k.Contesto
  */
 
 package org.ar4k
 
 import org.jclouds.json.config.GsonModule.ByteArrayAdapter;
-
 import com.google.common.io.ByteStreams.ByteArrayDataInputStream
 import com.google.common.io.ByteStreams.ByteArrayDataOutputStream;
 import com.jcraft.jsch.*
-
 import grails.converters.JSON
 import groovy.json.JsonSlurper
-
 import java.util.zip.ZipInputStream
-
 import grails.util.Holders
 
 class Vaso {
@@ -37,6 +34,160 @@ class Vaso {
 	String etichetta = null
 	/** descrizione vaso */
 	String descrizione = null
+	/** nodo contenitore del vaso. Ovvero l'host che ospita l'account ssh associato a questo vaso */
+	Nodo nodo = null
+	/** parametri di connessione ssh */
+	ConnessioneSSH ssh = null
+	/** Stringa proxy (esportata come http_proxy) */
+	String proxy = null
+	/** l'utenza ha l'accesso root sulla macchina come root usando #sudo su - */
+	Boolean sudo = false
+	/** variabile PATH sulla macchina */
+	String path = '/usr/local/bin:/usr/bin:/bin'
+	/** job gestiti dalla machina via ssh */
+	List<LavorazioniSSH> lavorazioni = []
+	/** ricettari necessari sul vaso */
+	List<Ricettario> ricettari = []
+	/** funzionalità. In particolare: 
+	 * - accesso a internet; 
+	 * - software installato sul sistema; 
+	 * - particolari funzionalità hardware;
+	 * - dispositivi collegati via usb, seriale, midi ecc...
+	 * le funzionalità vengono rilevate dal sistema di scansione
+	 */
+	List<String> funzionalita = []
+	/** host pubblico per test di raggiungibilità */
+	String indirizzoTest='http://hc.rossonet.name'
+
+	/** salva in uno Stato specifico a catena per N profondità */
+	Boolean salva(Stato stato,Integer contatore) {
+		stato.salvaValore(idVaso,'org-ar4k-vaso',(esporta() as JSON).toString())
+		if (contatore > 0) {
+			contatore = contatore -1
+			lavorazioni*.salva(stato,contatore)
+			ricettari*.salva(stato,contatore)
+		}
+	}
+	/** salva in uno Stato specifico solo l'oggetto */
+	Boolean salva(Stato stato) {
+		salva(stato,0)
+	}
+	/** salva nello stato di default solo l'oggetto */
+	Boolean salva() {
+		salva(Holders.applicationContext.getBean("interfacciaContestoService").stato,0)
+	}
+	/** salva nello stato di default a catena per N profondità */
+	Boolean salva(Integer contatore) {
+		salva(Holders.applicationContext.getBean("interfacciaContestoService").stato,contatore)
+	}
+
+	/** esporta il contenuto dell'oggetto */
+	def esporta() {
+		return [
+			idVaso:idVaso,
+			etichetta:etichetta,
+			descrizione:descrizione,
+			sudo:sudo,
+			path:path,
+			funzionalita:funzionalita,
+			javaVersion:javaVersion,
+			proxy:proxy,
+			nodo:nodo?.idNodo,
+			lavorazioni:lavorazioni*.idLavorazione,
+			ricettari:ricettari*.idRicettario
+		]
+	}
+
+	/** avvia agente consul in modalità client */
+	LavorazioniSSH avviaConsulClient(IstanzaConsul consul,Boolean reset=false) {
+		return false
+	}
+
+	/** avvia agente consul in modalità client */
+	LavorazioniSSH avviaConsulServer(IstanzaConsul consul,Boolean reset=false) {
+		return false
+	}
+
+	/** avvia interfaccia ar4k */
+	LavorazioniSSH avviaInterfacciaAr4k(Boolean reset=false) {
+		return false
+	}
+
+	/** avvia interfaccia web ssh in node */
+	LavorazioniSSH avviaInterfacciaSSHWeb(Boolean reset=false) {
+		return false
+	}
+
+	/** Scansione funzionalità e stato
+	 * 
+	 * @return oggetto scansione 
+	 */
+	Scansione selfScan() {
+		return 'non implementata'
+	}
+
+	/** Scansione con NMAP 
+	 * 
+	 * @return oggetto scansione 
+	 */
+	Scansione scansioneNmap() {
+		return 'non implementata'
+	}
+
+	/** Scansione con OpenVas
+	 * 
+	 * @return oggetto scansione 
+	 */
+	Scansione scansioneOpenVas() {
+		return 'non implementata'
+	}
+
+	/** creazione directory per ar4k */
+	Boolean creaStruttura() {
+		return false
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	/** host vaso */
 	String macchina = null
 	/** porta vaso */
@@ -47,50 +198,13 @@ class Vaso {
 	String key = null
 	/** proxy per connettere il vaso dall'interfaccia */
 	String proxyAccesso = null
-	/** variabile PATH sulla macchina */
-	String path = '/usr/local/bin:/usr/bin:/bin'
-	/** da definire: rappresenta le funzionalità del vaso root/user space, memoria, capacità computazionale, spazio store. */
-	List<String> funzionalita = []
-	/** Stringa proxy (esportata come http_proxy) */
-	String proxy = null
-	/** l'utenza ha l'accesso root sulla macchina come root usando #sudo su - */
-	Boolean sudo = false
+
+
 	/** versione java -se installato- rilevata con #java -version*/
 	String javaVersion = null
 	/** funziona da gw ssh per altri vasi? */
 	Boolean gwRete = false
-	/** nodo contenitore del vaso. Ovvero l'host che ospita l'account ssh associato a questo vaso */
-	Nodo nodo = null
-	/** il vaso ospita una istanza Consul */
-	IstanzaConsul consul = null
-	/** host pubblico per test di raggiungibilità */
-	String indirizzoTest='http://hc.rossonet.name'
 
-	
-	/** salva il contesto sul nodo master */
-	Boolean salva(Stato stato) {
-		stato.salvaValore(idVaso,'org-ar4k-vaso',(esporta() as JSON).toString())
-	}
-	
-	/** esporta il vaso */
-	def esporta() {
-		return [
-			idVaso:idVaso,
-			etichetta:etichetta,
-			descrizione:descrizione,
-			macchina:macchina,
-			porta:porta,
-			utente:utente,
-			key:key,
-			sudo:sudo,
-			path:path,
-			funzionalita:funzionalita,
-			javaVersion:javaVersion,
-			proxy:proxy,
-			nodo:nodo.idNodo,
-			consul:consul.idIstanzaConsul
-		]
-	}
 
 	/** importa la configurazione di un vaso da json */
 	Vaso importa(Map json){
@@ -123,7 +237,6 @@ class Vaso {
 	}
 
 	/** salva un contesto sul vaso
-	 *  @deprecated
 	 * */
 	Boolean salvaContesto(Contesto contesto) {
 		JSON file = contesto.esporta() as JSON

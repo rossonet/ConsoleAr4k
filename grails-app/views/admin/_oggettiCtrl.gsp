@@ -14,11 +14,52 @@ angular.module('sbAdminApp')
     $http.get("${createLink(controller:'documentazione',action:'vaso.md',absolute:'true')}")
     .success(function (response) {$scope.vasoHelp = response;});    
   
+  	// appare nuovo vaso
     $scope.nuovo=false;
-    
+    // appare documentazione
     $scope.focusDocumentazione=false;
+    //appare scansione rete
+    $scope.scansioneRete = false;
+    //appare scansione vaso
+    $scope.scansioneVaso = false;
+    //appare aggiungi a meme
+    $scope.assegnaMeme = false;
     
-    $scope.nuovovaso = function(vaso) {
+    //vaso in modifica o nuovo;
+    $scope.vaso = null;
+ 
+ 	//scansione del vaso esecuzione
+    $scope.scansioneVasoF = function(vaso) {
+    	$scope.scansioneVaso = true;
+    }
+    
+    //scansione rete apertura modal
+    $scope.scansioneReteF = function(vaso) {
+    	$scope.scansioneRete = true;
+    }
+    
+    //assegna a meme apertura modal
+    $scope.assegnaMemeF = function(vaso) {
+    	$scope.assegnaMeme = true;
+    }
+    
+    //scansiona in modalità veloce
+    $scope.scansioneReteVeloceE = function(vaso) {
+    	//
+    }
+ 
+    //scansiona in modalità nascosta
+    $scope.scansioneReteNascostaE = function(vaso) {
+    	//
+    }
+    
+    //scansiona con OpenVas
+    $scope.scansioneOpenVasE = function(vaso) {
+    	//
+    }
+    
+    // crea un nuovo vaso testando la connessione prima
+    $scope.nuovoVaso = function(vaso) {
         $http.post("${createLink(controller:'admin',action:'aggiungiVaso',absolute:'true')}", {vaso:vaso})
         .success(function(response) {
     		    $http.get("${createLink(controller:'admin',action:'listaVasi',absolute:'true')}")
@@ -29,32 +70,20 @@ angular.module('sbAdminApp')
     		// or server returns response with an error status.
   		});
       };
+    
+    // testa e modifica un vaso esistente. Alla fine della procedura le connessioni saranno sulle nuove coordinate  
+    $scope.modifica = function(vaso) {
+    	$scope.nuovo = true;
+    	$("html, body").animate({ scrollTop: 160 }, "slow");
+    } 
       
-    $scope.eliminavaso = function(vaso) {
+    // elimina una connessione
+    $scope.eliminaVaso = function(vaso) {
     	$http.post("${createLink(controller:'admin',action:'eliminaVaso',absolute:'true')}", {vaso:vaso})
         .success(function(response) {
     		    $http.get("${createLink(controller:'admin',action:'listaVasi',absolute:'true')}")
     			.success(function (response) {$scope.vasi = response.vasi;});
   		})
   	  };
-  		
-  	$scope.salvacontestosuvaso = function(vaso) {
-    	$http.post("${createLink(controller:'admin',action:'salvaContestoSuVaso',absolute:'true')}", {vaso:vaso})
-        .success(function(response) {
-    		    $http.get("${createLink(controller:'admin',action:'listaVasi',absolute:'true')}")
-    			.success(function (response) {$scope.vasi = response.vasi;});
-  		})
-  	  };
-  	  
-  	$scope.resettasuvaso = function(vaso) {
-    	$http.post("${createLink(controller:'admin',action:'resettaInterfacciaSuVaso',absolute:'true')}", {vaso:vaso})
-        .success(function(response) {
-        		setTimeout(
-  				function() 
-  				{
-    				window.location.href="${createLink(controller:'bootStrap',action:'boot',absolute:'true')}";
- 				}, 2000);
-  		})
-  	  };	
   	  
   });

@@ -56,7 +56,7 @@ class Contesto {
 	List<Fabbrica> fabbriche = []
 	/** utenti del contesto da importare in configurazione */
 	List<UtenteRuolo> utentiRuoli = []
-	/** Datacenter vasi contesto - condivisibile tra più contesti - */
+	/** Datacenter consul per i dati di questo contesto - condivisibile tra più contesti - */
 	String datacenterConsul = null
 
 	/** dump oggetto per funzioni di salvataggio*/
@@ -76,14 +76,39 @@ class Contesto {
 			vasi:vasi*.idVaso,
 			ricettari:ricettari*.idRicettario,
 			utentiRuoli:utentiRuoli.each{
-				it.ruolo+'/'+it.utente
+				it.ruolo.authority+'/'+it.utente.username
 			}
 		]
 	}
 
-	/** salva il contesto sul nodo master */
-	Boolean salva(Stato stato) {
+	/** salva in uno Stato specifico a catena per N profondità */
+	Boolean salva(Stato stato,Integer contatore) {
 		stato.salvaValore(idContesto,'org-ar4k-contesto',(esporta() as JSON).toString())
+		if (contatore > 0) {
+			contatore = contatore -1
+			ricettari*.salva(stato,contatore)
+			interfacce*.salva(stato,contatore)
+			memi*.salva(stato,contatore)
+			vasi*.salva(stato,contatore)
+			nodi*.salva(stato,contatore)
+			regioni*.salva(stato,contatore)
+			fabbriche*.salva(stato,contatore)
+			// da implementare utenti/ruoli
+		}
+		// da verificare il ritorno
+		return true
+	}
+	/** salva in uno Stato specifico solo l'oggetto */
+	Boolean salva(Stato stato) {
+		return salva(stato,0)
+	}
+	/** salva nello stato di default solo l'oggetto */
+	Boolean salva() {
+		return salva(Holders.applicationContext.getBean("interfacciaContestoService").stato,0)
+	}
+	/** salva nello stato di default a catena per N profondità */
+	Boolean salva(Integer contatore) {
+		return salva(Holders.applicationContext.getBean("interfacciaContestoService").stato,contatore)
 	}
 
 	/** campo per l'avanzamanto del bootstrap (nascita,vita,virus,morte)*/
@@ -177,7 +202,7 @@ class Contesto {
 }
 
 class CloudProvider {
-	/** id univoco metodo */
+	/** id univoco cloud provider */
 	String idCloudProvider = UUID.randomUUID()
 	String etichetta = 'nessuna etichetta'
 	String descrizione = 'nessuna descrizione'
@@ -187,9 +212,30 @@ class CloudProvider {
 	String utenza = ''
 	String chiaveAccesso = ''
 
+	/** salva in uno Stato specifico a catena per N profondità */
+	Boolean salva(Stato stato,Integer contatore) {
+		stato.salvaValore(idCloudProvider,'org-ar4k-cloudProvider',(esporta() as JSON).toString())
+		if (contatore > 0) {
+			contatore = contatore -1
+			// nessuna lista
+		}
+	}
+	/** salva in uno Stato specifico solo l'oggetto */
+	Boolean salva(Stato stato) {
+		salva(stato,0)
+	}
+	/** salva nello stato di default solo l'oggetto */
+	Boolean salva() {
+		salva(Holders.applicationContext.getBean("interfacciaContestoService").stato,0)
+	}
+	/** salva nello stato di default a catena per N profondità */
+	Boolean salva(Integer contatore) {
+		salva(Holders.applicationContext.getBean("interfacciaContestoService").stato,contatore)
+	}
+
 	def esporta() {
 		return [
-			idMetodo:idMetodo,
+			idMetodo:idCloudProvider,
 			etichetta:etichetta,
 			descrizione:descrizione,
 			urlAccesso:urlAccesso,
@@ -215,6 +261,27 @@ class Puntatore {
 	String datiJson = ''
 	/** lista chiavi accesso alla risorsa -per sicurezza- */
 	List<String> chiaviAccesso = []
+
+	/** salva in uno Stato specifico a catena per N profondità */
+	Boolean salva(Stato stato,Integer contatore) {
+		stato.salvaValore(idPuntatore,'org-ar4k-puntatore',(esporta() as JSON).toString())
+		if (contatore > 0) {
+			contatore = contatore -1
+			// nessuna lista
+		}
+	}
+	/** salva in uno Stato specifico solo l'oggetto */
+	Boolean salva(Stato stato) {
+		salva(stato,0)
+	}
+	/** salva nello stato di default solo l'oggetto */
+	Boolean salva() {
+		salva(Holders.applicationContext.getBean("interfacciaContestoService").stato,0)
+	}
+	/** salva nello stato di default a catena per N profondità */
+	Boolean salva(Integer contatore) {
+		salva(Holders.applicationContext.getBean("interfacciaContestoService").stato,contatore)
+	}
 
 	def esporta() {
 		return [

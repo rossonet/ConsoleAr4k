@@ -12,10 +12,11 @@ angular
     'oc.lazyLoad',
     'ui.router',
     'ui.bootstrap',
-    //'ngAnimate',
+    'ngAnimate',
     'angular-loading-bar',
     'hc.marked',
-    'restangular'
+    'restangular',
+    'nvd3'
   ])
   .config(['$stateProvider','$urlRouterProvider','$ocLazyLoadProvider',function ($stateProvider,$urlRouterProvider,$ocLazyLoadProvider) {
     
@@ -54,17 +55,17 @@ angular
                 {
                   name:'ngAnimate',
                   files:["${resource(dir: 'bower_components', file: 'angular-animate/angular-animate.js')}"]
-                })
+                }),
                 $ocLazyLoad.load(
                 {
                   name:'ngCookies',
                   files:["${resource(dir: 'bower_components', file: 'angular-cookies/angular-cookies.js')}"]
-                })
+                }),
                 $ocLazyLoad.load(
                 {
                   name:'ngSanitize',
                   files:["${resource(dir: 'bower_components', file: 'angular-sanitize/angular-sanitize.js')}"]
-                })
+                }),
                 $ocLazyLoad.load(
                 {
                   name:'ngTouch',
@@ -100,7 +101,7 @@ angular
             return $ocLazyLoad.load({
               name:'sbAdminApp',
               files:[
-              "${resource(dir: 'admin', file: 'apiAr4kCtrl')}"
+              "js!${resource(dir: 'admin', file: 'apiAr4kCtrl')}"
               ]
             })
           }
@@ -115,7 +116,7 @@ angular
             return $ocLazyLoad.load({
               name:'sbAdminApp',
               files:[
-              "${resource(dir: 'admin', file: 'rossonetCtrl')}"
+              "js!${resource(dir: 'admin', file: 'rossonetCtrl')}"
               ]
             })
           }
@@ -130,7 +131,7 @@ angular
             return $ocLazyLoad.load({
               name:'sbAdminApp',
               files:[
-              "${resource(dir: 'admin', file: 'oggettiCtrl')}"
+              "js!${resource(dir: 'admin', file: 'oggettiCtrl')}"
               ]
             })
           }
@@ -145,7 +146,7 @@ angular
             return $ocLazyLoad.load({
               name:'sbAdminApp',
               files:[
-              "${resource(dir: 'admin', file: 'utentiCtrl')}"
+              "js!${resource(dir: 'admin', file: 'utentiCtrl')}"
               ]
             })
           }
@@ -160,7 +161,7 @@ angular
             return $ocLazyLoad.load({
               name:'sbAdminApp',
               files:[
-              "${resource(dir: 'admin', file: 'dashrossonetCtrl')}"
+              "js!${resource(dir: 'admin', file: 'dashrossonetCtrl')}"
               ]
             })
           }
@@ -175,7 +176,7 @@ angular
             return $ocLazyLoad.load({
               name:'sbAdminApp',
               files:[
-              "${resource(dir: 'admin', file: 'memiCtrl')}"
+              "js!${resource(dir: 'admin', file: 'memiCtrl')}"
               ]
             })
           }
@@ -190,7 +191,7 @@ angular
             return $ocLazyLoad.load({
               name:'sbAdminApp',
               files:[
-              "${resource(dir: 'admin', file: 'memoriaCtrl')}"
+              "js!${resource(dir: 'admin', file: 'memoriaCtrl')}"
               ]
             })
           }
@@ -205,7 +206,7 @@ angular
             return $ocLazyLoad.load({
               name:'sbAdminApp',
               files:[
-              "${resource(dir: 'admin', file: 'ricettariCtrl')}"
+              "js!${resource(dir: 'admin', file: 'ricettariCtrl')}"
               ]
             })
           }
@@ -220,7 +221,7 @@ angular
             return $ocLazyLoad.load({
               name:'sbAdminApp',
               files:[
-              "${resource(dir: 'admin', file: 'retiCtrl')}"
+              "js!${resource(dir: 'admin', file: 'retiCtrl')}"
               ]
             })
           }
@@ -235,7 +236,7 @@ angular
             return $ocLazyLoad.load({
               name:'sbAdminApp',
               files:[
-              "${resource(dir: 'admin', file: 'processiCtrl')}"
+              "js!${resource(dir: 'admin', file: 'processiCtrl')}"
               ]
             })
           }
@@ -314,11 +315,6 @@ angular
        	$scope.pannelloMain = true;
        	};
 
-    $http.get("${createLink(controller:'admin',action:'listaTask',absolute:'true')}")
-    	.success(function (response) {
-    		$scope.tasks = response.tasks;
-    		$scope.numeroTasks = response.conto;
-    		}); 
     $scope.aggiornaDaMessaggio = function() {
     	$http.get("${createLink(controller:'admin',action:'listaTask',absolute:'true')}")
     		.success(function (response) {
@@ -326,12 +322,14 @@ angular
     			$scope.numeroTasks = response.conto;
     			}); 
   		};
+  		
   	$scope.salvaConfigurazioneInterfaccia = function() {
     	$http.get("${createLink(controller:'admin',action:'salvaConfigurazioneInterfaccia',absolute:'true')}")
     		.success(function (response) {
     			alert("Configurazione salvata con risultato: "+response);
     			}); 
   		};
+  		
   	$scope.scaricaConfigurazioneInterfaccia = function() {
     	$http.get("${createLink(controller:'admin',action:'scaricaConfigurazioneInterfaccia',absolute:'true')}")
     		.success(function (response) {$window.open("${createLink(controller:'admin',action:'scaricaConfigurazioneInterfaccia',absolute:'true')}");}); 

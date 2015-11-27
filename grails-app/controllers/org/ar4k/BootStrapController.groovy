@@ -112,28 +112,8 @@ class BootStrapController {
 
 		testProxyMaster {
 			action {
-				Boolean errore = false
-				String macchina = '127.0.0.1'
-				Integer porta = 3128
-				String utente = null
-				String password = null
-				String protocollo = 'http'
-				try{
-					URL targetProxy = new URL(params.proxyMaster)
-					protocollo = targetProxy.getProtocol()?:'http'
-					porta = targetProxy.getPort()?:3128
-					macchina = targetProxy.getHost()?:'127.0.0.1'
-				} catch(Exception ee) {
-					errore = true
-					log.error(ee)
-				}
-				if (errore==false ) {
-					Proxy nuovoProxy = new Proxy(
-							macchina:macchina,
-							porta:porta,
-							utente:utente,
-							password:password,
-							protocollo:protocollo)
+				Proxy nuovoProxy = Proxy.creaDaUrl(params.proxyMaster, params.passwordProxyMaster)
+				if (nuovoProxy) {
 					bootStrapService.stato.listaProxy.add(nuovoProxy)
 					bootStrapService.stato.connessioneProxy = true
 					return successo()
@@ -211,11 +191,18 @@ class BootStrapController {
 		creaConsul {
 			action {
 				String valoreCasuale=org.apache.commons.lang.RandomStringUtils.random(5, true, true).toString()
-				Contesto nuovoContesto = new Contesto(
-						idContesto:bootStrapService.contesto?:'contestoBootStrap',
-						etichetta:params.etichetta?:'Contesto '+new Date().format("yyyyMMddHHmmss", TimeZone.getTimeZone("UTC")).toString()+' ('+valoreCasuale+')',
-						descrizione:params.descrizione?:"Contesto generato automaticamente "+new Date().format("yyyyMMddHHmmss", TimeZone.getTimeZone("UTC")).toString(),
-						)
+				List<UtenteRuolo> autorizzazioniCorrenti
+				Contesto nuovoContesto
+				if (bootStrapService.contestoCreato){
+					nuovoContesto = bootStrapService.contestoCreato
+				} else {
+					nuovoContesto = new Contesto()
+				}
+				nuovoContesto.idContesto=bootStrapService.contesto?:'contestoBootStrap'
+				nuovoContesto.etichetta=params.etichetta?:'Contesto '+new Date().format("yyyyMMddHHmmss", TimeZone.getTimeZone("UTC")).toString()+' ('+valoreCasuale+')'
+				nuovoContesto.descrizione=params.descrizione?:"Contesto generato automaticamente "+new Date().format("yyyyMMddHHmmss", TimeZone.getTimeZone("UTC")).toString()
+				nuovoContesto.idProgetto=params.progetto?:null
+
 				IstanzaConsul nuovaIstanzaConsul = new IstanzaConsul(
 						portaDNS:8600,
 						portaHTTP:params.porta?.toInteger()?:8500,
@@ -284,11 +271,18 @@ class BootStrapController {
 				if(params.utenteDemo ) {
 					if ( params.passwordDemo1 == params.passwordDemo2 && params.passwordDemo1 != '') {
 						log.info("Creo l'utente "+params.utenteDemo)
-						bootStrapService.aggiungiUtente(params.utenteDemo,params.passwordDemo1)
+						if ( bootStrapService.aggiungiUtente(params.utenteDemo,params.passwordDemo1) ) {
+							// nessun errore
+						} else
+						{
+							log.warn("non è possibile salvare l'utente "+params.utenteDemo)
+							// DA COMPLETARE !!
+							//return erroreUtente()
+						}
 					} else {
-						log.info("Le password NON corrispondo per creare l'utente "+params.utenteDemo)
+						log.warn("Le password NON corrispondo per creare l'utente "+params.utenteDemo)
 						if ( params.utenteDemo) {
-							return configuraAmministratore()
+							return erroreUtente()
 						}
 					}
 				}
@@ -300,6 +294,7 @@ class BootStrapController {
 				}
 			}
 			on ("completata").to("mascheraFinale")
+			on ("erroreUtente").to("configuraAmministratore")
 			on ("noConsul").to("verifica")
 			on ("fallita").to("fallita")
 		}

@@ -55,6 +55,7 @@ angular.module('sbAdminApp')
   			$scope.valore = valore;
         	$scope.editor.setText(valore);
   			$scope.nuovo=true;
+  			$("html, body").animate({ scrollTop: 180 }, "slow");
   	};
   	
   	$scope.salvaContestoinKV = function() {

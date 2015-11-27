@@ -1,3 +1,12 @@
+
+package org.ar4k
+import java.util.List
+import com.ecwid.consul.v1.ConsulClient
+import com.jcraft.jsch.*
+import com.subgraph.orchid.TorClient
+import com.subgraph.orchid.TorInitializationListener
+import grails.util.Holders
+
 /**
  * Stato
  *
@@ -6,25 +15,22 @@
  * </p>
  *
  * <p style="text-justify">
- * Uno stato rappresenta una connesione al demone Consul tramite le API Java.
+ * Uno stato rappresenta una connesione al demone Consul
+ * tramite le API Java ed è utilizzato dal bootstrap e dall'interfaccia per interagire con Consul.
  * </p>
  *
  * @author Andrea Ambrosini (Rossonet s.c.a r.l)
  * @version 0.2-alpha
  * @see org.ar4k.Contesto
+ * @see org.ar4k.IstanzaConsul
+ * @see org.ar4k.ConnessioneSSH
  */
-package org.ar4k
-
-import java.util.List;
-
-import com.ecwid.consul.v1.ConsulClient
-import com.jcraft.jsch.*
-import com.subgraph.orchid.TorClient
-import com.subgraph.orchid.TorInitializationListener
 
 class Stato {
-	/** server bootsrap iniettato */
+	/** servervice bootsrap iniettato */
 	BootStrapService bootStrapService
+	/** servervice interfaccia iniettato */
+	InterfacciaContestoService interfacciaContestoService
 	/** id univoco stato connessione a Consul */
 	String idStato = UUID.randomUUID()
 	/** client Consul collegato allo Stato */
@@ -62,39 +68,28 @@ class Stato {
 
 	/** stato connessione Consul. Per ora i valori possibili sono "configurazione","installazione" e "attivo" */
 	String stato = 'configurazione'
+
 	/** l'installazione Consul è governata da questo contesto */
 	Boolean controlloConsul = true
 
 	String toString() {
 		String ritorno = idStato+' ['+stato+']'
 		if (stato=='configurazione') ritorno = 'template '+idStato
-		if (stato=='installazione') ritorno = 'installazione Consul ['+idStato+'] su host '+macchina
+		if (stato=='installazione') ritorno = 'installazione Consul ['+idStato+'] su host '+macchinaConsul
 		if (stato=='attivo') ritorno = consul.getStatusLeader()
 		return ritorno
 	}
 
 	/** testa la connessione senza sincronizzare i dati e chiudendola immediatamente */
 	Boolean testConnessione() {
-	}
-
-	/** connette il ponte ssh */
-	private Boolean connettiSSH() {
+		stato='installazione'
+		return false
 	}
 
 	/** attiva tor */
 	Boolean attivaProxyTOR() {
+		stato='installazione'
 		Boolean errore = false
-		/*
-		 try{
-		 ServerSocket s = new ServerSocket(0) // dovrebbe ritornare una porta libera casuale
-		 portaProxyTOR = s.getLocalPort()
-		 s.close()
-		 } catch (IOException e) {
-		 errore =true
-		 log.warn("non trovo una porta tcp libera...")
-		 }
-		 */
-
 		try {
 			if (client==null) {
 				client = new TorClient()
@@ -114,7 +109,8 @@ class Stato {
 								log.info("Tor pronto!")
 								torAttivo=true
 							} catch (Exception e) {
-								log.warn('Errore avvio TOR in listener: '+e.printStackTrace())
+								log.warn('Errore avvio TOR: '+e.printStackTrace())
+								stato='errore attivazione TOR'
 							}
 						}
 					})
@@ -125,7 +121,8 @@ class Stato {
 			//client.enableDashboard()
 		} catch (Exception eee) {
 			errore=true
-			log.warn('Errore avvio TOR '+eee.printStackTrace())
+			log.warn('Errore avvio TOR: '+eee.printStackTrace())
+			stato='errore attivazione TOR'
 		}
 		return !errore
 	}
@@ -164,10 +161,12 @@ class Stato {
 			}
 			String risposta = consul?.getCatalogDatacenters()
 			log.info("Connessione Consul. Datacenter disponibili: "+risposta)
+			stato='attivo'
 			if (risposta) ritorno = true
 		} catch (Exception ee) {
 			// non stampa tutto lo stacktrace in avvio
 			log.warn("Errore connessione Consul")
+			stato='errore connessione Consul'
 		}
 
 		return ritorno
@@ -180,13 +179,17 @@ class Stato {
 
 	/** leggi un valore dal datastore Consul */
 	String leggiValore(String id,String tipologia) {
+		return 'da implementare...'
 	}
 
 	/** sincronizza i dati */
 	Boolean sincronizza() {
+		return false
 	}
 
-	/** Ritorna l'elenco degli id contesti per il bootstrap*/
+	/** Ritorna l'elenco degli id contesti per il bootstrap 
+	 * -- da verificare...
+	 * */
 	def listaIdContesti() {
 		def risultati = []
 		consul.getKVValues('').getValue().each{
@@ -200,6 +203,34 @@ class Stato {
 		}
 		return risultati
 	}
+
+	/** esegui tramite consul */
+	EsecuzioneConsul esegui(String datacenter, Nodo nodo, String comando) {
+		return null
+	}
+
+	/** salva in uno Stato specifico a catena per N profondità */
+	Boolean salva(Stato stato,Integer contatore) {
+		// nessuna attività di salvataggio
+		return false
+	}
+
+	/** salva in uno Stato specifico solo l'oggetto */
+	Boolean salva(Stato stato) {
+		salva(stato,0)
+	}
+	/** salva nello stato di default solo l'oggetto */
+	Boolean salva() {
+		salva(Holders.applicationContext.getBean("interfacciaContestoService").stato,0)
+	}
+	/** salva nello stato di default a catena per N profondità */
+	Boolean salva(Integer contatore) {
+		salva(Holders.applicationContext.getBean("interfacciaContestoService").stato,contatore)
+	}
+}
+
+class EsecuzioneConsul {
+
 }
 
 

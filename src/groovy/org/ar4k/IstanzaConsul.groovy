@@ -1,5 +1,6 @@
 package org.ar4k
 
+import grails.converters.JSON
 import java.util.List;
 
 import com.ecwid.consul.v1.ConsulClient
@@ -7,7 +8,7 @@ import com.jcraft.jsch.*
 import com.subgraph.orchid.TorClient
 import com.subgraph.orchid.TorInitializationListener
 
-
+import grails.util.Holders
 
 /**
  * IstanzaConsul
@@ -63,4 +64,48 @@ class IstanzaConsul {
 	String dominio = 'ar4k.net.'
 	/** stringa datacenter */
 	String datacenter = 'ar4k-test'
+	
+	def esporta() {
+		log.info("esporta() il template grafico: "+etichetta)
+		return [
+			idIstanzaConsul:idIstanzaConsul,
+			stato:stato,
+			portaDNS:portaDNS,
+			portaHTTP:portaHTTP,
+			portaHTTPS:portaHTTPS,
+			portaRPC:portaRPC,
+			portaSerfLAN:portaSerfLAN,
+			portaSerfWAN:portaSerfWAN,
+			portaServer:portaServer,
+			advertiseWan:advertiseWan,
+			avvioInBootStrap:avvioInBootStrap,
+			chiave:chiave,
+			listaJoin:listaJoin,
+			listaJoinWan:listaJoinWan,
+			server:dominio,
+			dominio:dominio,
+			datacenter:datacenter
+		]
+	}
+	
+	/** salva in uno Stato specifico a catena per N profondità */
+	Boolean salva(Stato stato,Integer contatore) {
+		stato.salvaValore(idIstanzaConsul,'org-ar4k-istanzaConsul',(esporta() as JSON).toString())
+		if (contatore > 0) {
+			contatore = contatore -1
+			// nessuna eredità
+		}
+	}
+	/** salva in uno Stato specifico solo l'oggetto */
+	Boolean salva(Stato stato) {
+		salva(stato,0)
+	}
+	/** salva nello stato di default solo l'oggetto */
+	Boolean salva() {
+		salva(Holders.applicationContext.getBean("interfacciaContestoService").stato,0)
+	}
+	/** salva nello stato di default a catena per N profondità */
+	Boolean salva(Integer contatore) {
+		salva(Holders.applicationContext.getBean("interfacciaContestoService").stato,contatore)
+	}
 }

@@ -1,11 +1,16 @@
 package org.ar4k
 
+import grails.converters.JSON
+
 import java.util.List;
+
+import javax.validation.OverridesAttribute;
 
 import com.ecwid.consul.v1.ConsulClient
 import com.jcraft.jsch.*
 import com.subgraph.orchid.TorClient
 import com.subgraph.orchid.TorInitializationListener
+
 
 /**
  *  Rappresentazione connessione ssh
@@ -15,6 +20,8 @@ import com.subgraph.orchid.TorInitializationListener
  * @author andrea
  *
  */
+import grails.util.Holders
+
 class ConnessioneSSH {
 
 	/** id univoco connessione SSH */
@@ -32,6 +39,39 @@ class ConnessioneSSH {
 	/** bind SSH */
 	JSch connessione = new JSch()
 
+	/** salva in uno Stato specifico a catena per N profondità */
+	Boolean salva(Stato stato,Integer contatore) {
+		stato.salvaValore(idConnessioneSSH,'org-ar4k-connessioneSSH',(esporta() as JSON).toString())
+		if (contatore > 0) {
+			contatore = contatore -1
+			// nessun oggetto a catena
+		}
+	}
+	/** salva in uno Stato specifico solo l'oggetto */
+	Boolean salva(Stato stato) {
+		salva(stato,0)
+	}
+	/** salva nello stato di default solo l'oggetto */
+	Boolean salva() {
+		salva(Holders.applicationContext.getBean("interfacciaContestoService").stato,0)
+	}
+	/** salva nello stato di default a catena per N profondità */
+	Boolean salva(Integer contatore) {
+		salva(Holders.applicationContext.getBean("interfacciaContestoService").stato,contatore)
+	}
+
+	/** esporta la connessione ssh */
+	def esporta() {
+		return [
+			idConnessioneSSH:idConnessioneSSH,
+			macchina:macchina,
+			porta:porta,
+			utente:utente,
+			key:key,
+			proxyMaster:proxyMaster
+		]
+	}
+
 	/** attiva il tunnel senza proxy */
 	Boolean verificaAvvia(Integer gwPort,String targetHost,Integer targetPort) {
 		if (!connessione) {
@@ -44,7 +84,6 @@ class ConnessioneSSH {
 			log.warn("Errore avvio tunnel: "+ee.printStackTrace())
 			return false
 		}
-
 	}
 
 	String toString() {
@@ -160,4 +199,82 @@ class ConnessioneSSH {
 			log.warn("Errore nella creazione del tunnel SSH: "+e.printStackTrace())
 		}
 	}
+}
+
+
+/**
+ *  job SSH asincroni con gestione dello stato e mappatura del ciclo
+ *  di vita tramite Consule K/V
+ * 
+ * @author andrea
+ *
+ */
+class LavorazioniSSH {
+
+	String tipoOggetto = 'org-ar4k-lavorazioneSSH'
+
+	/** id univoco connessione SSH */
+	String idLavorazione = new Date().format("yyyyMMddHHmmss", TimeZone.getTimeZone("UTC")).toString()+'_'+UUID.randomUUID()
+	/** etichetta */
+	String etichetta = null
+	/** descrizione */
+	String descrizione = null
+
+	/** salva in uno Stato specifico a catena per N profondità */
+	Boolean salva(Stato stato,Integer contatore) {
+		stato.salvaValore(idLavorazione,tipoOggetto,(esporta() as JSON).toString())
+		if (contatore > 0) {
+			contatore = contatore -1
+			// nessuna lista
+		}
+	}
+	/** salva in uno Stato specifico solo l'oggetto */
+	Boolean salva(Stato stato) {
+		salva(stato,0)
+	}
+	/** salva nello stato di default solo l'oggetto */
+	Boolean salva() {
+		salva(Holders.applicationContext.getBean("interfacciaContestoService").stato,0)
+	}
+	/** salva nello stato di default a catena per N profondità */
+	Boolean salva(Integer contatore) {
+		salva(Holders.applicationContext.getBean("interfacciaContestoService").stato,contatore)
+	}
+
+	/** esporta la connessione ssh */
+	def esporta() {
+		return [
+			idLavorazione:idLavorazione,
+			etichetta:etichetta,
+			descrizione:descrizione
+		]
+	}
+}
+
+/** job di scansione
+ * 
+ * @author andrea
+ *
+ */
+class Scansione extends LavorazioniSSH {
+	String tipoOggetto = 'org-ar4k-Scansione'
+
+}
+
+/** servizio permanente in userspace supportato con cron di scansione
+ *
+ * @author andrea
+ *
+ */
+class Servizio extends LavorazioniSSH {
+	String tipoOggetto = 'Servizio'
+}
+
+/** servizio permanente in userspace supportato con supporto env consul
+ *
+ * @author andrea
+ *
+ */
+class EnvConsulSSH extends LavorazioniSSH {
+	String tipoOggetto = 'EnvConsulSSH'
 }

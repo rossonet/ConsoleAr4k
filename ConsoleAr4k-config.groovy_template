@@ -31,7 +31,7 @@ portaConsul = 8500
 //"""
 
 // se necessario proxy per connettersi a Consul
-//connessioneProxySocks = true
+//connessioneProxy = true
 //proxy.macchina = '127.0.0.1'
 //proxy.porta = 8080
 //proxy.utente = 'root'

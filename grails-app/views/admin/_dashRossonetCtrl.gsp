@@ -7,5 +7,5 @@
  * Controller of the sbAdminApp
  */
 angular.module('sbAdminApp')
-  .controller('DashRossonetCtrl', function($scope,$position) {
+  .controller('DashRossonetCtrl', function($scope) {
   });

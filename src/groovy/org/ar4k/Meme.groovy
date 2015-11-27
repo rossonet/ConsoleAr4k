@@ -48,10 +48,6 @@ class Meme {
 	List<String> dipendenze = []
 	/** lista funzionalità rese disponibili al contesto */
 	List<String> funzionalita = []
-	/** lista archivi bar (deployment Activiti) da caricare */
-	List<Metodo> metodi = []
-	/** stati possibili del meme */
-	List<StatoMeme> stati = []
 	/** nodi coinvolti dal meme */
 	List<String> indirizziNodiCoinvolti = []
 	/** maschera disinstallazione (verrà interpretata da grails) */
@@ -74,132 +70,33 @@ class Meme {
 			stato:stato,
 			autoStart:autoStart,
 			disinstallazione:disinstallazione,
-			stati:stati*.esporta(),
 			dipendenze:dipendenze,
 			funzionalita:funzionalita,
-			metodi:metodi*.esporta(),
 			indirizziNodiCoinvolti:indirizziNodiCoinvolti,
 			caricaInBootstrap:caricaInBootstrap
 		]
 	}
 	
-	Meme importa(Map json){
-		log.info("importa() il meme: "+json.idMeme)
-		Meme memeCreato = new Meme(
-			idMeme:json.idMeme,
-			etichetta:json.etichetta,
-			descrizione:json.descrizione,
-			autore:json.autore,
-			gestore:json.gestore,
-			versione:json.versione,
-			versioniCompatibili:json.versioniCompatibili,
-			icona:json.icona,
-			stato:json.stato,
-			autoStart:json.autoStart,
-			disinstallazione:json.disinstallazione,
-			dipendenze:json.dipendenze,
-			funzionalita:json.funzionalita,
-			caricaInBootstrap:json.caricaInBootstrap
-			)
-		json.metodi.each{memeCreato.metodi.add(new Metodo(it))}
-		json.stati.each{memeCreato.stati.add(new StatoMeme(it))}
-
-		return memeCreato
+	/** salva in uno Stato specifico a catena per N profondità */
+	Boolean salva(Stato stato,Integer contatore) {
+		stato.salvaValore(idMeme,'org-ar4k-meme',(esporta() as JSON).toString())
+		if (contatore > 0) {
+			contatore = contatore -1
+			// nessuna eredità
+		}
+	}
+	/** salva in uno Stato specifico solo l'oggetto */
+	Boolean salva(Stato stato) {
+		salva(stato,0)
+	}
+	/** salva nello stato di default solo l'oggetto */
+	Boolean salva() {
+		salva(Holders.applicationContext.getBean("interfacciaContestoService").stato,0)
+	}
+	/** salva nello stato di default a catena per N profondità */
+	Boolean salva(Integer contatore) {
+		salva(Holders.applicationContext.getBean("interfacciaContestoService").stato,contatore)
 	}
 
-	String toString() {
-		return idMeme +' ('+etichetta+') '+descrizione
-	}
-
-	/**
-	 * Chiamato quando si avvia un interfaccia nel contesto
-	 */
-	Boolean verificaAvvia() {
-		log.warn("Implementare la procedura di avvio automatico del meme!")
-		return true
-	}
-
-	/** ritorna la maschera html relativa allo stato corrente del meme */
-	String maschera() {
-		return stati.find{it.etichetta == stato}.angularMaschera
-	}
-
-	/** ritorna il pannello per la dashboard relativo allo stato corrente del meme */
-	String dashboard() {
-		return stati.find{it.etichetta == stato}.angularDashboard
-	}
-
-	/** ritorna la maschera html ridotta relativa allo stato corrente del meme */
-	String box() {
-		return stati.find{it.etichetta == stato}.angularBox
-	}
-
-	/** ritorna il tooltip relativo allo stato corrente del meme */
-	String tooltip() {
-		return stati.find{it.etichetta == stato}.tooltip
-	}
-
-	/** ritorna l'icona relativa allo stato corrente del meme */
-	String iconaStato() {
-		return stati.find{it.etichetta == stato}.icona
-	}
 }
 
-
-/**
- * Metodo sul meme (da sviluppare aggancio verso i vari Service)
- *
- * @author Andrea Ambrosini
- *
- */
-class Metodo {
-	/** id univoco metodo */
-	String idMetodo = UUID.randomUUID()
-	String etichetta = 'metodo senza etichetta'
-	String descrizione = 'metodo creato in automatico'
-	/** percorso file bar (Activiti) nel repository git -Ricettario- */
-	String riferimento = ''
-
-	def esporta() {
-		return [
-			idMetodo:idMetodo,
-			etichetta:etichetta,
-			descrizione:descrizione,
-			riferimento:riferimento
-		]
-	}
-}
-
-/** 
- * Stato possibile per il Meme
- */
-class StatoMeme {
-	String etichetta = 'non implementato'
-	/** maschera del meme nello stato (verrà interpretata da grails) */
-	String angularMaschera = '<div>INTERFACCIA NON IMPLEMENTATA</div>'
-	/** html per dashboard del meme nello stato (verrà interpretata da grails) */
-	String angularDashboard = '<div>INTERFACCIA NON IMPLEMENTATA</div>'
-	/** maschera piccola meme nello stato (verrà interpretata da grails) */
-	String angularBox = '<div>INTERFACCIA NON IMPLEMENTATA</div>'
-	/** icona pulsante nello stato -Maschera Memi- */
-	String icona = 'fa-thumb-tack'
-	/** tooltip pulsante nello stato -Maschera Memi- */
-	String tooltip = 'interfaccia non implementata'
-	/** visualizzato su tutti i nodi? */
-	Boolean suTuttiNodi = false
-
-	String toString() {
-		return etichetta
-	}
-
-	def esporta() {
-		return [
-			etichetta:etichetta,
-			angularMaschera:angularMaschera,
-			angularDashboard:angularDashboard,
-			angularBox:angularBox,
-			icona:icona,
-			tooltip:tooltip
-		]
-	}
-}

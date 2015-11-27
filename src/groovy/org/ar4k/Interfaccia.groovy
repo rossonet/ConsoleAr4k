@@ -24,6 +24,7 @@
 package org.ar4k
 
 import grails.converters.JSON
+import grails.util.Holders
 
 class Interfaccia {
 	/** id univoco interfaccia */
@@ -42,13 +43,30 @@ class Interfaccia {
 			idInterfaccia:idInterfaccia,
 			etichetta:etichetta,
 			descrizione:descrizione,
-			grafica:grafica.esporta()
+			grafica:grafica.esporta(),
+			graficaId:grafica.idGrafica
 		]
 	}
 
-	/** salva il contesto sul nodo master */
+	/** salva in uno Stato specifico a catena per N profondità */
+	Boolean salva(Stato stato,Integer contatore) {
+		stato.salvaValore(idInterfaccia,'org-ar4k-interfaccia',(esporta() as JSON).toString())
+		if (contatore > 0) {
+			contatore = contatore -1
+			grafica?.salva(stato,contatore)
+		}
+	}
+	/** salva in uno Stato specifico solo l'oggetto */
 	Boolean salva(Stato stato) {
-		stato.salvaValore(idInterfaccia,'org-ar4k-Interfaccia',((esporta() as JSON).toString()))
+		salva(stato,0)
+	}
+	/** salva nello stato di default solo l'oggetto */
+	Boolean salva() {
+		salva(Holders.applicationContext.getBean("interfacciaContestoService").stato,0)
+	}
+	/** salva nello stato di default a catena per N profondità */
+	Boolean salva(Integer contatore) {
+		salva(Holders.applicationContext.getBean("interfacciaContestoService").stato,contatore)
 	}
 
 
@@ -126,6 +144,27 @@ class TemplateInterfaccia {
 				danger: colori.danger
 			]
 		]
+	}
+
+	/** salva in uno Stato specifico a catena per N profondità */
+	Boolean salva(Stato stato,Integer contatore) {
+		stato.salvaValore(idGrafica,'org-ar4k-templateInterfaccia',(esporta() as JSON).toString())
+		if (contatore > 0) {
+			contatore = contatore -1
+			// nessuna eredità
+		}
+	}
+	/** salva in uno Stato specifico solo l'oggetto */
+	Boolean salva(Stato stato) {
+		salva(stato,0)
+	}
+	/** salva nello stato di default solo l'oggetto */
+	Boolean salva() {
+		salva(Holders.applicationContext.getBean("interfacciaContestoService").stato,0)
+	}
+	/** salva nello stato di default a catena per N profondità */
+	Boolean salva(Integer contatore) {
+		salva(Holders.applicationContext.getBean("interfacciaContestoService").stato,contatore)
 	}
 
 	String toString() {

@@ -29,28 +29,28 @@
 					<button class="btn btn-circle btn-success btn-xs" type="button"
 						ng-click="scansiona(focus.nodo.value.node.address)"
 						tooltip-placement="bottom"
-						tooltip="carica come vaso. Installa i componenti base e configura il nodo come Vaso Ar4k.">
+						uib-tooltip="carica come vaso. Installa i componenti base e configura il nodo come Vaso Ar4k.">
 						<i class="fa fa-linux"></i>
 					</button>
 				
 					<button class="btn btn-circle btn-success btn-xs" type="button"
 						ng-click="scansiona(focus.nodo.value.node.address)"
 						tooltip-placement="bottom"
-						tooltip="scansiona il nodo per trovare servizi conosciuti">
+						uib-tooltip="scansiona il nodo per trovare servizi conosciuti">
 						<i class="fa fa-steam"></i>
 					</button>
 
 					<button class="btn btn-circle btn-warning btn-xs" type="button"
 						ng-click="scansionarete(focus.nodo.value.node.address)"
 						tooltip-placement="bottom"
-						tooltip="scansiona una rete da questo nodo per identificare i servizi">
+						uib-tooltip="scansiona una rete da questo nodo per identificare i servizi">
 						<i class="fa fa-share-alt"></i>
 					</button>
 
 					<button class="btn btn-circle btn-danger btn-xs" type="button"
 						ng-click="eseguisunodo(focus.nodo.value.node.address)"
 						tooltip-placement="bottom"
-						tooltip="esegui un comando su questo nodo">
+						uib-tooltip="esegui un comando su questo nodo">
 						<i class="fa fa-wrench"></i>
 					</button>
 				</div>
@@ -77,7 +77,7 @@
 							class="btn btn-circle btn-default btn-xs" type="button"
 							ng-click="focusDocumentazione=!focusDocumentazione"
 							tooltip-placement="bottom"
-							tooltip="visualizza la documentazione sulle reti.">
+							uib-tooltip="visualizza la documentazione sulle reti.">
 							<i class="fa fa-question"></i>
 						</button>
 					</h3>
@@ -88,15 +88,6 @@
 					<div marked="retiHelp" ng-show="focusDocumentazione"></div>
 				</div>
 				<div class="panel-body">
-					<div class="panel panel-green">
-						<div class="panel-heading text-center">HYPERVISOR
-							DISPONIBILI - Servizi Cloud -</div>
-						<div class="panel-body">
-							<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-								Vestibulum tincidunt est vitae ultrices accumsan. Aliquam ornare
-								lacus adipiscing, posuere lectus et, fringilla augue.</p>
-						</div>
-					</div>
 					<div class="container-fluid">
 
 						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -114,7 +105,7 @@
 										type="button"
 										ng-click="$parent.dettagli(nodo.nodo.node,datacenter.datacenter)"
 										tooltip-placement="top"
-										tooltip="visualizza i dettagli del nodo.">
+										uib-tooltip="visualizza i dettagli del nodo.">
 										<i class="fa fa-info-circle"></i> {{nodo.nodo.node}}
 										({{nodo.nodo.address}})
 									</button>

@@ -64,7 +64,7 @@ class AdminController {
 	 * @return Definizione applicazione AngularJS 
 	 */
 	def appjs() {
-		render(template: "appjs",model:[grafica: interfacciaContestoService.interfaccia.grafica])
+		render(template: "appjs",model:[grafica: interfacciaContestoService.interfaccia.grafica],contentType: 'text/javascript')
 	}
 
 	/**
@@ -88,7 +88,7 @@ class AdminController {
 	}
 
 	def oggettiCtrl() {
-		render(template: "oggettiCtrl",model:[grafica: interfacciaContestoService.interfaccia.grafica])
+		render(template: "oggettiCtrl",model:[grafica: interfacciaContestoService.interfaccia.grafica],contentType: 'text/javascript')
 	}
 
 	def rossonet() {
@@ -96,7 +96,7 @@ class AdminController {
 	}
 
 	def rossonetCtrl() {
-		render(template: "rossonetCtrl",model:[grafica: interfacciaContestoService.interfaccia.grafica])
+		render(template: "rossonetCtrl",model:[grafica: interfacciaContestoService.interfaccia.grafica],contentType: 'text/javascript')
 	}
 
 	def apiAr4k() {
@@ -104,7 +104,7 @@ class AdminController {
 	}
 
 	def apiAr4kCtrl() {
-		render(template: "apiAr4kCtrl",model:[grafica: interfacciaContestoService.interfaccia.grafica])
+		render(template: "apiAr4kCtrl",model:[grafica: interfacciaContestoService.interfaccia.grafica],contentType: 'text/javascript')
 	}
 
 	def memoria() {
@@ -112,7 +112,7 @@ class AdminController {
 	}
 
 	def memoriaCtrl() {
-		render(template: "memoriaCtrl",model:[grafica: interfacciaContestoService.interfaccia.grafica])
+		render(template: "memoriaCtrl",model:[grafica: interfacciaContestoService.interfaccia.grafica],contentType: 'text/javascript')
 	}
 
 	def utenti() {
@@ -120,14 +120,14 @@ class AdminController {
 	}
 
 	def utentiCtrl() {
-		render(template: "utentiCtrl",model:[grafica: interfacciaContestoService.interfaccia.grafica])
+		render(template: "utentiCtrl",model:[grafica: interfacciaContestoService.interfaccia.grafica],contentType: 'text/javascript')
 	}
 	def processi() {
 		render(template: "processi",model:[grafica: interfacciaContestoService.interfaccia.grafica])
 	}
 
 	def processiCtrl() {
-		render(template: "processiCtrl",model:[grafica: interfacciaContestoService.interfaccia.grafica])
+		render(template: "processiCtrl",model:[grafica: interfacciaContestoService.interfaccia.grafica],contentType: 'text/javascript')
 	}
 
 	def memi() {
@@ -135,7 +135,7 @@ class AdminController {
 	}
 
 	def memiCtrl() {
-		render(template: "memiCtrl",model:[grafica: interfacciaContestoService.interfaccia.grafica])
+		render(template: "memiCtrl",model:[grafica: interfacciaContestoService.interfaccia.grafica],contentType: 'text/javascript')
 	}
 
 	def reti() {
@@ -143,7 +143,7 @@ class AdminController {
 	}
 
 	def retiCtrl() {
-		render(template: "retiCtrl",model:[grafica: interfacciaContestoService.interfaccia.grafica])
+		render(template: "retiCtrl",model:[grafica: interfacciaContestoService.interfaccia.grafica],contentType: 'text/javascript')
 	}
 
 	def ricettari() {
@@ -151,14 +151,14 @@ class AdminController {
 	}
 
 	def ricettariCtrl() {
-		render(template: "ricettariCtrl",model:[grafica: interfacciaContestoService.interfaccia.grafica])
+		render(template: "ricettariCtrl",model:[grafica: interfacciaContestoService.interfaccia.grafica],contentType: 'text/javascript')
 	}
 	def dashrossonet() {
 		render(template: "dashRossonet",model:[grafica: interfacciaContestoService.interfaccia.grafica])
 	}
 
 	def dashrossonetCtrl() {
-		render(template: "dashRossonetCtrl",model:[grafica: interfacciaContestoService.interfaccia.grafica])
+		render(template: "dashRossonetCtrl",model:[grafica: interfacciaContestoService.interfaccia.grafica],contentType: 'text/javascript')
 	}
 
 	def messaggiSistema() {
@@ -166,7 +166,7 @@ class AdminController {
 	}
 
 	def messaggiSistemaCtrl() {
-		render(template: "messaggiSistemaCtrl",model:[grafica: interfacciaContestoService.interfaccia.grafica])
+		render(template: "messaggiSistemaCtrl",model:[grafica: interfacciaContestoService.interfaccia.grafica],contentType: 'text/javascript')
 	}
 
 	/**
@@ -182,7 +182,7 @@ class AdminController {
 			if (interfacciaContestoService.contesto.vasoMaster?.idVaso == vaso.idVaso ) {
 				eMaster = true;
 			}
-			risultato.add([vaso:vaso,stato:stato,master:eMaster])
+			risultato.add([vaso:vaso.esporta(),stato:stato,master:eMaster])
 		}
 		def incapsulato = [vasi:risultato]
 		render incapsulato as JSON
@@ -247,21 +247,8 @@ class AdminController {
 	def listaMemi() {
 		def risultato = []
 		interfacciaContestoService.contesto.memi.each{ meme ->
-			try{
-				String idMeme = meme.idMeme
-				List<String> listRep = repositoryService.createDeploymentQuery().deploymentName(idMeme).list()*.getId()
-				//String datiRep = repositoryService.createDeploymentQuery().deploymentName(idMeme).singleResult()
-				def processi = []
-				listRep.each{ rep->
-					String idRep = rep
-					List<String> processiID = repositoryService.createProcessDefinitionQuery().deploymentId(idRep).list()*.getId()
-					processiID.each{
-						processi.add([processo:it,istanze:runtimeService.createExecutionQuery().processDefinitionId(it).count()])
-					}
-				}
-				def calcolati = [tooltip:meme.tooltip(),maschera:meme.maschera(),dashboard:meme.dashboard(),box:meme.box(),iconaStato:meme.iconaStato()]
-				risultato.add([meme:meme,processi:processi,calcolati:calcolati])
-			} catch (Exception ee){log.warn("Errore nella lettura del meme: "+ee)}
+			def calcolati = [tooltip:meme.tooltip(),maschera:meme.maschera(),dashboard:meme.dashboard(),box:meme.box(),iconaStato:meme.iconaStato()]
+			risultato.add([meme:meme,processi:processi,calcolati:calcolati])
 		}
 		def incapsulato = [memi:risultato]
 		render incapsulato as JSON
@@ -287,7 +274,6 @@ class AdminController {
 		String chiave = request.JSON.chiave
 		String valore = request.JSON.valore
 		interfacciaContestoService.stato.consul.setKVValue(chiave, valore)
-		sendMessage("activemq:topic:interfaccia.eventi",([tipo:'KVAGGIUNTO',chiave:chiave,valore:valore] as JSON).toString())
 		render "ok"
 	}
 
@@ -298,7 +284,6 @@ class AdminController {
 	def cancellaValoreKV() {
 		String chiave = request.JSON.chiave
 		interfacciaContestoService.stato.consul.deleteKVValue(chiave)
-		sendMessage("activemq:topic:interfaccia.eventi",([tipo:'KVRIMOSSO',chiave:chiave] as JSON).toString())
 		render "ok"
 	}
 
@@ -307,9 +292,7 @@ class AdminController {
 	 * Salva il contesto in consul KV
 	 */
 	def salvaContestoinKV() {
-		JSON contestoJson = interfacciaContestoService.contesto.esporta() as JSON
-		interfacciaContestoService.stato.consul.setKVValue("contesto_"+new Date().format("yyyyMMddHHmmss", TimeZone.getTimeZone("UTC")), contestoJson.toString())
-		sendMessage("activemq:topic:interfaccia.eventi",([tipo:'KVSALVATAGGIOCONTESTO',contesto:interfacciaContestoService.contesto.descrizione] as JSON).toString())
+		interfacciaContestoService.contesto.salva(interfacciaContestoService.stato)
 		render "ok"
 	}
 
@@ -323,7 +306,6 @@ class AdminController {
 		String vasoEtichetta = vasoTarget.etichetta
 		Contesto contestoDaSalvare = interfacciaContestoService.contesto
 		vasoTarget.salvaContesto(contestoDaSalvare)
-		sendMessage("activemq:topic:interfaccia.eventi",([tipo:'VASOSALVATAGGIOCONTESTO',contesto:interfacciaContestoService.contesto.descrizione,vaso:vasoEtichetta] as JSON).toString())
 		render "ok"
 	}
 
@@ -332,40 +314,13 @@ class AdminController {
 		JsonSlurper jsonSlurper = new JsonSlurper()
 		Map dato = jsonSlurper.parseText(request.JSON.dato)
 		Contesto contestoCaricato = new Contesto().importa(dato)
-		contestoCaricato.salva()
+		interfacciaContestoService.contesto.vasoMaster.salvaContesto(contestoCaricato)
 		render 'ok'
 	}
 
-	def resettaInterfacciaSuVaso() {
-		String idVasoTarget = request.JSON.vaso
-		Vaso vasoTarget = interfacciaContestoService.contesto.vasi.find{it.idVaso == idVasoTarget}
-		bootStrapService.macchinaMaster = vasoTarget.macchina
-		bootStrapService.portaMaster = vasoTarget.porta
-		bootStrapService.utenteMaster = vasoTarget.utente
-		bootStrapService.keyMaster = vasoTarget.key
-		bootStrapService.idContestoScelto = null
-		bootStrapService.idInterfacciaScelta = null
-		bootStrapService.inAvvio = true
-		bootStrapService.inReset = true
-		bootStrapService.contestoScelto = false
-		bootStrapService.interfacciaScelta = false
-		bootStrapService.configurato = true
-		bootStrapService.raggiungibile = true
-		bootStrapService.contesto = null
-		bootStrapService.interfaccia = null
-		bootStrapService.contestiInMaster = []
-		bootStrapService.interfacceInContesto = []
-		bootStrapService.utentiInContesto = []
-		interfacciaContestoService.connessioneConsul.finalize()
-		interfacciaContestoService.connessioneActiveMQ.finalize()
-		interfacciaContestoService.connnessioniSSH.each{it.finalize()}
-		UtenteRuolo.findAll().each{it.delete(flush: true)}
-		Utente.findAll().each{it.delete(flush: true)}
-		Ruolo.findAll().each{it.delete(flush: true)}
-		bootStrapService.valoreCasuale=org.apache.commons.lang.RandomStringUtils.random(5, true, true).toString()
-		render 'ok'
-	}
-
+	/** crea un file locale per il futuro avvio della console ar4K 
+	 *  il file verrà letto all'avvio
+	 * */
 	def salvaConfigurazioneInterfaccia() {
 		String risposta = "Errore nel salvataggio della configurazione..."
 		try{
@@ -383,10 +338,13 @@ class AdminController {
 			file << "interfaccia = '"+interfacciaContestoService.interfaccia.idInterfaccia+"'\n"
 
 			risposta = "salvataggio effettuato"
-		} catch(Exception ee){log.warn("Errore nel salvataggio della configurazione interfaccia in locale: "+ee.toString())}
+		} catch(Exception ee){
+			log.warn("Errore nel salvataggio della configurazione interfaccia in locale: "+ee.toString())
+		}
 		render risposta
 	}
 
+	/** scarica il file di configurazione della console Ar4k */
 	def scaricaConfigurazioneInterfaccia() {
 		def configurazione = [
 			host:interfacciaContestoService.contesto.vasoMaster.macchina,
@@ -427,13 +385,13 @@ class AdminController {
 				}
 			}
 			vasoTrovato.avviaConsulClient(interfacciaContestoService.contesto.vasoMaster.macchina)
-			sendMessage("activemq:topic:interfaccia.eventi",([tipo:'VASOAGGIUNTO',messaggio:vaso] as JSON).toString())
 			render "ok"
 		} else {
 			render "errore"
 		}
 	}
 
+	/** elimina un vaso */
 	def eliminaVaso() {
 		String idVaso = request.JSON.vaso
 		String risultato = 'Vaso non eliminato'
@@ -443,7 +401,6 @@ class AdminController {
 			if (conto!=interfacciaContestoService.contesto.vasi.size()){
 				int differenza = conto-interfacciaContestoService.contesto.vasi.size()
 				risultato = "Eliminato "+differenza.toString()+" vaso"
-				sendMessage("activemq:topic:interfaccia.eventi",([tipo:'VASOELIMINATO',vaso:idVaso] as JSON).toString())
 			}
 		}
 		render risultato
@@ -456,7 +413,6 @@ class AdminController {
 	def aggiungiRicettario() {
 		def ricettario = request.JSON.ricettario
 		log.info("Richiesta aggiunta ricettario: "+ricettario)
-		sendMessage("activemq:topic:interfaccia.eventi",([tipo:'RICETTARIOAGGIUNTO',messaggio:request.JSON.ricettario] as JSON).toString())
 		RepositoryGit repositoryGit = new RepositoryGit(indirizzo:ricettario.repo,nomeCartella:ricettario.cartella)
 		if (
 		interfacciaContestoService.contesto.ricettari.add(
@@ -476,7 +432,6 @@ class AdminController {
 		String idRicettario = request.JSON.idricettario
 		interfacciaContestoService.contesto.ricettari.removeAll{it.idRicettario == idRicettario}
 		try {
-			sendMessage("activemq:topic:interfaccia.eventi",([tipo:'RICETTARIOELIMINATO',messaggio:idRicettario.toString()]  as JSON).toString())
 			render "ok"
 		} catch (Exception ee){
 			log.info "Evento da AdminController non comunicato: "+ee.toString()

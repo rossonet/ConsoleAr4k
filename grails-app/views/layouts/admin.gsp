@@ -6,7 +6,7 @@
 <base href="${g.createLink(absolute:true,uri:'/')}" />
 <meta name="author" content="Rossonet s.c.a r.l (Imola) - Italy">
 <meta name="description"
-	content="Template applicativo per App in Grails AngularJS Twitter BootStrap con supporto Kettle SSH Spring Auth">
+	content="Console gestione ambienti Ar4k by Rossonet">
 <meta name="viewport" content="width=device-width">
 
 <link rel="shortcut icon"
@@ -22,8 +22,6 @@
 <g:if env="development">
 	<link rel="stylesheet"
 		href="bower_components/bootstrap/dist/css/bootstrap.css" />
-
-
 	<link rel="stylesheet"
 		href="bower_components/metisMenu/dist/metisMenu.css">
 	<link rel="stylesheet"
@@ -31,6 +29,7 @@
 	<link rel="stylesheet"
 		href="bower_components/font-awesome/css/font-awesome.css"
 		type="text/css">
+	<link href="bower_components/nvd3/build/nv.d3.css" rel="stylesheet">
 
 	<script src="bower_components/jquery/dist/jquery.js"></script>
 	<script src="bower_components/angular/angular.js"></script>
@@ -45,16 +44,18 @@
 		src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
 	<script src="bower_components/metisMenu/dist/metisMenu.js"></script>
 	<script src="bower_components/marked/lib/marked.js"></script>
-	<script src="bower_components/angular-marked/angular-marked.js"></script>
+	<script src="bower_components/angular-marked/dist/angular-marked.js"></script>
 	<script src="bower_components/restangular/dist/restangular.js"></script>
 	<script src="bower_components/lodash/dist/lodash.js"></script>
 	<script src="bower_components/angular-animate/angular-animate.js"></script>
 	<script src="bower_components/jsoneditor/dist/jsoneditor.js"></script>
+	<script src="bower_components/d3/d3.js"></script>
+	<script src="bower_components/nvd3/build/nv.d3.js"></script>
+	<script src="bower_components/angular-nvd3/dist/angular-nvd3.js"></script>
 </g:if>
 <g:if env="production">
 	<link rel="stylesheet"
 		href="bower_components/bootstrap/dist/css/bootstrap.min.css" />
-
 	<link rel="stylesheet"
 		href="bower_components/metisMenu/dist/metisMenu.min.css">
 	<link rel="stylesheet"
@@ -62,6 +63,7 @@
 	<link rel="stylesheet"
 		href="bower_components/font-awesome/css/font-awesome.min.css"
 		type="text/css">
+	<link href="bower_components/nvd3/build/nv.d3.min.css" rel="stylesheet">
 
 	<script src="bower_components/jquery/dist/jquery.min.js"></script>
 	<script src="bower_components/angular/angular.min.js"></script>
@@ -77,13 +79,16 @@
 	<script src="bower_components/metisMenu/dist/metisMenu.min.js"></script>
 	<script src="bower_components/marked/marked.min.js"></script>
 	<script
-		src="bower_components/angular-marked/angular-marked.min.js"></script>
+		src="bower_components/angular-marked/dist/angular-marked.min.js"></script>
 	<script
 		src="bower_components/restangular/dist/restangular.min.js"></script>
 	<script src="bower_components/lodash/dist/lodash.min.js"></script>
 	<script
 		src="bower_components/angular-animate/angular-animate.min.js"></script>
 	<script src="bower_components/jsoneditor/dist/jsoneditor.min.js"></script>
+	<script src="bower_components/d3/d3.min.js"></script>
+	<script src="bower_components/nvd3/build/nv.d3.min.js"></script>
+	<script src="bower_components/angular-nvd3/dist/angular-nvd3.min.js"></script>
 </g:if>
 
 <script src="bower_components/angular-lodash/angular-lodash.js"></script>

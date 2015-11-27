@@ -1,6 +1,8 @@
 (function () {
   'use strict';
 
+  var fs = require('fs');
+  var path = require('path');
   var gulp = require('gulp');
   var less = require('gulp-less');
   var sourcemaps = require('gulp-sourcemaps');
@@ -16,14 +18,26 @@
   var git = require('gulp-git');
   var shell = require('gulp-shell');
   var rename = require('gulp-rename');
-  var fs = require('fs');
   var sequence = require('gulp-sequence');
+  var ngAnnotate = require('gulp-ng-annotate');
+  var rimraf = require('gulp-rimraf');
+
+  gulp.task('clean', function () {
+    return gulp.src('./dist/*', { read: false })
+      .pipe(rimraf());
+  });
 
   gulp.task('less', function () {
     return gulp.src('./*.less')
-      .pipe(sourcemaps.init())
       .pipe(less())
+      .pipe(gulp.dest('./dist'));
+  });
+
+  gulp.task('css-min', function () {
+    return gulp.src('./dist/*.css')
+      .pipe(sourcemaps.init())
       .pipe(csso())
+      .pipe(rename({ suffix: '.min' }))
       .pipe(sourcemaps.write('./'))
       .pipe(gulp.dest('./dist'));
   });
@@ -39,14 +53,22 @@
       .pipe(jscs());
   });
 
+  gulp.task('cover', shell.task([
+    './node_modules/istanbul/lib/cli.js instrument angular-chart.js > test/fixtures/coverage.js'
+  ]));
+
   gulp.task('unit', shell.task([
-    ' ./node_modules/mocha-phantomjs/bin/mocha-phantomjs -R spec test/index.html '
+    'mocha-phantomjs -R spec ' + path.join('test', 'index.html') + ' -k mocha-phantomjs-istanbul'
   ]));
 
   gulp.task('integration', function () {
-    return gulp.src('test/test.integration.js', {read: false})
-      .pipe(mocha({ reporter: 'list', timeout: 10000, require: 'test/support/setup.js' }));
+    return gulp.src(path.join('test', 'test.integration.js'), {read: false})
+      .pipe(mocha({ reporter: 'list', timeout: 20000, require: 'test/support/setup.js' }));
   });
+
+  gulp.task('report', shell.task([
+    './node_modules/istanbul/lib/cli.js report --include coverage/coverage.json'
+  ]));
 
   gulp.task('bump-patch', bump('patch'));
   gulp.task('bump-minor', bump('minor'));
@@ -54,12 +76,14 @@
 
   gulp.task('bower', function () {
     return gulp.src('./angular-chart.js')
+      .pipe(ngAnnotate({ single_quotes: true }))
       .pipe(gulp.dest('./dist'));
   });
 
   gulp.task('js', ['lint', 'style', 'bower'], function () {
     return gulp.src('./angular-chart.js')
       .pipe(rename('angular-chart.min.js'))
+      .pipe(ngAnnotate({ single_quotes: true }))
       .pipe(sourcemaps.init())
       .pipe(uglify())
       .pipe(sourcemaps.write('./'))
@@ -83,7 +107,7 @@
 
   gulp.task('git-commit', function () {
     var v = version();
-    gulp.src(['./dist/*', './package.json', './bower.json', './examples/charts.html'])
+    gulp.src(['./dist/*', './package.json', './bower.json', './examples/charts.html', './test/fixtures/coverage.js'])
       .pipe(git.add())
       .pipe(git.commit(v))
     ;
@@ -122,8 +146,9 @@
     return JSON.parse(fs.readFileSync('package.json', 'utf8')).version;
   }
 
-  gulp.task('default', sequence('check', ['less', 'js'], 'build'));
-  gulp.task('test', sequence('unit', 'integration'));
+  gulp.task('default', sequence('check', 'assets'));
+  gulp.task('assets', sequence('clean', ['less', 'js'], 'css-min', 'build'));
+  gulp.task('test', sequence('cover', 'unit', 'integration', 'report'));
   gulp.task('check', sequence(['lint', 'style'], 'test'));
   gulp.task('deploy-patch', sequence('default', 'bump-patch', 'update', 'git-commit', 'git-push', 'npm'));
   gulp.task('deploy-minor', sequence('default', 'bump-minor', 'update', 'git-commit', 'git-push', 'npm'));

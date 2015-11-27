@@ -28,7 +28,7 @@
 						class="col-xs-6 col-sm-6 col-md-2 col-lg-2 text-right div4-padding">
 						<button class="btn btn-circle btn-xs" type="button"
 							ng-click="creameme(seme.meme.idMeme)" tooltip-placement="bottom"
-							tooltip="crea un meme da questo seme.">
+							uib-tooltip="crea un meme da questo seme.">
 							<i class="fa fa-flask"></i>
 						</button>
 					</div>
@@ -57,7 +57,7 @@
 							class="btn btn-circle btn-default btn-xs" type="button"
 							ng-click="focusDocumentazione=!focusDocumentazione"
 							tooltip-placement="bottom"
-							tooltip="visualizza la documentazione sui ricettari e i repository git.">
+							uib-tooltip="visualizza la documentazione sui ricettari e i repository git.">
 							<i class="fa fa-question"></i>
 						</button>
 					</h3>
@@ -106,14 +106,14 @@
 								class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text-right div4-padding">
 								<button class="btn btn-outline btn-primary" ng-hide="nuovo"
 									type="button" ng-click="nuovo=true" tooltip-placement="bottom"
-									tooltip="collega un nuovo repository git al sistema.">NUOVO
+									uib-tooltip="collega un nuovo repository git al sistema.">NUOVO
 									RICETTARIO</button>
 							</div>
 							<div
 								class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text-left div4-padding">
 								<button class="btn btn-success btn-primary" ng-hide="nuovo"
 									type="button" ng-click="nuovo=true" tooltip-placement="bottom"
-									tooltip="collega un abbonamento Rossonet Ar4k.">
+									uib-tooltip="collega un abbonamento Rossonet Ar4k.">
 									<i class="fa fa-shopping-cart"></i> CODICE AR4K
 								</button>
 							</div>
@@ -150,13 +150,13 @@
 											type="button"
 											ng-click="$parent.semi(ricettario.idRicettario)"
 											tooltip-placement="top"
-											tooltip="visualizza i semi nel ricettario.">
+											uib-tooltip="visualizza i semi nel ricettario.">
 											<i class="fa fa-eye"></i>
 										</button>
 										<button class="btn btn-circle btn-info btn-xs" type="button"
 											ng-click="$parent.aggiorna(ricettario.idRicettario)"
 											tooltip-placement="top"
-											tooltip="aggiorna il repository git del ricettario e ricarica i semi.">
+											uib-tooltip="aggiorna il repository git del ricettario e ricarica i semi.">
 											<i class="fa fa-refresh"></i>
 										</button>
 										<button
@@ -165,7 +165,7 @@
 											class="btn btn-circle btn-danger btn-xs" type="button"
 											tooltip-placement="bottom"
 											ng-click="$parent.cancella(ricettario.idRicettario)"
-											tooltip="elimina il ricettario. Tutti i semi collegati saranno eliminati! il ricettario non sarà eliminato dai vasi per permettere ai memi il funzionamento.">
+											uib-tooltip="elimina il ricettario. Tutti i semi collegati saranno eliminati! il ricettario non sarà eliminato dai vasi per permettere ai memi il funzionamento.">
 											<i class="fa fa-trash-o"></i>
 										</button>
 									</div>

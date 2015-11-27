@@ -2,8 +2,6 @@
 	<div class="row">
 		<div class="col-lg-12">
 			<h1 class="page-header">Dashboard</h1>
-
-			<!-- /.col-lg-12 -->
 			Dalla dashboard si gestiranno i link diretti. QR, short code ecc...
 			da qui si potranno organizzare i memi e i metodi dei memi su vari
 			pattern semantici. In particolare mappe geografiche, sinottiche,

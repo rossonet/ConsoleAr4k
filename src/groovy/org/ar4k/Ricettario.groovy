@@ -1,7 +1,7 @@
 /**
  * Ricettario
  *
- * <p>Un ricettario corrisponde ad un archivio git accessibile da un vaso e contiene semi utilizzabili nel vaso per la creazione dei memi.</p>
+ * <p>Un ricettario corrisponde ad un archivio git accessibile da un nodo e contiene semi utilizzabili nel vaso per la creazione dei memi.</p>
  *
  * <p style="text-justify">
  * In un vaso sono presenti più ricettari. Un vaso può utilizzare i ricettari compatibili con le funzionalità di cui dispone (base e aggiunte con memi).</br>
@@ -17,7 +17,8 @@
 
 package org.ar4k
 
-import grails.converters.JSON;
+import grails.converters.JSON
+import grails.util.Holders
 
 class Ricettario {
 	/** id univoco ricettario */
@@ -28,16 +29,6 @@ class Ricettario {
 	String descrizione ='Ricettario (git) AR4K by Rossonet'
 	/** repository git */
 	RepositoryGit repositoryGit = new RepositoryGit()
-	/** semi disponibili sul ricettario */
-	List<Seme> semi = []
-	/** ultimo caricamento */
-	String aggiornato
-	/** se vero, carica il repository su tutti i vasi  */
-	Boolean clonaOvunque = true
-	/** se vero, esegue in caricamento del repository sui vasi in bootstrap */
-	Boolean caricaInBootstrap = true
-
-
 
 	/** esporta il ricettario */
 	def esporta() {
@@ -46,12 +37,29 @@ class Ricettario {
 			idRicettario:idRicettario,
 			etichetta:etichetta,
 			descrizione:descrizione,
-			repositoryGit:repositoryGit.esporta(),
-			aggiornato: aggiornato.toString(),
-			clonaOvunque:clonaOvunque,
-			semi:semi*.esporta(),
-			caricaInBootstrap:caricaInBootstrap
+			repositoryGit:repositoryGit?.idRepository
 		]
+	}
+	
+	/** salva in uno Stato specifico a catena per N profondità */
+	Boolean salva(Stato stato,Integer contatore) {
+		stato.salvaValore(idRicettario,'org-ar4k-ricettario',(esporta() as JSON).toString())
+		if (contatore > 0) {
+			contatore = contatore -1
+			repositoryGit?.salva(stato,contatore)
+		}
+	}
+	/** salva in uno Stato specifico solo l'oggetto */
+	Boolean salva(Stato stato) {
+		salva(stato,0)
+	}
+	/** salva nello stato di default solo l'oggetto */
+	Boolean salva() {
+		salva(Holders.applicationContext.getBean("interfacciaContestoService").stato,0)
+	}
+	/** salva nello stato di default a catena per N profondità */
+	Boolean salva(Integer contatore) {
+		salva(Holders.applicationContext.getBean("interfacciaContestoService").stato,contatore)
 	}
 
 	Ricettario importa(Map json){
@@ -80,26 +88,50 @@ class Ricettario {
  *
  */
 class RepositoryGit {
+	/** id univoco */
+	String idRepository = UUID.randomUUID()
 	/** utente, se null accesso anonimo */
 	String utente = null
 	/** password utente */
 	String password = null
 	/** URL Repository */
-	String indirizzo = 'https://github.com/rossonet/templateAr4k.git'
+	String indirizzo = null
 	/** directory ricettario in vaso */
-	String nomeCartella = 'ar4k_open'
+	String nomeCartella = null
 	/** stato */
 	Boolean configurato = true
 
 	def esporta() {
 		log.info("esporta: "+indirizzo )
 		return [
+			idRepository:idRepository,
 			utente:utente,
 			password:password,
 			indirizzo:indirizzo,
 			nomeCartella:nomeCartella,
 			configurato:configurato
 		]
+	}
+	
+	/** salva in uno Stato specifico a catena per N profondità */
+	Boolean salva(Stato stato,Integer contatore) {
+		stato.salvaValore(idRepository,'org-ar4k-repository',(esporta() as JSON).toString())
+		if (contatore > 0) {
+			contatore = contatore -1
+			// nessuna dipendenza
+		}
+	}
+	/** salva in uno Stato specifico solo l'oggetto */
+	Boolean salva(Stato stato) {
+		salva(stato,0)
+	}
+	/** salva nello stato di default solo l'oggetto */
+	Boolean salva() {
+		salva(Holders.applicationContext.getBean("interfacciaContestoService").stato,0)
+	}
+	/** salva nello stato di default a catena per N profondità */
+	Boolean salva(Integer contatore) {
+		salva(Holders.applicationContext.getBean("interfacciaContestoService").stato,contatore)
 	}
 }
 
@@ -113,6 +145,8 @@ class RepositoryGit {
  *
  */
 class Seme {
+	/** id univoco */
+	String idSeme = UUID.randomUUID()
 	/** dati meme germinante*/
 	Meme meme
 	String percorso
@@ -121,11 +155,32 @@ class Seme {
 	def esporta() {
 		log.info("esporta() il seme in : "+percorso)
 		return [
-			meme:meme.esporta(),
+			meme:meme?.idMeme,
 			percorso:percorso
 		]
 	}
 
+	/** salva in uno Stato specifico a catena per N profondità */
+	Boolean salva(Stato stato,Integer contatore) {
+		stato.salvaValore(idSeme,'org-ar4k-seme',(esporta() as JSON).toString())
+		if (contatore > 0) {
+			contatore = contatore -1
+			meme?.salva(stato,contatore)
+		}
+	}
+	/** salva in uno Stato specifico solo l'oggetto */
+	Boolean salva(Stato stato) {
+		salva(stato,0)
+	}
+	/** salva nello stato di defualt solo l'oggetto */
+	Boolean salva() {
+		salva(Holders.applicationContext.getBean("interfacciaContestoService").stato,0)
+	}
+	/** salva nello stato di defualt a catena per N profondità */
+	Boolean salva(Integer contatore) {
+		salva(Holders.applicationContext.getBean("interfacciaContestoService").stato,contatore)
+	} 
+	
 	Seme importa(Map json){
 		log.info("importa() il seme: "+json.meme.idMeme)
 		Seme semeCreato = new Seme(

@@ -58,23 +58,23 @@
 									<button class="btn btn-circle btn-success btn-xs" type="button"
 										ng-click="svolgiistanza(istanza.taskid)"
 										tooltip-placement="bottom"
-										tooltip="esegui il prossimo compito per questa istanza">
+										uib-tooltip="esegui il prossimo compito per questa istanza">
 										<i class="fa fa-play"></i>
 									</button>
 									<button class="btn btn-circle btn-warning btn-xs" type="button"
 										ng-click="sospendiistanza(istanza.id)"
-										tooltip-placement="bottom" tooltip="sospendi questa istanza">
+										tooltip-placement="bottom" uib-tooltip="sospendi questa istanza">
 										<i class="fa fa-pause"></i>
 									</button>
 									<button class="btn btn-circle btn-danger btn-xs" type="button"
 										ng-click="eliminaistanza(istanza.id)"
-										tooltip-placement="bottom" tooltip="cancella questa istanza">
+										tooltip-placement="bottom" uib-tooltip="cancella questa istanza">
 										<i class="fa fa-stop"></i>
 									</button>
 									<button class="btn btn-circle btn-info btn-xs" type="button"
 										ng-click="assegnaistanza(istanza.id)"
 										tooltip-placement="bottom"
-										tooltip="assegna questa istanza ad un utente">
+										uib-tooltip="assegna questa istanza ad un utente">
 										<i class="fa fa-user"></i>
 									</button>
 								</div>
@@ -137,7 +137,7 @@
 							class="btn btn-circle btn-default btn-xs" type="button"
 							ng-click="focusDocumentazione=!focusDocumentazione"
 							tooltip-placement="bottom"
-							tooltip="visualizza la documentazione sui memi.">
+							uib-tooltip="visualizza la documentazione sui memi.">
 							<i class="fa fa-question"></i>
 						</button>
 					</h3>
@@ -215,21 +215,21 @@
 												class="btn btn-circle btn-warning btn-xs" type="button"
 												ng-click="$parent.maschera(processo.processo)"
 												tooltip-placement="bottom"
-												tooltip="visualizza le istanze attive per questo processo.">
+												uib-tooltip="visualizza le istanze attive per questo processo.">
 												<i>{{processo.istanze}}</i>
 											</button>
 											<button style="margin: 0.1em;"
 												class="btn btn-circle btn-info btn-xs" type="button"
 												ng-click="$parent.dettagli(processo.processo)"
 												tooltip-placement="top"
-												tooltip="visualizza la definizione del processo.">
+												uib-tooltip="visualizza la definizione del processo.">
 												<i class="fa fa-eye"></i>
 											</button>
 											<button style="margin: 0.1em;"
 												class="btn btn-circle btn-success btn-xs" type="button"
 												ng-click="$parent.mascheraNuovo(processo.processo)"
 												tooltip-placement="bottom"
-												tooltip="crea una nuova istanza per questo processo.">
+												uib-tooltip="crea una nuova istanza per questo processo.">
 												<i class="fa fa-play"></i>
 											</button>
 										</div>
@@ -240,21 +240,21 @@
 								class="col-xs-12 col-sm-4 col-md-3 col-lg-2 text-right div4-padding">
 								<button style="margin: 0.1em;" class="btn btn-circle btn-xs"
 									type="button" ng-click="$parent.azioneMeme(meme.meme.idMeme)"
-									tooltip-placement="top" tooltip="{{meme.calcolati.tooltip}}">
+									tooltip-placement="top" uib-tooltip="{{meme.calcolati.tooltip}}">
 									<i class="fa {{meme.calcolati.iconaStato}}"></i>
 								</button>
 								<button style="margin: 0.1em;"
 									class="btn btn-circle btn-info btn-xs" type="button"
 									ng-click="1+1"
 									tooltip-placement="top"
-									tooltip="gestisci i link e i qr per questo meme.">
+									uib-tooltip="gestisci i link e i qr per questo meme.">
 									<i class="fa fa-qrcode"></i>
 								</button>
 								<button style="margin: 0.1em;"
 									class="btn btn-circle btn-danger btn-xs" type="button"
 									ng-click="$parent.cancellaMeme(meme.meme.idMeme)"
 									tooltip-placement="bottom"
-									tooltip="Apre l'interfaccia per eliminare questo meme, i processi e le istanze collegate ad esso.">
+									uib-tooltip="Apre l'interfaccia per eliminare questo meme, i processi e le istanze collegate ad esso.">
 									<i class="fa fa-trash-o"></i>
 								</button>
 							</div>
