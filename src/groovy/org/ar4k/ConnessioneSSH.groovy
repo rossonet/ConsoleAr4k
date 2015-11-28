@@ -3,6 +3,7 @@ package org.ar4k
 import grails.converters.JSON
 
 import java.util.List;
+import java.util.zip.ZipOutputStream
 
 import javax.validation.OverridesAttribute;
 
@@ -276,7 +277,7 @@ class ConnessioneSSH {
 		String risultato=esegui(creaDirectory)
 		return risultato?true:false
 	}
-	
+
 	/** crea la struttura di directory per ar4k */
 	Boolean killConsul() {
 		String kill = """
@@ -350,7 +351,7 @@ class ConnessioneSSH {
  * @author andrea
  *
  */
-class LavorazioniSSH {
+class LavorazioneSSH {
 	String tipoOggetto = 'org-ar4k-lavorazioneSSH'
 
 	/** id univoco lavorazione */
@@ -359,17 +360,115 @@ class LavorazioniSSH {
 	String etichetta = null
 	/** descrizione */
 	String descrizione = null
-	/** stato lavorazione **/
-	String stato = 'init'
+	/** vaso esecuzione */
+	Vaso vaso = null
 	/** repository necessari sul nodo, verrano aggiornati prima dell'esecuzione */
 	List<Ricettario> ricettariNecessari = []
-	
+	/** pid esecuzione sul vaso */
+	Integer pid = null
+	/** data esecuzione */
+	Date inizio = null
+	/** data ultimo check */
+	Date aggiornamento = null
+	/** comando da eseguire comprensivo di parametri */
+	String comando
+
+	/** avvia la lavorazione */
+	Integer avvia() {
+		try {
+			// crea la cartella
+			String creaCartella = "mkdir -p .ar4k/esecuzioni/"+idLavorazione
+			vaso.ssh.esegui(creaCartella)
+			// verifica i repository
+			ricettariNecessari.each{
+				vaso.ssh.esegui(it.comandoCaricamento())
+				vaso.ssh.esegui('ln -s '+it.percorsoLocaleUtente()+' .ar4k/esecuzioni/'+idLavorazione+'/')
+			}
+			// esegue il comando reindirizzando l'output e l'errore, poi sgancia la sessione dopo aver letto il pid
+			String comandoEsecuzione = "cd .ar4k/esecuzioni/"+idLavorazione+'; '+comando
+			comandoEsecuzione+=' </dev/null >.ar4k/esecuzioni/'+idLavorazione+'/output 2>.ar4k/esecuzioni/'+idLavorazione+'/error &\n echo $!'
+			pid = vaso.ssh.esegui(comandoEsecuzione).replaceAll("[\n\r]", "").toInteger()
+			inizio = new Date()
+			if (vaso.lavorazioni.find{it.idLavorazione==idLavorazione}){
+				// lavorazione già sul vaso
+			} else {
+				vaso.lavorazioni.add(this)
+			}
+			log.info("lavorazione lanciata su vaso "+vaso+" con pid "+pid)
+			// salva l'oggetto in db
+			salva(4) // segue a catena per quatro step
+		} catch(Exception frg) {
+			log.warn("Errore nell'esecuzione del comando "+comando+" : "+frg.printStackTrace())
+			return -1
+		}
+		return pid
+	}
+
+	/** interrompi la lavorazione */
+	String pausa() {
+		vaso.ssh.esegui("kill -STOP "+pid)
+		return stato()
+	}
+
+	/** riprendi la lavorazione */
+	String riprendi() {
+		return vaso.ssh.esegui("kill -CONT "+pid)
+		return stato()
+	}
+
+	/** ferma la lavorazione */
+	String stop() {
+		return vaso.ssh.esegui("kill -TERM "+pid)
+		return stato()
+	}
+
+	/** distruggi i dati relativi alla lavorazione */
+	void ripulisci() {
+		vaso.ssh.esegui("kill -KILL "+pid)
+		vaso.ssh.esegui("cd .ar4k/esecuzioni/ && rm -rf "+idLavorazione)
+		vaso.lavorazioni.removeAll{it.idLavorazione==idLavorazione}
+		this.finalize()
+	}
+
+	/** stato */
+	String stato() {
+		//return vaso.ssh.esegui('ps --no-headers -o "start_time,flags,s,uname,tty,ppid,pid,pri,etime,%cpu,time,%mem,rss,sz,command,args,ni" '+pid+' | sed "s/[\\ ]\\+/,/g"')
+		aggiornamento = new Date()
+		return vaso.ssh.esegui('ps --no-headers -o "flags,start_time,s,uname,tty,ppid,pid,pri,etime,%cpu,time,%mem,rss,sz,ni" '+pid+' | sed "s/[\\ ]\\+/,/g"').replaceAll("[\n\r]", "")
+	}
+
+	/** esiste sul sistema? */
+	Boolean esiste() {
+		return (stato()=='')?false:true
+	}
+
+	/** in pausa? */
+	Boolean eInPausa() {
+		return (stato().split(',')[2]=='T')?true:false
+	}
+
+	/** senza errori? */
+	Boolean eSenzaErrori() {
+		return (getErrorStream()=='')?true:false
+	}
+
+	/** ritorna l'output generato */
+	String getOutputStream() {
+		return vaso.ssh.leggiConCat('cat .ar4k/esecuzioni/'+idLavorazione+'/output')
+	}
+
+	/** ritorna l'errore generato */
+	String getErrorStream() {
+		return vaso.ssh.leggiConCat('cat .ar4k/esecuzioni/'+idLavorazione+'/error')
+	}
+
 	/** salva in uno Stato specifico a catena per N profondità */
 	Boolean salva(Stato stato,Integer contatore) {
 		stato.salvaValore(idLavorazione,tipoOggetto,(esporta() as JSON).toString())
 		if (contatore > 0) {
 			contatore = contatore -1
 			ricettariNecessari*.salva(stato,contatore)
+			vaso?.salva(stato,contatore)
 		}
 	}
 	/** salva in uno Stato specifico solo l'oggetto */
@@ -390,17 +489,82 @@ class LavorazioniSSH {
 		return [
 			idLavorazione:idLavorazione,
 			etichetta:etichetta,
-			descrizione:descrizione
+			descrizione:descrizione,
+			vaso:vaso?.idVaso,
+			ricettariNecessari:ricettariNecessari*.idRicettario,
+			pid:pid,
+			comando:comando,
+			aggiornamento:aggiornamento,
+			inizio:inizio
 		]
 	}
 }
+
+/** job di scansione
+ *
+ * @author andrea
+ *
+ */
+class noVNC extends LavorazioneSSH {
+	String tipoOggetto = 'org-ar4k-noVNC'
+	/** etichetta */
+	String etichetta = 'servizio noVNC'
+	/** descrizione */
+	String descrizione = 'Applicazione node per accesso in VNC'
+	String hostVNC = '127.0.0.1'
+	Integer portaVNC = 5901
+
+	Integer avviaNoVNC() {
+		def ricettariDisponibili = Holders.applicationContext.getBean("interfacciaContestoService").contesto.ricettari
+		ricettariNecessari.add(ricettariDisponibili.find{it.repositoryGit.nomeCartella == 'ar4k_open'})
+		comando = 'cp -a ar4k_open/noVNC-0.5.1 .'+'\n'
+		comando += 'cd noVNC-0.5.1'+'\n'
+		comando += 'npm install &>/dev/null'+'\n'
+		comando += './utils/launch.sh --vnc '+hostVNC+' '+portaVNC+'\n'
+		return avvia()
+	}
+
+	Boolean fermaNoVNC() {
+		stop()
+	}
+
+}
+
+/** job di scansione
+ *
+ * @author andrea
+ *
+ */
+class ConsoleJS extends LavorazioneSSH {
+	String tipoOggetto = 'org-ar4k-ttyJS'
+	/** etichetta */
+	String etichetta = 'servizio ttyJS'
+	/** descrizione */
+	String descrizione = 'Applicazione node per accesso in console'
+
+	Integer avviaConsole() {
+		def ricettariDisponibili = Holders.applicationContext.getBean("interfacciaContestoService").contesto.ricettari
+		// richiede installazione root: #npm install tty.js -g
+		ricettariNecessari.add(ricettariDisponibili.find{it.repositoryGit.nomeCartella == 'ar4k_open'})
+		comando = 'cp -a ar4k_open/tty.js-0.2.15 .'+'\n'
+		comando += 'cd tty.js-0.2.15'+'\n'
+		comando += 'npm install &>/dev/null'+'\n'
+		comando = './bin/tty.js'
+		return avvia()
+	}
+
+	Boolean fermaConsole() {
+		stop()
+	}
+}
+
 
 /** job di scansione
  * 
  * @author andrea
  *
  */
-class Scansione extends LavorazioniSSH {
+class Scansione extends LavorazioneSSH {
 	String tipoOggetto = 'org-ar4k-Scansione'
 
 }
@@ -410,7 +574,7 @@ class Scansione extends LavorazioniSSH {
  * @author andrea
  *
  */
-class Servizio extends LavorazioniSSH {
+class Servizio extends LavorazioneSSH {
 	String tipoOggetto = 'Servizio'
 }
 
@@ -419,6 +583,6 @@ class Servizio extends LavorazioniSSH {
  * @author andrea
  *
  */
-class EnvConsul extends LavorazioniSSH {
+class EnvConsul extends LavorazioneSSH {
 	String tipoOggetto = 'EnvConsulSSH'
 }

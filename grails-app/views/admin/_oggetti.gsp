@@ -1,3 +1,29 @@
+<%-- modal terminale --%>
+<div aria-hidden="false" aria-labelledby="Terminale" role="dialog"
+	tabindex="-1" id="terminaleModal" class="modal fade in"
+	ng-show="terminale" style="display: block; padding: 13px;">
+	<div class="modal-dialog"
+		style="width: 100%; height: 100%; padding: 0;">
+		<div class="modal-content" style="height: 96%; border-radius: 15; background-color: gray;">
+			<div class="modal-body" style="padding-top: 4px;">
+				<button aria-hidden="true" data-dismiss="modal"
+					ng-click="terminale=false" class="close" type="button"
+					style="z-index: 100; position: absolute; color: white; opacity: 0.9;">×</button>
+				<div class="row vertical-center-row">
+					<div
+						class="col-xs-12 col-sm-12 col-md-12 col-lg-12 embed-responsive embed-responsive-16by9">
+						<iframe ng-src="{{iframeTerminale}}" style="border: 0px;"></iframe>
+					</div>
+
+				</div>
+
+			</div>
+		</div>
+		<!-- /.modal-content -->
+	</div>
+	<!-- /.modal-dialog -->
+</div>
+
 <%-- modal scansione rete --%>
 <div aria-hidden="false" aria-labelledby="Meme" role="dialog"
 	tabindex="-1" id="scansioneReteModal" class="modal fade in"
@@ -31,8 +57,8 @@
 									<button style="margin: 0.2em;"
 										class="btn btn-circle btn-danger btn-xs" type="submit"
 										ng-click="$parent.scansioneOpenVasE(vaso.vaso.idVaso)"
-										uib-tooltip="inizia scansione con OpenVas">
-										<i class="fa fa-sun-o"></i>
+										uib-tooltip="inizia scansione completa">
+										<i class="fa fa-share-alt"></i>
 									</button>
 								</div>
 							</div>
@@ -256,8 +282,8 @@
 								</button>
 								<button style="margin: 0.1em;"
 									class="btn btn-circle btn-warning btn-xs" type="button"
-									ng-click="$parent.modifica(vaso.vaso.idVaso)"
-									uib-tooltip="accesso ssh">
+									ng-click="$parent.terminaleA(vaso.vaso.idVaso)"
+									uib-tooltip="accesso terminale">
 									<i class="fa fa-terminal"></i>
 								</button>
 								<button style="margin: 0.1em;"
@@ -279,6 +305,7 @@
 									ng-hide="vaso.master">
 									<i class="fa fa-trash-o"></i>
 								</button>
+
 
 							</div>
 							<div

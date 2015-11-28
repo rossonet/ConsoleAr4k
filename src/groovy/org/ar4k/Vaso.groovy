@@ -45,7 +45,7 @@ class Vaso {
 	/** variabile PATH sulla macchina */
 	String path = '/usr/local/bin:/usr/bin:/bin'
 	/** job gestiti dalla machina via ssh */
-	List<LavorazioniSSH> lavorazioni = []
+	List<LavorazioneSSH> lavorazioni = []
 	/** ricettari necessari sul vaso */
 	List<Ricettario> ricettari = []
 	/** funzionalità. In particolare: 
@@ -98,23 +98,23 @@ class Vaso {
 	}
 
 	/** avvia agente consul in modalità client */
-	LavorazioniSSH avviaConsulClient(IstanzaConsul consul,Boolean reset=false) {
+	LavorazioneSSH avviaConsulClient(IstanzaConsul consul,Boolean reset=false) {
 		return false
 	}
 
 	/** avvia agente consul in modalità client */
-	LavorazioniSSH avviaConsulServer(IstanzaConsul consul,Boolean reset=false) {
+	LavorazioneSSH avviaConsulServer(IstanzaConsul consul,Boolean reset=false) {
 		return false
 	}
 
 	/** avvia interfaccia ar4k */
-	LavorazioniSSH avviaInterfacciaAr4k(Boolean reset=false) {
+	LavorazioneSSH avviaInterfacciaAr4k(Boolean reset=false) {
 		return false
 	}
 
 	/** avvia interfaccia web ssh in node */
-	LavorazioniSSH avviaInterfacciaSSHWeb(Boolean reset=false) {
-		return false
+	LavorazioneSSH avviaInterfacciaSSHWeb(Boolean reset=false) {
+		return new ConsoleJS(this).avviaConsole()
 	}
 
 	/** Scansione funzionalità e stato

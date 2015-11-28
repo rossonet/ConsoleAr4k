@@ -40,7 +40,7 @@ class Ricettario {
 			repositoryGit:repositoryGit?.idRepository
 		]
 	}
-	
+
 	/** salva in uno Stato specifico a catena per N profondità */
 	Boolean salva(Stato stato,Integer contatore) {
 		stato.salvaValore(idRicettario,'org-ar4k-ricettario',(esporta() as JSON).toString())
@@ -77,6 +77,14 @@ class Ricettario {
 		json.semi.each{ricettarioCreato.semi.add(new Seme().importa(it))}
 		return ricettarioCreato
 	}
+
+	String comandoCaricamento() {
+		return repositoryGit.comandoCaricamento()
+	}
+
+	String percorsoLocaleUtente() {
+		return repositoryGit.percorsoLocaleUtente()
+	}
 }
 
 /**
@@ -112,7 +120,7 @@ class RepositoryGit {
 			configurato:configurato
 		]
 	}
-	
+
 	/** salva in uno Stato specifico a catena per N profondità */
 	Boolean salva(Stato stato,Integer contatore) {
 		stato.salvaValore(idRepository,'org-ar4k-repository',(esporta() as JSON).toString())
@@ -132,6 +140,15 @@ class RepositoryGit {
 	/** salva nello stato di default a catena per N profondità */
 	Boolean salva(Integer contatore) {
 		salva(Holders.applicationContext.getBean("interfacciaContestoService").stato,contatore)
+	}
+
+	String comandoCaricamento() {
+		String urlCompleta = indirizzo
+		return "cd ~/.ar4k/ricettari ; if [ -e "+nomeCartella+" ] ; then cd "+nomeCartella+"; git pull; else git clone "+urlCompleta+" "+nomeCartella+"; fi"
+	}
+
+	String percorsoLocaleUtente() {
+		return '~/.ar4k/ricettari/'+nomeCartella
 	}
 }
 
@@ -179,8 +196,8 @@ class Seme {
 	/** salva nello stato di defualt a catena per N profondità */
 	Boolean salva(Integer contatore) {
 		salva(Holders.applicationContext.getBean("interfacciaContestoService").stato,contatore)
-	} 
-	
+	}
+
 	Seme importa(Map json){
 		log.info("importa() il seme: "+json.meme.idMeme)
 		Seme semeCreato = new Seme(

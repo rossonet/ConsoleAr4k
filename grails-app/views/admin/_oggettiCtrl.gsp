@@ -7,7 +7,7 @@
  * Controller of the sbAdminApp
  */
 angular.module('sbAdminApp')
-  .controller('OggettiCtrl', function($scope, $http) {
+  .controller('OggettiCtrl', function($scope, $http, $sce) {
     $http.get("${createLink(controller:'admin',action:'listaVasi',absolute:'true')}")
     .success(function (response) {$scope.vasi = response.vasi;});
     
@@ -24,6 +24,9 @@ angular.module('sbAdminApp')
     $scope.scansioneVaso = false;
     //appare aggiungi a meme
     $scope.assegnaMeme = false;
+    //appare con il terminale
+    $scope.terminale = false;
+    $scope.iframeTerminale = $sce.trustAsResourceUrl('http://prometeo.rossonet.net:8080/');
     
     //vaso in modifica o nuovo;
     $scope.vaso = null;
@@ -53,9 +56,9 @@ angular.module('sbAdminApp')
     	//
     }
     
-    //scansiona con OpenVas
-    $scope.scansioneOpenVasE = function(vaso) {
-    	//
+    //terminale
+    $scope.terminaleA = function(vaso) {
+    	$scope.terminale = true;
     }
     
     // crea un nuovo vaso testando la connessione prima
