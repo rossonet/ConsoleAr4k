@@ -24,8 +24,6 @@ import groovy.transform.AutoClone
 class Meme {
 	/** id univoco meme */
 	String idMeme = UUID.randomUUID()
-	/** Riferimento sul filesytem per il ricettario */
-	String pathVaso = ''
 	/** etichetta meme */
 	String etichetta = 'Meme generato atomaticamente'
 	/** descrizione meme */
@@ -39,21 +37,27 @@ class Meme {
 	/** lista versioni compatibili -per aggiornamento- */
 	List<String> versioniCompatibili = []
 	/** icona generale meme */
-	String icona = 'fa-thumb-tack'
+	String icona = icona
 	/** stato del meme */
-	String stato = 'inattivo'
-	/** processo lanciato alla creazione del meme */
-	String autoStart = ''
+	/** possibili stati censiti:
+	 * 
+	 *  nuovo: meme appena istanziato
+	 *  setup: l'applicazione è in fase di setup (scarico repository, compilazioni ecc...)
+	 *  installazione: il meme è in fase di installazione sul vaso/sui vasi
+	 *  bloccato: il meme è in fase di blocco (per le procedure di disaster recovery. Importante il dump dei db in questa fase! )
+	 *  avviata: in funzione
+	 *  fermato: il meme è disattivato, ma configurato sui vasi
+	 *  
+	 */
+	String stato = 'nuovo'
+	/** attivare alla creazione del meme? */
+	Boolean autoStart = false
 	/** lista funzionalità di cui è necessaria la presenza nel contesto per operare */
 	List<String> dipendenze = []
 	/** lista funzionalità rese disponibili al contesto */
 	List<String> funzionalita = []
-	/** nodi coinvolti dal meme */
-	List<String> indirizziNodiCoinvolti = []
-	/** maschera disinstallazione (verrà interpretata da grails) */
-	String disinstallazione = '<div>INTERFACCIA DISINSTALLAZIONE</div>'
-	/** se vero, carica il meme in fase di bootstrap */
-	Boolean caricaInBootstrap = false
+	/** vasi utilizzati e loro funzione per il meme */
+	List<Cella> celle = []
 
 	/** dump dati del meme */
 	def esporta() {
@@ -69,14 +73,12 @@ class Meme {
 			icona:icona,
 			stato:stato,
 			autoStart:autoStart,
-			disinstallazione:disinstallazione,
 			dipendenze:dipendenze,
 			funzionalita:funzionalita,
-			indirizziNodiCoinvolti:indirizziNodiCoinvolti,
-			caricaInBootstrap:caricaInBootstrap
+			celle:celle*.esporta()
 		]
 	}
-	
+
 	/** salva in uno Stato specifico a catena per N profondità */
 	Boolean salva(Stato stato,Integer contatore) {
 		stato.salvaValore(idMeme,'org-ar4k-meme',(esporta() as JSON).toString())
@@ -97,6 +99,21 @@ class Meme {
 	Boolean salva(Integer contatore) {
 		salva(Holders.applicationContext.getBean("interfacciaContestoService").stato,contatore)
 	}
-
 }
 
+/***
+ * una cella è un processo in esecuzione su un vaso per conto di un meme
+ * 
+ * 
+ * @author andrea
+ *
+ */
+class Cella {
+	/** id univoco cella */
+	String idCella = UUID.randomUUID()
+	/** tipo oggetto */
+	String tipoOggetto = 'org-ar4k-cella'
+	/** comandi gestiti dalla cella */
+	List<LavorazioneSSH> lavorazioni = []
+	
+}

@@ -95,7 +95,7 @@ class ConnessioneSSH {
 
 	/** attiva i tunnel con porta di callback predefinita  */
 	Boolean verificaAvvia(Integer gwPort,String targetHost,Integer targetPort) {
-		return verificaAvvia(gwPort,targetHost,targetPort,3630)
+		return verificaAvvia(gwPort,targetHost,targetPort,6630)
 	}
 
 	String toString() {
@@ -368,40 +368,132 @@ class LavorazioneSSH {
 	Integer pid = null
 	/** data esecuzione */
 	Date inizio = null
-	/** data ultimo check */
+	/** data ultimo check tramite ssh di ps*/
 	Date aggiornamento = null
 	/** comando da eseguire comprensivo di parametri */
-	String comando
+	String comando = null
+	/** short link esecuzione per coordinamento esterno */
+	String refInterna = null
+	/** comando installazione. Se presente viene a sua volta lanciato come lavorazione nella stessa cartella e ne viene monitorato lo stato */
+	String comandoInstallazione = null
+	/** modifica al nome dei log prima di output e error */
+	String preLog = ''
+	// variabili non salvate in db
+	/** percorso cella dati - utile per lavorazioni sincrone con altri comandi - */
+	String cartellaDati = null
+	/** percorso esecuzione */
+	String cartellaEsecuzione = '~/.ar4k/esecuzioni/'+idLavorazione
+	/** se è stata lanciata la preparazione */
+	Boolean preparato = false
+	/** se è stata lanciata la preparazione */
+	private Integer pidInstallazione  = null
+
+	private LavorazioneSSH lavorazioneInstallazione = null
+
+
+	/** procedura di installazazione */
+	Boolean prepara() {
+		if (!(preparato || pidInstallazione!=null)) {
+			try {
+				// crea la cartella
+				String creaCartella = "mkdir -p "+cartellaEsecuzione
+				vaso.ssh.esegui(creaCartella)
+				// se presente una directory dati prova il link
+				if (cartellaDati) vaso.ssh.esegui('ln -s '+cartellaDati+' '+cartellaEsecuzione+'/dati')
+
+				// verifica i repository
+				ricettariNecessari.each{
+					vaso.ssh.esegui(it.comandoCaricamento())
+					vaso.ssh.esegui('ln -s '+it.percorsoLocaleUtente()+' '+cartellaEsecuzione+'/')
+				}
+				String messaggioStato = 'echo preparato > '+cartellaEsecuzione+'/'+preLog+'stato'
+				vaso.ssh.esegui(messaggioStato)
+			}	 catch(Exception frg) {
+				log.warn("Errore nella preparazione del comando "+etichetta?:comando+" : "+frg.printStackTrace())
+				return false
+			}
+			if (comandoInstallazione) {
+				log.info("eseguo il comando di installazione "+comandoInstallazione+" per "+etichetta?:comando)
+				lavorazioneInstallazione = new LavorazioneSSH(
+						etichetta:'installazione '+etichetta?:comando,
+						descrizione:'processo di installazione per comando '+etichetta?:comando,
+						refInterna:'installazione',
+						vaso:vaso,
+						comando:comandoInstallazione,
+						preparato:true,
+						cartellaDati:cartellaDati,
+						preLog:'installazione.',
+						)
+				pidInstallazione = lavorazioneInstallazione.esegui()
+				String marcaPidInstallazione = 'echo "'+pidInstallazione+'" > '+cartellaEsecuzione+'/installazione.pid'
+				vaso.ssh.esegui(marcaPidInstallazione)
+				return true
+			} else {
+				String messaggioStato = 'echo installato > '+cartellaEsecuzione+'/'+preLog+'stato'
+				vaso.ssh.esegui(messaggioStato)
+				preparato=true
+				return true
+			}
+		} else {
+			if(pidInstallazione>0) {
+				return completataInstallazione()
+			} else {
+				log.warn("procedura di preparazione di "+etichetta?:comando+" già eseguita")
+				return false
+			}
+		}
+	}
+
+	/** verifica se l'installazione è completata */
+	Boolean completataInstallazione() {
+		if (pidInstallazione && ! preparato) {
+			if ( lavorazioneInstallazione.esiste() ) {
+				return false
+			} else {
+				String cancellaPidInstallazione = 'rm '+cartellaEsecuzione+'/installazione.pid'
+				String messaggioStato = 'echo installato > '+cartellaEsecuzione+'/'+preLog+'stato'
+				vaso.ssh.esegui(messaggioStato)
+				vaso.ssh.esegui(cancellaPidInstallazione)
+				pidInstallazione = null
+				preparato = true
+				lavorazioneInstallazione = null
+				return true
+			}
+		} else {
+			return true
+		}
+	}
+
 
 	/** avvia la lavorazione */
-	Integer avvia() {
-		try {
-			// crea la cartella
-			String creaCartella = "mkdir -p .ar4k/esecuzioni/"+idLavorazione
-			vaso.ssh.esegui(creaCartella)
-			// verifica i repository
-			ricettariNecessari.each{
-				vaso.ssh.esegui(it.comandoCaricamento())
-				vaso.ssh.esegui('ln -s '+it.percorsoLocaleUtente()+' .ar4k/esecuzioni/'+idLavorazione+'/')
-			}
+	Integer esegui() {
+		Boolean installato = preparato
+		if (!installato) installato = prepara()
+		if (installato) {
 			// esegue il comando reindirizzando l'output e l'errore, poi sgancia la sessione dopo aver letto il pid
-			String comandoEsecuzione = "cd .ar4k/esecuzioni/"+idLavorazione+'; '+comando
-			comandoEsecuzione+=' </dev/null >.ar4k/esecuzioni/'+idLavorazione+'/output 2>.ar4k/esecuzioni/'+idLavorazione+'/error &\n echo $!'
-			pid = vaso.ssh.esegui(comandoEsecuzione).replaceAll("[\n\r]", "").toInteger()
-			inizio = new Date()
-			if (vaso.lavorazioni.find{it.idLavorazione==idLavorazione}){
-				// lavorazione già sul vaso
-			} else {
-				vaso.lavorazioni.add(this)
+			String comandoEsecuzione = "cd "+cartellaEsecuzione+'\n'+comando
+			comandoEsecuzione+=' </dev/null >'+cartellaEsecuzione+'/'+preLog+'output 2>'+cartellaEsecuzione+'/'+preLog+'error &\n echo $!'
+			String messaggioStato = "echo '"+comandoEsecuzione+"' > "+cartellaEsecuzione+'/'+preLog+'comando'
+			vaso.ssh.esegui(messaggioStato)
+			try {
+				pid = vaso.ssh.esegui(comandoEsecuzione).replaceAll("[\n\r]", "").toInteger()
+				inizio = new Date()
+				if (vaso.lavorazioni.find{it.idLavorazione==idLavorazione}){
+					// lavorazione già sul vaso
+				} else {
+					vaso.lavorazioni.add(this)
+				}
+				log.info("lavorazione "+etichetta?:comando+" lanciata su vaso "+vaso+" con pid "+pid)
+				// salva l'oggetto in db
+				salva(4) // segue a catena per quatro step
+			} catch(Exception frg) {
+				log.warn("Errore nell'esecuzione del comando "+etichetta?:comando+" : "+frg.printStackTrace())
+				return -1 // errore nell'esecuzione del comando
 			}
-			log.info("lavorazione lanciata su vaso "+vaso+" con pid "+pid)
-			// salva l'oggetto in db
-			salva(4) // segue a catena per quatro step
-		} catch(Exception frg) {
-			log.warn("Errore nell'esecuzione del comando "+comando+" : "+frg.printStackTrace())
-			return -1
+			return pid
+		} else {
+			return -2 // in fase di installazione
 		}
-		return pid
 	}
 
 	/** interrompi la lavorazione */
@@ -412,20 +504,39 @@ class LavorazioneSSH {
 
 	/** riprendi la lavorazione */
 	String riprendi() {
-		return vaso.ssh.esegui("kill -CONT "+pid)
+		if (pid) vaso.ssh.esegui("kill -CONT "+pid)
 		return stato()
 	}
 
 	/** ferma la lavorazione */
-	String stop() {
-		return vaso.ssh.esegui("kill -TERM "+pid)
+	String ferma() {
+		if (pid) vaso.ssh.esegui("kill -TERM "+pid)
 		return stato()
+	}
+
+	/** ricarica le configurazioni */
+	String ricarica() {
+		// da implementare
+		return stato()
+	}
+
+	/** uccide la lavorazione */
+	String distruggi() {
+		if (pid) vaso.ssh.esegui("kill -9 "+pid)
+		return stato()
+	}
+
+	/** ferma, se neccessario uccide e riavvia */
+	Integer riavvia() {
+		ferma()
+		if (esiste()) distruggi()
+		return esegui()
 	}
 
 	/** distruggi i dati relativi alla lavorazione */
 	void ripulisci() {
 		vaso.ssh.esegui("kill -KILL "+pid)
-		vaso.ssh.esegui("cd .ar4k/esecuzioni/ && rm -rf "+idLavorazione)
+		vaso.ssh.esegui("rm -rf "+cartellaEsecuzione)
 		vaso.lavorazioni.removeAll{it.idLavorazione==idLavorazione}
 		this.finalize()
 	}
@@ -447,6 +558,11 @@ class LavorazioneSSH {
 		return (stato().split(',')[2]=='T')?true:false
 	}
 
+	/** in installazione? */
+	Boolean eInIstallazione() {
+		return !completataInstallazione() // da completare
+	}
+
 	/** senza errori? */
 	Boolean eSenzaErrori() {
 		return (getErrorStream()=='')?true:false
@@ -454,13 +570,42 @@ class LavorazioneSSH {
 
 	/** ritorna l'output generato */
 	String getOutputStream() {
-		return vaso.ssh.leggiConCat('cat .ar4k/esecuzioni/'+idLavorazione+'/output')
+		return vaso.ssh.leggiConCat('cat '+cartellaEsecuzione+'/'+preLog+'output')
 	}
 
 	/** ritorna l'errore generato */
 	String getErrorStream() {
-		return vaso.ssh.leggiConCat('cat .ar4k/esecuzioni/'+idLavorazione+'/error')
+		return vaso.ssh.leggiConCat('cat '+cartellaEsecuzione+'/'+preLog+'error')
 	}
+
+	/** prepara il filesytem per il dump */
+	String preSnapshot() {
+		ferma()
+		// da implementare le procedure
+		return stato()
+	}
+
+	/** rimuove i file di dump o simili dopo il dump */
+	String postSnapshot() {
+		// da implementare le procedure
+		esegui()
+		return stato()
+	}
+
+	/** prepara per il restore di un backup */
+	String preRestore() {
+		ferma()
+		// da implementare le procedure
+		return stato()
+	}
+
+	/** ricarica dopo il restore da un backup */
+	String postRestore() {
+		// da implementare le procedure
+		esegui()
+		return stato()
+	}
+
 
 	/** salva in uno Stato specifico a catena per N profondità */
 	Boolean salva(Stato stato,Integer contatore) {
@@ -495,7 +640,10 @@ class LavorazioneSSH {
 			pid:pid,
 			comando:comando,
 			aggiornamento:aggiornamento,
-			inizio:inizio
+			inizio:inizio,
+			refInterna:refInterna,
+			comandoInstallazione:comandoInstallazione,
+			preLog:preLog
 		]
 	}
 }
@@ -514,18 +662,18 @@ class noVNC extends LavorazioneSSH {
 	String hostVNC = '127.0.0.1'
 	Integer portaVNC = 5901
 
-	Integer avviaNoVNC() {
+	Boolean prepara() {
 		def ricettariDisponibili = Holders.applicationContext.getBean("interfacciaContestoService").contesto.ricettari
 		ricettariNecessari.add(ricettariDisponibili.find{it.repositoryGit.nomeCartella == 'ar4k_open'})
-		comando = 'cp -a ar4k_open/noVNC-0.5.1 .'+'\n'
-		comando += 'cd noVNC-0.5.1'+'\n'
-		comando += 'npm install &>/dev/null'+'\n'
-		comando += './utils/launch.sh --vnc '+hostVNC+' '+portaVNC+'\n'
-		return avvia()
+		comandoInstallazione = 'cp -a ar4k_open/noVNC-0.5.1 .'+'\n'
+		comandoInstallazione += 'cd noVNC-0.5.1'+'\n'
+		comandoInstallazione += 'npm install &>/dev/null'+'\n'
+		return super.prepara()
 	}
 
-	Boolean fermaNoVNC() {
-		stop()
+	Integer esegui() {
+		comando = './utils/launch.sh --vnc '+hostVNC+' '+portaVNC+'\n'
+		return super.esegui(comando)
 	}
 
 }
@@ -535,54 +683,24 @@ class noVNC extends LavorazioneSSH {
  * @author andrea
  *
  */
-class ConsoleJS extends LavorazioneSSH {
+class TtyJs extends LavorazioneSSH {
 	String tipoOggetto = 'org-ar4k-ttyJS'
 	/** etichetta */
 	String etichetta = 'servizio ttyJS'
 	/** descrizione */
 	String descrizione = 'Applicazione node per accesso in console'
 
-	Integer avviaConsole() {
+	Boolean prepara() {
 		def ricettariDisponibili = Holders.applicationContext.getBean("interfacciaContestoService").contesto.ricettari
-		// richiede installazione root: #npm install tty.js -g
 		ricettariNecessari.add(ricettariDisponibili.find{it.repositoryGit.nomeCartella == 'ar4k_open'})
-		comando = 'cp -a ar4k_open/tty.js-0.2.15 .'+'\n'
-		comando += 'cd tty.js-0.2.15'+'\n'
-		comando += 'npm install &>/dev/null'+'\n'
+		comandoInstallazione = 'cp -a ar4k_open/tty.js-0.2.15 .'+'\n'
+		comandoInstallazione += 'cd tty.js-0.2.15'+'\n'
+		comandoInstallazione += 'npm install &>/dev/null'+'\n'
+		return super.prepara()
+	}
+
+	Integer esegui() {
 		comando = './bin/tty.js'
-		return avvia()
+		return super.esegui(comando)
 	}
-
-	Boolean fermaConsole() {
-		stop()
-	}
-}
-
-
-/** job di scansione
- * 
- * @author andrea
- *
- */
-class Scansione extends LavorazioneSSH {
-	String tipoOggetto = 'org-ar4k-Scansione'
-
-}
-
-/** servizio permanente in userspace supportato con cron di scansione
- *
- * @author andrea
- *
- */
-class Servizio extends LavorazioneSSH {
-	String tipoOggetto = 'Servizio'
-}
-
-/** servizio permanente in userspace supportato con supporto env consul
- *
- * @author andrea
- *
- */
-class EnvConsul extends LavorazioneSSH {
-	String tipoOggetto = 'EnvConsulSSH'
 }
