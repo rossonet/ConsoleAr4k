@@ -114,6 +114,7 @@ grails.project.dependency.resolution = {
 		compile "com.ecwid.consul:consul-api:1.1.4"
 		
 		compile 'com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider:2.5.4'
+		runtime 'org.apache.camel:camel-jetty:2.16.1'
 	}
 
 	plugins {
@@ -140,7 +141,7 @@ grails.project.dependency.resolution = {
 		//runtime ":aws-sdk:1.9.22"
 
 		// Camel
-		compile ":routing:1.2.3"
+		compile ":routing:1.4.0"
 		compile ":routing-jms:1.2.0"
 		compile ":mail:1.0.7"
 		// scheduler

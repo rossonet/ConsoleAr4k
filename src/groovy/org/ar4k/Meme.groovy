@@ -60,12 +60,27 @@ class Meme {
 	List<String> funzionalita = []
 	/** vasi utilizzati e loro funzione per il meme */
 	List<Cella> celle = []
-	/** servizio maschera principale del Meme */
+	/** servizio maschera principale del Meme - 
+	 * se non null, il meme sarà integrato nella console
+	 * puntando ai contenuti erogati dal servizio
+	 */
 	Servizio mascheraGestione = null
-	/** maschera da iframe */
-	Boolean mascheraIframe = true
-	/** maschera AngularJS */
-	Boolean mascheraAngularJS = false
+	/** maschera da iframe -  
+	 * se vero il servizio mascheraGestione viene incluso nelle
+	 * pagine della console come IFrame
+	*/
+	Boolean mascheraInIframe = true
+	/** maschera in div -
+	 * se non null e con mascheraInIframe false
+	 * il contenuto viene parsato includendo in
+	 * particolare i dati sul servizio, l'utente 
+	 * e altre variabili utili.
+	 * il caso d'uso previsto è l'istanziazione di uno
+	 * specifico controller AngularJS e ralativi contenuti.
+	 * il dato è espresso come JSON ed importato
+	 * direttamente dal seme
+	 */
+	String mascheraInDiv = null
 	/** chiavi ssh privata del meme per accedere ai vasi */
 	String chiavePrivata = []
 
@@ -85,7 +100,10 @@ class Meme {
 			autoStart:autoStart,
 			dipendenze:dipendenze,
 			funzionalita:funzionalita,
-			celle:celle*.esporta()
+			celle:celle*.esporta(),
+			mascheraInDiv:mascheraInDiv,
+			mascheraInIframe:mascheraInIframe,
+			mascheraGestione:mascheraGestione
 		]
 	}
 
