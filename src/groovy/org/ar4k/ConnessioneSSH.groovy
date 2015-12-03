@@ -465,13 +465,20 @@ class LavorazioneSSH {
 	}
 
 
-	/** avvia la lavorazione */
+
+	/** avvia la lavorazione senza parametri */
 	Integer esegui() {
+		return esegui(null)
+	}
+
+
+	/** avvia la lavorazione con parametri */
+	Integer esegui(String parametri) {
 		Boolean installato = preparato
 		if (!installato) installato = prepara()
 		if (installato) {
 			// esegue il comando reindirizzando l'output e l'errore, poi sgancia la sessione dopo aver letto il pid
-			String comandoEsecuzione = "cd "+cartellaEsecuzione+'\n'+comando
+			String comandoEsecuzione = "cd "+cartellaEsecuzione+'\n'+comando+parametri?' '+parametri:''
 			comandoEsecuzione+=' </dev/null >'+cartellaEsecuzione+'/'+preLog+'output 2>'+cartellaEsecuzione+'/'+preLog+'error &\n echo $!'
 			String messaggioStato = "echo '"+comandoEsecuzione+"' > "+cartellaEsecuzione+'/'+preLog+'comando'
 			vaso.ssh.esegui(messaggioStato)
@@ -648,12 +655,12 @@ class LavorazioneSSH {
 	}
 }
 
-/** job di scansione
+/** 
  *
  * @author andrea
  *
  */
-class noVNC extends LavorazioneSSH {
+class NoVNC extends LavorazioneSSH {
 	String tipoOggetto = 'org-ar4k-noVNC'
 	/** etichetta */
 	String etichetta = 'servizio noVNC'
@@ -661,6 +668,7 @@ class noVNC extends LavorazioneSSH {
 	String descrizione = 'Applicazione node per accesso in VNC'
 	String hostVNC = '127.0.0.1'
 	Integer portaVNC = 5901
+	String refInterna = 'noVNC'
 
 	Boolean prepara() {
 		def ricettariDisponibili = Holders.applicationContext.getBean("interfacciaContestoService").contesto.ricettari
@@ -678,7 +686,7 @@ class noVNC extends LavorazioneSSH {
 
 }
 
-/** job di scansione
+/**
  *
  * @author andrea
  *
@@ -689,6 +697,7 @@ class TtyJs extends LavorazioneSSH {
 	String etichetta = 'servizio ttyJS'
 	/** descrizione */
 	String descrizione = 'Applicazione node per accesso in console'
+	String refInterna = 'tty.js'
 
 	Boolean prepara() {
 		def ricettariDisponibili = Holders.applicationContext.getBean("interfacciaContestoService").contesto.ricettari

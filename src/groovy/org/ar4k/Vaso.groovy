@@ -42,6 +42,8 @@ class Vaso {
 	String proxy = null
 	/** l'utenza ha l'accesso root sulla macchina come root usando #sudo su - */
 	Boolean sudo = false
+	/** l'utenza è root sulla macchina come root usando #sudo su - */
+	Boolean root = false
 	/** variabile PATH sulla macchina */
 	String path = '/usr/local/bin:/usr/bin:/bin'
 	/** job gestiti dalla machina via ssh */
@@ -56,8 +58,14 @@ class Vaso {
 	 * le funzionalità vengono rilevate dal sistema di scansione
 	 */
 	List<String> funzionalita = []
+	/** esecuzione Consul sul vaso per il nodo ? */
+	Boolean esecuzioneConsul = false
 	/** host pubblico per test di raggiungibilità */
 	String indirizzoTest='http://hc.rossonet.name'
+	/** lista dns di servizio gestiti con Consul */
+	List<String> dns = []
+	/** celle in esecuzione sul vaso */
+	List<Cella> celle = []
 
 	/** salva in uno Stato specifico a catena per N profondità */
 	Boolean salva(Stato stato,Integer contatore) {
@@ -88,12 +96,16 @@ class Vaso {
 			etichetta:etichetta,
 			descrizione:descrizione,
 			sudo:sudo,
+			root:root,
 			path:path,
 			funzionalita:funzionalita,
 			proxy:proxy,
 			nodo:nodo?.idNodo,
 			lavorazioni:lavorazioni*.idLavorazione,
-			ricettari:ricettari*.idRicettario
+			ricettari:ricettari*.idRicettario,
+			esecuzioneConsul:esecuzioneConsul,
+			indirizzoTest:indirizzoTest,
+			dns:dns*.toString()
 		]
 	}
 
@@ -111,17 +123,103 @@ class Vaso {
 	LavorazioneSSH avviaInterfacciaAr4k(Boolean reset=false) {
 		return false
 	}
+	
+	/** avvia interfaccia ar4k */
+	LavorazioneSSH avviaRethinkDB(Boolean reset=false) {
+		return false
+	}
+	
+	/** avvia interfaccia ar4k */
+	LavorazioneSSH avviaMySQL(Boolean reset=false) {
+		return false
+	}
+	
+	/** avvia interfaccia ar4k */
+	LavorazioneSSH avviaPostgresql(Boolean reset=false) {
+		return false
+	}
+	
+	/** avvia interfaccia ar4k */
+	LavorazioneSSH avviaKettleCarte(Boolean reset=false) {
+		return false
+	}
 
 	/** avvia interfaccia web ssh in node */
 	LavorazioneSSH avviaInterfacciaSSHWeb(Boolean reset=false) {
-		return new ConsoleJS(this).avviaConsole()
+		return new TtyJs(this).esegui()
+	}
+
+	/** avvia interfaccia web ssh in node */
+	LavorazioneSSH avviaInterfacciaVNCWeb(Boolean reset=false) {
+		return new NoVNC(this).esegui()
+	}
+
+	/** avvia interfaccia web ssh in node */
+	LavorazioneSSH avviaCloud9(Boolean reset=false) {
+		return null
+	}
+	
+	/** avvia interfaccia web ssh in node */
+	LavorazioneSSH avviaTomcat7(Boolean reset=false) {
+		return null
+	}
+
+	/** avvia interfaccia web ssh in node */
+	LavorazioneSSH avviaGestoreChiaviSSH() {
+		return null
+	}
+
+	/** avvia interfaccia web ssh in node */
+	LavorazioneSSH avviaOnionGw() {
+		return null
+	}
+
+	/** avvia interfaccia web ssh in node */
+	LavorazioneSSH avviaDnsGw() {
+		return null
+	}
+
+	LavorazioneSSH avviaTunnelR() {
+		return null
+	}
+
+	LavorazioneSSH avviaTunnelL() {
+		return null
+	}
+
+	LavorazioneSSH avviaProxy() {
+		return null
+	}
+
+	LavorazioneSSH avviaGestoreContattiErranti() {
+		return null
+	}
+
+	LavorazioneSSH avviaSerialeSocat() {
+		return null
+	}
+
+	LavorazioneSSH avviaLinkFileSystemFuse() {
+		return null
+	}
+	
+	LavorazioneSSH avviaReverseProxyNginx() {
+		return null
+	}
+	
+	LavorazioneSSH avviaInterfacciaNode() {
+		return null
+	}
+
+	Cella installaCella(Seme seme,String ruoloCella) {
+		return null
 	}
 
 	/** Scansione funzionalità e stato
 	 * 
 	 * @return oggetto scansione 
 	 */
-	Scansione selfScan() {
+	LavorazioneSSH selfScan() {
 		return 'non implementata'
 	}
 
@@ -129,15 +227,7 @@ class Vaso {
 	 * 
 	 * @return oggetto scansione 
 	 */
-	Scansione scansioneNmap() {
-		return 'non implementata'
-	}
-
-	/** Scansione con OpenVas
-	 * 
-	 * @return oggetto scansione 
-	 */
-	Scansione scansioneOpenVas() {
+	LavorazioneSSH scansioneNmap() {
 		return 'non implementata'
 	}
 
@@ -169,6 +259,13 @@ class Vaso {
 	/** stringa predefinita */
 	String toString() {
 		return etichetta+" => "+ssh.utente+"@"+ssh.macchina+":"+ssh.porta
+	}
+
+	/** nuova lavorazione */
+	LavorazioneSSH nuovaLavorazioneSSH() {
+		LavorazioneSSH nuova = new LavorazioneSSH(vaso:this)
+		lavorazioni.add(nuova)
+		return nuova
 	}
 }
 

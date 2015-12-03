@@ -31,7 +31,7 @@ class Nodo {
 	String note = null
 	/** lista vasi su questo nodo */
 	List<Vaso> vasi = []
-	/** vaso per accesso amministrativo (in cui funziona #sudo) */
+	/** vaso per accesso amministrativo (in cui funziona #sudo o è l'account root) */
 	Vaso vasoMaster = null
 	/** impronta per identificazione univoca nodo.
 	 * Composta da dati rilevabili in user space utili all'identificazione
@@ -39,16 +39,24 @@ class Nodo {
 	 */
 	Impronta impronta = null
 	/** lavorazioni richieste con account amministrativo */
-	List<LavorazioniSSH> richiesteAdmin = []
+	List<LavorazioneSSH> richiesteAdmin = []
+	/** lista pacchetti software richiesti al nodo con l'installatore yum */
+	List<String> pacchettiYum = []
+	/** è un server Consul nella regione? */
+	Boolean serverConsul = false
 	/** identificativo Consul per il nodo */
 	String indirizzoConsul = null
 	/** regioni di appartenenza */
 	List<Regione> regioni = []
-	/** il nodo a connessione discontinua? */
+	/** il nodo a connessione discontinua? -appartiene alla regione virtuale degli erranti- */
 	Boolean mobile = false
+	/** il nodo non è gestito? -per mappare servizi erogati da terzi- */
+	Boolean nonGestito = false
+	/** servizi gestiti non nei vasi o nelle celle */
+	List<Servizio> serviziSistema = []
 
 	/** crea un nuovo vaso sul nodo */
-	LavorazioniSSH creaVaso(String username){
+	LavorazioneSSH creaVaso(String username){
 		return false
 	}
 

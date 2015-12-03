@@ -104,6 +104,12 @@ class BootStrapService {
 							interfacciaContestoService.interfaccia = contestoCreato.interfacce.find{it.idInterfaccia==interfaccia}
 							inAvvio = false
 							inReset = false
+							// impostare la strutturra Consul:
+							// - creare servizio restfull interfaccia (già istanziata con reverse su 6630 da vasoMaster )
+							// - creare servizio genera configurazioni da interfaccia (già istanziata con reverse su 6630 da vasoMaster )
+							// - creare code/locazioni KV Consul messaggi utenti, messaggi lavorazioni(task) e log
+							// 			 dell'interfaccia con watcher su vasoMaster 
+							// - creare i servizi base e i check automatici conseguenti
 							log.info("creato il contesto "+contestoCreato+" in Consul")
 						} else {
 							risultato = false
