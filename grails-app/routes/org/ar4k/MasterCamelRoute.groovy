@@ -30,6 +30,6 @@ class MasterCamelRoute extends RouteBuilder {
 		 from('activemq:topic:jcloud.eventi').to('bean:interfacciaContestoService?method=eventiJCloud')
 		 from('activemq:topic:sistema.messaggi').to('bean:interfacciaContestoService?method=codaMessaggiInfo')
 		 */
-		from('jetty:http://0.0.0.0:8080/proxy?matchOnUriPrefix=true').to('jetty:http://www.rossonet.org')
+		from('servlet:/meme?matchOnUriPrefix=true').to('http://www.rossonet.org?bridgeEndpoint=true&amp;throwExceptionOnFailure=false')
 	}
 }

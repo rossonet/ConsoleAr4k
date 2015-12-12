@@ -137,14 +137,15 @@ log4j.main = {
 	fatal	'org.hibernate.tool.hbm2ddl.SchemaExport' // bug grails 11198 work around by Ambrosini
 	fatal   'org.apache.camel.component.jms.DefaultJmsMessageListenerContainer'
 	environments {
-		development  {
+	development  {
 			info 'grails.app'
 			info 'org.codehaus.groovy.grails.web.servlet'
 			info 'org.codehaus.groovy.grails.web.sitemesh'
 			info 'org.codehaus.groovy.grails.plugins'
 			info 'org.codehaus.groovy.grails.commons'
 			info 'org.ar4k'
-			debug 'com.subgraph.orchid'
+			//debug 'com.subgraph.orchid'
+			debug 'org.apache.camel'
 		}
 	}
 }
@@ -221,7 +222,7 @@ grails {
 // Per l'assistenza remota
 olark.key='1445-771-10-6904'
 
-grails.routing.camelContextId = 'ContestoAr4kBootstrap'
+grails.routing.camelContextId = 'gwar4k'
 
 ///////////////////////////////////////////////////////////////////////////
 ///////////// FINE CONFIGURAZIONI ROSSONET ////////////////////////////////
@@ -241,7 +242,7 @@ grails.plugin.springsecurity.controllerAnnotations.staticRules = [
 	'/**/js/**':                      ['permitAll'],
 	'/**/css/**':                     ['permitAll'],
 	'/**/images/**':                  ['permitAll'],
-	'/bower_components/**':                  ['permitAll'],
+	'/bower_components/**':           ['permitAll'],
 	// by Andrea Ambrosini
 	'/register/**':                   ['permitAll'],
 	'/bootStrap/**':                  ['permitAll'], // Ricordarsi di bloccare la sicurezza sul Controller!
